@@ -2,184 +2,166 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="/home/mihika/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-tasks-1.4.0_8fdbdfd3bf7dc2466b60358ffd56d3c685f5283a/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.19.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c6047a34af07d6ec4e950ba1dc70ce23ac65ecaa">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.facebook.android-facebook-android-sdk-4.19.0_53817260f10d4ce58cff702a31222435ffe8605e/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c03bf57f358aa10d253f21989e93bcf6014b3b17">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.1.1_1b716f9f4bfd29f73f221447d518355de46f2375/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/25.0.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="8a372c4191f80489770a231f7be4820b204b886a">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-cardview-v7-25.0.0_5bfd0f515ca663f9fcecf750701ef446daa088de/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/transition/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="15b049fedbd8e3926bf99d9e45dfc9b2a1043bb9">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-transition-25.1.1_5ec2f792a6876648e06b330ed2cfb44d1f4a9f7b/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="02741d05d4b697fba5e279e9881aaa1da0ca7c7f">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-25.1.1_33fbf90aac3713bd5429c9adf6f38013bc2b7406/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c9649557905bf7a80fca9e0d54cbcb7662627860">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-25.1.1_bea8dae7e4f706e5b1abe7ebc9ecaab5915f38d9/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="3e04ac8ca644ea7baddf6fdcf72e15c79e9df94a">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-25.1.1_ab68a9daba7e44284fcfb95ab543f5fd6d5b70c6/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/customtabs/25.0.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="94ba691efc31bf53264db0716d9c9ec03843ea31">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-customtabs-25.0.0_0fbdd9e91f4e464e740fa3f38a0443c28ce2bf59/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="7bde4c34162092e0a77e7f12dc85ed77c484cf5c">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.1.1_0a6a18e6fc4e01d34798970cb00446807452bc8d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="ecb496cc08dd52551fc5ec6db3bc0632e95a89bb">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.1.1_b015ab739178cf28e00d1d624a62bd9ec31b7975/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.1/jars/classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.1/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="0d191c1a09e4892d059e5ce749e4ad4e08129e35">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.1.1_40d056993fe6eb968bf98d2e2e42a7d51ba2d124/classes.dex" />
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.1.1_e4c7415b09a8884d8a7d28a5cf0268f381c72c22.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.1/jars/classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.1/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="0fb891e8f0cfba0513043a7bb357513d229ca2cd">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.1.1_437829fa8fdadcb6e9a1aaa475ff1325cf70b803/classes.dex" />
+        sha1="7bde4c34162092e0a77e7f12dc85ed77c484cf5c">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.1.1_4288375ff1a093d7bb323219ad906832a3f37442.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.1.1_cba357bfaf5749a5312afaf2ac9497b567b60e51/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/design/25.1.1/jars/classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/design/25.1.1/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="cd7951e04cfb9a8bf008d544a478d9a8d8192d38">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-25.1.1_2f874b47bfefac5263bb1e6f2c86e4a97c0d76af/classes.dex" />
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-design-25.1.1_1a8cb8652a6c2be7742b983f44a19329077b67c2.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/customtabs/25.0.0/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="70b23a51a5fa55f600daef7c446471f5ae12803a">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_c4df83a68508c732375ade1ccbfb45c4536242bb/classes.dex" />
+        sha1="94ba691efc31bf53264db0716d9c9ec03843ea31">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-customtabs-25.0.0_2f85db367d5a94d1c38ea901059054d1e424d135.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.1/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="b8f900597769376c38a0f293153173f0955a8aef">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_c555df83bba04fdef1c7c504f569b9dcb7bf7207/classes.dex" />
+        sha1="ecb496cc08dd52551fc5ec6db3bc0632e95a89bb">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.1.1_31c215375b523a9695eed1f2851f5a612f5ddd3f.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.1/jars/classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.1/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="e2719c102dca3a7a5b02ce07f769362da6ddb4ab">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.1.1_de99058f29c7888e89f2b6778ee3a396e6a9b567/classes.dex" />
+        sha1="0fb891e8f0cfba0513043a7bb357513d229ca2cd">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-25.1.1_999d593d454f824664c19e863cf0228726ac2e90.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/mihika/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.4.0/8ad21bf21784dacce5f2043afb97218cc377e835/bolts-applinks-1.4.0.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/Users/hermitebai/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.4.0/8ad21bf21784dacce5f2043afb97218cc377e835/bolts-applinks-1.4.0.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="8ad21bf21784dacce5f2043afb97218cc377e835">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-applinks-1.4.0_5a395579c4703363014819d506a975ad93689c5e/classes.dex" />
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/bolts-applinks-1.4.0_4ca7d51c19c101c594f7a1829ef2fede720a7042.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/mihika/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.1/support-annotations-25.1.1.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/transition/25.1.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="15b049fedbd8e3926bf99d9e45dfc9b2a1043bb9">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-transition-25.1.1_6c481a5008af9f33cc97199243a02afabfdde6c6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.1.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="02741d05d4b697fba5e279e9881aaa1da0ca7c7f">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.1.1_b44387dd0b6626a8cc89ec71a00f62f94fd8bc09.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.19.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c6047a34af07d6ec4e950ba1dc70ce23ac65ecaa">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.facebook.android-facebook-android-sdk-4.19.0_5843829f4fc0e27fed9fd41435f6c9dfc4b93882.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.1.1_b47589aa4d5b32ec510daf8fcbd1b4664b5309d8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8a372c4191f80489770a231f7be4820b204b886a">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-cardview-v7-25.0.0_b2e483e0e8ed6d4e19cc93d76d7ab452013ef705.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c03bf57f358aa10d253f21989e93bcf6014b3b17">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.1.1_3ab28c6eaee36dbe549e426e64db0842c5e8ffb9.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.1/support-annotations-25.1.1.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="b59b6ee8d6ecc03e672d253800430343493a6ed8">
-        <dex dex="/home/mihika/AndroidStudioProjects/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.1.1_440f1ef7ae727c87541cad84f498d9224b6a9c2b/classes.dex" />
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/support-annotations-25.1.1_5b785e82e27671c85437e2734162744e8c0a7bfb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.1.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c9649557905bf7a80fca9e0d54cbcb7662627860">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-25.1.1_f8d227238cd9e6396ebb63dea4d47d43c4822880.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e2719c102dca3a7a5b02ce07f769362da6ddb4ab">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.1.1_2e6f19022ad517a608faacf60d537389198e08d5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/bolts-tasks-1.4.0_cc7c56cedd1fdded9316db19cbd83cecb146e411.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="3e04ac8ca644ea7baddf6fdcf72e15c79e9df94a">
+        <dex dex="/Users/hermitebai/Projects/ExpOCR/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.1.1_e18f9aa7ab34728f3624acab9fc6df11b6f9bef9.jar" />
     </item>
 
 </items>
