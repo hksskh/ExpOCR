@@ -99,18 +99,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                //Todo: put bundle data to be transferred
+                //TODO: put bundle data to be transferred
                 startActivity(intent);
+                Toast.makeText(getApplicationContext(), "Facebook Logging in...", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancel() {
-
+                Toast.makeText(getApplicationContext(), "Facebook login cancelled!", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(FacebookException e) {
-                //Toast.makeText(LoginActivity.this.getApplicationContext(), "Error happens in Facebook Login!", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "Errors happen in Facebook Login!", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -161,6 +162,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
