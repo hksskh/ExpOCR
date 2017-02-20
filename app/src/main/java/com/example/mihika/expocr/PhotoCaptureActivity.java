@@ -22,6 +22,10 @@ import java.util.Date;
 
 public class PhotoCaptureActivity extends AppCompatActivity {
 
+    // code adapted from following tutorials:
+    // https://androidkennel.org/android-camera-access-tutorial/#comment-3110958747
+    // https://inthecheesefactory.com/blog/how-to-share-access-to-file-with-fileprovider-on-android-nougat/en
+
     private Button takePictureButton;
     private ImageView imageView;
     private Uri file;
