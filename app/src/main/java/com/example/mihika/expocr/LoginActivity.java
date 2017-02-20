@@ -104,6 +104,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 startActivity(intent);
             }
         });
+
+    }
+
+    protected void signup(View view) {
+        Intent iSignup = new Intent(LoginActivity.this, SignupActivity.class);
+        startActivity(iSignup);
     }
 
     private void populateAutoComplete() {
