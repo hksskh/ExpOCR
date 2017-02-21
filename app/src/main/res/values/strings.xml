@@ -30,4 +30,8 @@
     <string name="prompt_reenter_password">Re-enter Password</string>
     <string name="prompt_first_name">First Name</string>
     <string name="prompt_last_name">Last Name</string>
+    <string name="error_invalid_password_no_lower">Password should have lower case letter</string>
+    <string name="error_invalid_password_no_upper">Password should have upper case letter</string>
+    <string name="error_invalid_password_no_special">Password should have special letter</string>
+    <string name="error_cannot_match_password">Should be the same as password</string>
 </resources>

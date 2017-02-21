@@ -11,7 +11,9 @@
     tools:context="com.example.mihika.expocr.SignupActivity"
     android:weightSum="1"
     android:background="#80000000"
-    android:backgroundTint="@color/com_facebook_button_login_silver_background_color">
+    android:backgroundTint="@color/com_facebook_button_login_silver_background_color"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <!-- Signup progress -->
 
