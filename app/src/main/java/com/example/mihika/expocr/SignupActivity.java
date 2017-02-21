@@ -67,7 +67,7 @@ public class SignupActivity extends AppCompatActivity {
         if (isEmailValid && isPasswordValid && canReEnterPasswordMatch) {
             signup();
         } else {
-            //TODO
+            
             if (!isEmailValid) {
                 mEmailView.setError(getString(R.string.error_invalid_email));
             }
