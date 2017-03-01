@@ -1,0 +1,57 @@
+{
+  "expenses": [
+    {
+      "Expense": "Movie Ticket",
+      "Balance": -10.50,
+      "Date": "2/28/2017"
+    },
+
+    {
+      "Expense": "Dinner",
+      "Balance": 12.00,
+      "Date": "2/27/2017"
+    },
+
+    {
+      "Expense": "Groceries",
+      "Balance": -26.78,
+      "Date": "2/25/2017"
+    },
+
+    {
+      "Expense": "Wifi",
+      "Balance": 14.99,
+      "Date": "2/24/2017"
+    },
+
+    {
+      "Expense": "Electricity",
+      "Balance": -40.00,
+      "Date": "2/22/2017"
+    },
+
+    {
+      "Expense": "Water",
+      "Balance": 11.50,
+      "Date": "2/21/2017"
+    },
+
+    {
+      "Expense": "Cleaning Supplies",
+      "Balance": -8.50,
+      "Date": "2/20/2017"
+    },
+
+    {
+      "Expense": "Dinner",
+      "Balance": -15.50,
+      "Date": "2/18/2017"
+    },
+
+    {
+      "Expense": "Bowling",
+      "Balance": 5.50,
+      "Date": "2/16/2017"
+    }
+  ]
+}
