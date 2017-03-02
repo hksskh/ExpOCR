@@ -18,14 +18,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.expenses_list_view);
         final ArrayList<Expense> expenseList = Expense.getRecipesFromFile("recipes.json", this);
 
-        String[] listItems = new String[expenseList.size()];
-
-        for(int i = 0; i < expenseList.size(); i++){
-            Expense expense = expenseList.get(i);
-            listItems[i] = expense.expense;
-        }
-
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
+        ExpenseAdapter adapter = new ExpenseAdapter(this, expenseList);
         mListView.setAdapter(adapter);
     }
 }

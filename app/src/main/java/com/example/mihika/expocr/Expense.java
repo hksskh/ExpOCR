@@ -35,12 +35,14 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Expense {
 
     public String expense;
     public Double balance;
-    public String date;
+    public Calendar date;
 
     public static ArrayList<Expense> getRecipesFromFile(String filename, Context context){
         final ArrayList<Expense> expenseList = new ArrayList<>();
@@ -57,7 +59,11 @@ public class Expense {
 
                 expense.expense = expenses.getJSONObject(i).getString("Expense");
                 expense.balance = expenses.getJSONObject(i).getDouble("Balance");
-                expense.date = expenses.getJSONObject(i).getString("Date");
+                int date = expenses.getJSONObject(i).getInt("Day");
+                int month = expenses.getJSONObject(i).getInt("Month");
+                int year = expenses.getJSONObject(i).getInt("Year");
+                expense.date = Calendar.getInstance();
+                expense.date.set(year, month-1, date);
 
                 expenseList.add(expense);
             }
