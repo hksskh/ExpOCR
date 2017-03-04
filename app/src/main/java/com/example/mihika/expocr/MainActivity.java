@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //Todo: jump to activity for adding a bill here
+                Snackbar.make(view, "Add Bill", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -92,7 +93,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_add_friend) {
+            return true;
+        }else if(id == R.id.action_create_group){
             return true;
         }
 
@@ -105,19 +108,29 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if(id == R.id.nav_home){
+
+        }
+        else if(id == R.id.nav_account){
+
+        }else if(id == R.id.nav_budget){
+
+        }
+        else if (id == R.id.nav_camera) {
             Intent intent = new Intent(MainActivity.this, PhotoCaptureActivity.class);
             //Todo: bundle data to be transferred
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_contact) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_plan) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_summary) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_trend) {
+
+        } else if (id == R.id.nav_logout){
 
         }
 
@@ -145,7 +158,7 @@ class TabFragmentAdapter extends FragmentPagerAdapter {
         super(fm);
         this.fm = fm;
         //Todo: put strings in strings.xml
-        this.tab_titles = new String[]{"FRIENDS", "GROUPS", "ACTIVITY"};
+        this.tab_titles = new String[]{"FRIENDS", "GROUPS", "EXPENSES"};
         this.tab_fragments = new Fragment[tab_titles.length];
         for(int index = 0; index < tab_titles.length; index++){
             tab_fragments[index] = TabFragment.newInstance(tab_titles[index]);
