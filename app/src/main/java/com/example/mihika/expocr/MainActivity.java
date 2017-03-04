@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity
                 //Todo: jump to activity for adding a bill here
                 Snackbar.make(view, "Add Bill", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -82,6 +85,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getResources().getString(R.string.action_search));
+        //Todo: add different listeners for searchView to offer suggestions based on query text
+
         return true;
     }
 
@@ -94,8 +103,10 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_friend) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
             return true;
         }else if(id == R.id.action_create_group){
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
             return true;
         }
 
@@ -109,27 +120,28 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if(id == R.id.nav_home){
-
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
         else if(id == R.id.nav_account){
-
-        }
-        else if (id == R.id.nav_camera) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_plan) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_camera) {
             Intent intent = new Intent(MainActivity.this, PhotoCaptureActivity.class);
             //Todo: bundle data to be transferred
             startActivity(intent);
-        } else if (id == R.id.nav_contact) {
-
-        } else if (id == R.id.nav_plan) {
-
-        } else if (id == R.id.nav_settings) {
-
         } else if (id == R.id.nav_summary) {
-
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_trend) {
-
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_settings) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_contact) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_logout){
-
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
