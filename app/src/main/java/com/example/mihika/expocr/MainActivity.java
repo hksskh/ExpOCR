@@ -113,8 +113,6 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id == R.id.nav_account){
 
-        }else if(id == R.id.nav_budget){
-
         }
         else if (id == R.id.nav_camera) {
             Intent intent = new Intent(MainActivity.this, PhotoCaptureActivity.class);

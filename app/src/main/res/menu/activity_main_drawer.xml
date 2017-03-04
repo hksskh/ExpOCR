@@ -5,6 +5,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home"
             android:title="Home" />
     </group>
 
@@ -12,12 +13,11 @@
         android:checkableBehavior="none">
         <item
             android:id="@+id/nav_account"
+            android:icon="@drawable/ic_menu_account"
             android:title="Account" />
         <item
-            android:id="@+id/nav_budget"
-            android:title="Budgets" />
-        <item
             android:id="@+id/nav_plan"
+            android:icon="@drawable/ic_menu_plan"
             android:title="Plans" />
         <item
             android:id="@+id/nav_camera"
@@ -25,9 +25,11 @@
             android:title="Scan" />
         <item
             android:id="@+id/nav_summary"
+            android:icon="@drawable/ic_menu_summary"
             android:title="Summary" />
         <item
             android:id="@+id/nav_trend"
+            android:icon="@drawable/ic_menu_trend"
             android:title="Trends" />
     </group>
 
@@ -35,12 +37,15 @@
         android:checkableBehavior="none">
         <item
             android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_settings"
             android:title="Settings" />
         <item
             android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_menu_contact"
             android:title="Contact us" />
         <item
             android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_menu_logout"
             android:title="Log out" />
     </group>
 
