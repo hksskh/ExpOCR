@@ -4,3 +4,4 @@ CREATE TABLE users(username VARCHAR(20) UNIQUE, email VARCHAR(20) UNIQUE, passwo
 CREATE TABLE expenses(uid1 VARCHAR(20), uid2 VARCHAR(20), amount VARCHAR(20), category VARCHAR(20), memo VARCHAR(40));
 CREATE TABLE group(gid VARCHAR(20) UNIQUE, name VARCHAR(20));
 CREATE TABLE members(gid VARCHAR(20) UNIQUE, uid VARCHAR(20));
+CREATE TABLE payment(uid1 VARCHAR(20), uid2 VARCHAR(20), amount VARCHAR(20), date DATE);
