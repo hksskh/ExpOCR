@@ -28,7 +28,7 @@
     <string name="action_create_group">Create Group</string>
     <string name="action_search">search for something...</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- strings in sign up page -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sign_in">Sign up</string>
     <string name="prompt_reenter_password">Re-enter Password</string>
@@ -38,4 +38,20 @@
     <string name="error_invalid_password_no_upper">Password should have upper case letter</string>
     <string name="error_invalid_password_no_special">Password should have special letter</string>
     <string name="error_cannot_match_password">Should be the same as password</string>
+
+    <!-- strings in add transaction page -->
+    <string name="prompt_amount">Enter amount of transaction</string>
+    <string name="prompt_memo">Enter memo for this transaction</string>
+    <string name="prompt_fab">Choose kind of transaction</string>
+
+
+    <string-array name="transaction_options">
+        <item>For individual</item>
+        <item>For group</item>
+    </string-array>
+
+    <string-array name="user_options">
+        <item>Me</item>
+    </string-array>
+
 </resources>

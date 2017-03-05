@@ -21,16 +21,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:backgroundTint="@color/floatingbtnbgd"
-        android:src="@drawable/ic_vector_add_white"
-        android:scaleType="fitXY"/>
+        app:srcCompat="@android:drawable/ic_menu_add"
+        app:backgroundTint="@color/colorPrimary"
+        android:onClick="addTransaction"/>
+
+    <include layout="@layout/content_main" />
 
 </android.support.design.widget.CoordinatorLayout>

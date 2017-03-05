@@ -12,7 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity
 
     private TabFragmentAdapter tabAdapter;
     private ViewPager tabPager;
+    private FloatingActionButton myFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,16 @@ public class MainActivity extends AppCompatActivity
         tabPager.setOffscreenPageLimit(tabAdapter.getCount() - 1);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(tabPager);
+
+        myFAB = (FloatingActionButton) findViewById(R.id.fab);
+        myFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MainActivity", "Add button clicked");
+                Intent transaciton = new Intent(MainActivity.this, AddTransactionActivity.class);
+                startActivity(transaciton);
+            }
+        });
     }
 
     @Override
@@ -157,6 +168,7 @@ public class MainActivity extends AppCompatActivity
         builder.append("Current Time: ").append(DateFormat.getDateTimeInstance().format(new Date()));
         return builder.toString();
     }
+
 }
 
 class TabFragmentAdapter extends FragmentPagerAdapter {
