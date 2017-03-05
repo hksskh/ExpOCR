@@ -17,8 +17,16 @@ class add:
         if(input.funcname=="createUser"):
             ret=database.createUser(input.username, input.email, input.password)
             print ret
-        return
-
+		if (input.funcname=="getTransaction"):
+			ret = database.getTransacation(input.tid);
+			print ret
+		if (input.funcname=="getTransactions"):
+			ret = database.getTransactions(input.uid);
+		if (input.funcname == "getGroup"):
+			ret = database.getGroup(input.gid)
+		if (input.funcname == "getPassword"):
+			ret = database.getPassword(input.email)
+		return
 if __name__ == "__main__": 
     app = web.application(urls, globals())
     app.run()
