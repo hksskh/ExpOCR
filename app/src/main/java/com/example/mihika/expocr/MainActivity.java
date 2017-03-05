@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity
 
     private TabFragmentAdapter tabAdapter;
     private ViewPager tabPager;
+    private FloatingActionButton myFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +48,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //Todo: jump to activity for adding a bill here
+                Snackbar.make(view, "Add Bill", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -65,6 +71,16 @@ public class MainActivity extends AppCompatActivity
         tabPager.setOffscreenPageLimit(tabAdapter.getCount() - 1);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(tabPager);
+
+        myFAB = (FloatingActionButton) findViewById(R.id.fab);
+        myFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MainActivity", "Add button clicked");
+                Intent transaciton = new Intent(MainActivity.this, AddTransactionActivity.class);
+                startActivity(transaciton);
+            }
+        });
     }
 
     @Override
@@ -81,6 +97,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getResources().getString(R.string.action_search));
+        //Todo: add different listeners for searchView to offer suggestions based on query text
+
         return true;
     }
 
@@ -92,7 +114,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_add_friend) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+            return true;
+        }else if(id == R.id.action_create_group){
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
             return true;
         }
 
@@ -105,20 +131,29 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if(id == R.id.nav_home){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+        else if(id == R.id.nav_account){
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_plan) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_camera) {
             Intent intent = new Intent(MainActivity.this, PhotoCaptureActivity.class);
             //Todo: bundle data to be transferred
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_summary) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_trend) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_settings) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_contact) {
+            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_logout){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -134,6 +169,7 @@ public class MainActivity extends AppCompatActivity
         builder.append("Current Time: ").append(DateFormat.getDateTimeInstance().format(new Date()));
         return builder.toString();
     }
+
 }
 
 class TabFragmentAdapter extends FragmentPagerAdapter {
@@ -145,7 +181,7 @@ class TabFragmentAdapter extends FragmentPagerAdapter {
         super(fm);
         this.fm = fm;
         //Todo: put strings in strings.xml
-        this.tab_titles = new String[]{"FRIENDS", "GROUPS", "ACTIVITY"};
+        this.tab_titles = new String[]{"FRIENDS", "GROUPS", "EXPENSES"};
         this.tab_fragments = new Fragment[tab_titles.length];
         for(int index = 0; index < tab_titles.length; index++){
             tab_fragments[index] = TabFragment.newInstance(tab_titles[index]);
