@@ -1,6 +1,7 @@
 package com.example.mihika.expocr;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -129,11 +131,29 @@ public class TabFragment extends Fragment {
                 baseView = inflater.inflate(R.layout.fragment_tab, container, false);
                 textView = (TextView) baseView.findViewById(R.id.tab_textview);
                 textView.setText("Hello, this is tab " + page_title);
+                Button button = (Button) baseView.findViewById(R.id.tab_button);
+                button.setText("List of Friends");
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(baseView.getContext(), FriendListActivity.class);
+                        startActivity(intent);
+                    }
+                });
                 break;
             case "GROUPS":
                 baseView = inflater.inflate(R.layout.fragment_tab, container, false);
                 textView = (TextView) baseView.findViewById(R.id.tab_textview);
                 textView.setText("Hello, this is tab " + page_title);
+                Button button_grp = (Button) baseView.findViewById(R.id.tab_button);
+                button_grp.setText("List of Groups");
+                button_grp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(baseView.getContext(), IndividualGroupActivity.class);
+                        startActivity(intent);
+                    }
+                });
                 break;
             case "EXPENSES":
                 baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
@@ -171,11 +191,14 @@ public class TabFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String info = (String) ((TextView)view.findViewById(R.id.fragment_tab_expenses_list_info)).getText();
                         if(info.contains("recorded")){
-                            Toast.makeText(TabFragment.this.getContext(), "jump to overview page of this payment", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(baseView.getContext(), IndividualFriendActivity.class);
+                            startActivity(intent);
                         }else if(info.contains("paid")){
-                            Toast.makeText(TabFragment.this.getContext(), "jump to overview page of this payment", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(baseView.getContext(), IndividualFriendActivity.class);
+                            startActivity(intent);
                         }else if(info.contains("group")){
-                            Toast.makeText(TabFragment.this.getContext(), "jump to detailed page of this group", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(baseView.getContext(), IndividualGroupActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });

@@ -18,6 +18,11 @@
                 android:layout_height="wrap_content"
                 android:text="@string/hello_blank_fragment"
                 android:gravity="center"/>
+            <Button
+                android:id="@+id/tab_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"/>
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 

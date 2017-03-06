@@ -26,13 +26,14 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SignupActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -40,7 +41,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PhotoCaptureActivity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -52,7 +53,28 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".AddTransactionActivity"></activity>
+        <activity android:name=".AddTransactionActivity" />
+        <activity
+            android:name=".FriendListActivity"
+            android:label="@string/title_friend_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".FriendDetailActivity"
+            android:label="@string/title_friend_detail"
+            android:parentActivityName=".FriendListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mihika.expocr.FriendListActivity" />
+        </activity>
+        <activity
+            android:name=".IndividualFriendActivity"
+            android:label="@string/title_friend_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".IndividualGroupActivity"
+            android:label="Group"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
