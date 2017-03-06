@@ -3,6 +3,7 @@ package com.example.mihika.expocr;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,8 +16,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.Toast;
+
+import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -29,9 +40,11 @@ public class PhotoCaptureActivity extends AppCompatActivity {
     private Button takePictureButton;
     private ImageView imageView;
     private Uri file;
+    private String trainedDataPath="/mnt/sdcard/tesseract/tessdata/eng.traineddata";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_capture);
 
@@ -40,8 +53,9 @@ public class PhotoCaptureActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             takePictureButton.setEnabled(false);
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE , Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
         }
+
     }
 
     @Override
@@ -83,6 +97,65 @@ public class PhotoCaptureActivity extends AppCompatActivity {
         if (requestCode == 100) {
             if (resultCode == RESULT_OK) {
                 imageView.setImageURI(file);
+                onPhotoTaken();
+            }
+        }
+    }
+
+    protected void onPhotoTaken() {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        String path = Environment.getExternalStorageDirectory()+"/tesseract/tessdata";
+
+        Bitmap bitmap = BitmapFactory.decodeFile( file.getPath(), options );
+        Bitmap bitmap= BitmapFactory.decodeFile( Environment.getExternalStorageDirectory() +"/img/testimg.png", options);
+        bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        useTess(bitmap);*/
+    }
+
+    protected void useTess(Bitmap bitmap)
+    {
+        checkFile(new File("/mnt/sdcard/tesseract/tessdata"));
+        TessBaseAPI tessApi=new TessBaseAPI();
+        String setLang="eng";
+        tessApi.init(trainedDataPath, setLang);
+        tessApi.setImage(bitmap);
+        String text=tessApi.getUTF8Text();
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+        tessApi.end();
+    }
+
+    protected void copyTrainingFiles() {
+        try {
+            AssetManager assetMan= getAssets();
+            InputStream instream = assetMan.open("tessdata/eng.traineddata");
+            OutputStream outstream = new FileOutputStream(trainedDataPath);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = instream.read(buffer)) != -1) {
+                outstream.write(buffer, 0, read);
+            }
+            outstream.flush();
+            outstream.close();
+            instream.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void checkFile(File dir) {
+        if (!dir.exists()&& dir.mkdirs()){
+            copyTrainingFiles();
+        }
+        if(dir.exists()) {
+            File datafile = new File(trainedDataPath);
+
+            if (!datafile.exists()) {
+                copyTrainingFiles();
             }
         }
     }

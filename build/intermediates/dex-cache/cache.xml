@@ -3,183 +3,192 @@
 
     <item
         is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/customtabs/25.0.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="94ba691efc31bf53264db0716d9c9ec03843ea31">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-customtabs-25.0.0_f4b1dd43c84be459ff85ea7499347bc67e54be19/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.19.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c6047a34af07d6ec4e950ba1dc70ce23ac65ecaa">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.facebook.android-facebook-android-sdk-4.19.0_3aa8df1ea5130b01572365074072aaa3d322c6f3/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.4.0/8ad21bf21784dacce5f2043afb97218cc377e835/bolts-applinks-1.4.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="8ad21bf21784dacce5f2043afb97218cc377e835">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-applinks-1.4.0_cde1110334e11768a97bf9e390421f3f2d1a2c6d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c9649557905bf7a80fca9e0d54cbcb7662627860">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-25.1.1_37c50a1a67320d72cbdd69af09640a9ba1ee8c1f/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="7bde4c34162092e0a77e7f12dc85ed77c484cf5c">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.1.1_71b9392ea0cf1ec9283a6199a620ee0db2e4a8ff/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="02741d05d4b697fba5e279e9881aaa1da0ca7c7f">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-25.1.1_589c477d75aa0450cb70f96058eb508900d98334/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-tasks-1.4.0_754418eb121a13aca3c7b2b81a1ae6bc94381c19/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="b3ab29fc3e758395a3d70d3575995e3f9e86b8bf">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_7cb2f1a6602f0d58a7c5043d8b88f3333c20e7da/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.1/support-annotations-25.1.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="b59b6ee8d6ecc03e672d253800430343493a6ed8">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.1.1_14b6bac0c73a5bae8c2eca73a3671a462b268e51/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="62b046c994cb0835b50e76e176ac389b77010cca">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_d739ead282d59a6273d7e585c5800657f0f87992/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="0d191c1a09e4892d059e5ce749e4ad4e08129e35">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.1.1_96121320b7320b738f855fbdebb7b97f5e273391/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/design/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="cd7951e04cfb9a8bf008d544a478d9a8d8192d38">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-25.1.1_ff91da93a7b21ce978d243342fcaaa853ac94a93/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="3e04ac8ca644ea7baddf6fdcf72e15c79e9df94a">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-25.1.1_36c262ca3dc8ac759032972945889f789f1f3188/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.1/jars/classes.jar"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="ecb496cc08dd52551fc5ec6db3bc0632e95a89bb">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.1.1_f0aff45e59b98b1e69e5b3acb32e54d343ed51ef/classes.dex" />
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.1.1_0586ee82cbc06abd3eecda93897e946c628292af/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="e2719c102dca3a7a5b02ce07f769362da6ddb4ab">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.1.1_74d59d334e9e5661b053b05489fa6d8c6337a24e/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.1.1_a6f95bb8cd048625306904ebf5e315bed06ccbb7/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c03bf57f358aa10d253f21989e93bcf6014b3b17">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.1.1_6aa207c3b0c7a10d1ee39bd92dbe9c74c6e3738e/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/25.0.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="8a372c4191f80489770a231f7be4820b204b886a">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-cardview-v7-25.0.0_8a868c42e54514cca34c9f90f748f2a48d3c0d47/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/transition/25.1.1/jars/classes.jar"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/transition/25.1.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="15b049fedbd8e3926bf99d9e45dfc9b2a1043bb9">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-transition-25.1.1_448bbf6241ca68ad5c87803e9374a5007ad97262/classes.dex" />
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-transition-25.1.1_fd5a89192d504237c2e67ec0af20c84c238518aa/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.1/jars/classes.jar"
+        jar="/home/conner/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.4.0/8ad21bf21784dacce5f2043afb97218cc377e835/bolts-applinks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8ad21bf21784dacce5f2043afb97218cc377e835">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-applinks-1.4.0_2e5f9dc3e006123d3e847b3425fa47a1c75faf0c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-tasks-1.4.0_d1e822f38c69b1fba79393646d85957d015c80e5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="0d191c1a09e4892d059e5ce749e4ad4e08129e35">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.1.1_15ffa09b0efd23295d70fb42a469f67232d20b07/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e2719c102dca3a7a5b02ce07f769362da6ddb4ab">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.1.1_8c7fb67b8820df995ecaee5b6963ebe8408d710d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8a372c4191f80489770a231f7be4820b204b886a">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-cardview-v7-25.0.0_31b30f849ba36c624b42f05a8c9cd700d8a97b97/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="3e04ac8ca644ea7baddf6fdcf72e15c79e9df94a">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-25.1.1_ff9c515000cc5ed53cdd77b7347132a5d345ee08/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7bde4c34162092e0a77e7f12dc85ed77c484cf5c">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.1.1_9ee4439266186ef6b16dcb25ae3998ae4d4f804d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="deb5acdcfb3909273d19964dfdaef54e857b63dd">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_cf9eba913ec7eb6e049c4fb43f1b9e9e765c4bec/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.1/support-annotations-25.1.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b59b6ee8d6ecc03e672d253800430343493a6ed8">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.1.1_0d0ff21a1c0ea8cd3a9c2861f947c950faf0f177/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c03bf57f358aa10d253f21989e93bcf6014b3b17">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.1.1_6acff0491d0bdc7d74b84e2fda8a1a4d6a0f09e8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="0fb891e8f0cfba0513043a7bb357513d229ca2cd">
-        <dex dex="/Users/hksskh/Documents/uiuc_on-campus_courses/CS_428/teamproject/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.1.1_524e480c3fae07ea3dce4671c477424a0ae6ceee/classes.dex" />
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.1.1_cd4528565a346c761f05c730083472d5d2d75860/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.1.1_d2193becd20f995378c74081c0ccdd2c476505a0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/customtabs/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="94ba691efc31bf53264db0716d9c9ec03843ea31">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-customtabs-25.0.0_44864148923a3c463d7a62ee2181ef5eacb83a58/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.rmtheis/tess-two/6.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2e1e80e5618ce24efaf884fec3cf6133ba2d6555">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.rmtheis-tess-two-6.2.0_238053160f7070f43f023e3f58f8ce1e430c3e5b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="02741d05d4b697fba5e279e9881aaa1da0ca7c7f">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-25.1.1_bea8a31f9e41b12e00f7cc71c65aa030010d2c8b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.20.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="cb2ef781533c3f11c4e80341cbaebad275c66586">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.facebook.android-facebook-android-sdk-4.20.0_f272340871e1f0d1a61b2d06a6a17c2cbf1a82f4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c9649557905bf7a80fca9e0d54cbcb7662627860">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-25.1.1_7c9024314d82e84d360d6a0e99779216f24ac0d5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="85345e2d6fc7a5ddc8a2f48af827fd1c7815c12d">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_c8b5b847749b9dcea4edd5f8db8c274339c7ad30/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/exploded-aar/com.android.support/design/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="cd7951e04cfb9a8bf008d544a478d9a8d8192d38">
+        <dex dex="/home/conner/classes/cs428/ExpOCR/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-25.1.1_472fef5c2c0e69c2739c2a76508305899e1714fe/classes.dex" />
     </item>
 
 </items>
