@@ -105,7 +105,7 @@ public class PhotoCaptureActivity extends AppCompatActivity {
     protected void onPhotoTaken() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4;
-        String path = Environment.getExternalStorageDirectory()+"/tesseract/tessdata";
+        String path = Environment.getExternalStorageDirectory()+"/img/testimg.png";
 
         Bitmap bitmap = BitmapFactory.decodeFile( file.getPath(), options );
         Bitmap bitmap= BitmapFactory.decodeFile( Environment.getExternalStorageDirectory() +"/img/testimg.png", options);
