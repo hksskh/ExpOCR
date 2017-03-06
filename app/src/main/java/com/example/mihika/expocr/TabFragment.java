@@ -96,9 +96,9 @@ public class TabFragment extends Fragment {
                         case TabFragment.FRAGMENT_REFRESH:
                             Bundle b = msg.getData();
                             String text = b.getString("text");
-                            if(text != null && TabFragment.this.page_title != "EXPENSES"){
+                            /*if(text != null && TabFragment.this.page_title != "EXPENSES"){
                                 TabFragment.this.textView.setText(text);
-                            }
+                            }*/
                             swipeRefreshLayout.setRefreshing(false);
                             break;
                     }
@@ -128,41 +128,71 @@ public class TabFragment extends Fragment {
     private void asssignView(LayoutInflater inflater, ViewGroup container){
         switch(page_title){
             case "FRIENDS":
-                baseView = inflater.inflate(R.layout.fragment_tab, container, false);
-                textView = (TextView) baseView.findViewById(R.id.tab_textview);
-                textView.setText("Hello, this is tab " + page_title);
-                Button button = (Button) baseView.findViewById(R.id.tab_button);
-                button.setText("List of Friends");
-                button.setOnClickListener(new View.OnClickListener() {
+                baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
+                final ListView listView = (ListView) baseView.findViewById(R.id.fragment_tab_expenses_listview);
+                List<Map<String, Object>> listItems = new ArrayList<>();
+                int[] imageIDs = new int[]{R.drawable.ic_list_group, R.drawable.ic_list_group, R.drawable.ic_list_group};
+                String[] infos = new String[]{"First name, Last name", "First name, Last name", "First name, Last name"};
+                String[] alerts = new String[]{"Net balance: $15", "Net balance: -$35", "Net balance: $100"};
+                String[] dates = new String[]{"Last transaction date: Mar 2", "Last transaction date: Mar 1", "Last transaction date: Mar 2"};
+                for(int ij = 0; ij < 5; ij++){
+                    for(int i = 0; i < 3; i++){
+                        Map<String, Object> listItem = new HashMap<>();
+                        listItem.put("imageID", imageIDs[i]);
+                        listItem.put("info", infos[i]);
+                        listItem.put("alert", alerts[i]);
+                        listItem.put("date", dates[i]);
+                        listItem.put("textColor", getResources().getColor(R.color.floatingbtnbgd));
+                        listItems.add(listItem);
+                    }
+                }
+                Expenses_List_Adapter list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
+                listView.setAdapter(list_adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(baseView.getContext(), FriendListActivity.class);
-                        startActivity(intent);
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(baseView.getContext(), IndividualFriendActivity.class);
+                    startActivity(intent);
                     }
                 });
                 break;
             case "GROUPS":
-                baseView = inflater.inflate(R.layout.fragment_tab, container, false);
-                textView = (TextView) baseView.findViewById(R.id.tab_textview);
-                textView.setText("Hello, this is tab " + page_title);
-                Button button_grp = (Button) baseView.findViewById(R.id.tab_button);
-                button_grp.setText("List of Groups");
-                button_grp.setOnClickListener(new View.OnClickListener() {
+                baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
+                final ListView listView_grp = (ListView) baseView.findViewById(R.id.fragment_tab_expenses_listview);
+                listItems = new ArrayList<>();
+                imageIDs = new int[]{R.drawable.ic_list_group, R.drawable.ic_list_group, R.drawable.ic_list_group};
+                infos = new String[]{"You recorded a payment from Jack in group1", "You paid Jack in group1", "You created the group group 1"};
+                alerts = new String[]{"You received $20.00", "You paid $10.00", "2 members in group group 1"};
+                dates = new String[]{"Mar 2", "Mar 2", "Mar 2"};
+                for(int ij = 0; ij < 5; ij++){
+                    for(int i = 0; i < 3; i++){
+                        Map<String, Object> listItem = new HashMap<>();
+                        listItem.put("imageID", imageIDs[i]);
+                        listItem.put("info", infos[i]);
+                        listItem.put("alert", alerts[i]);
+                        listItem.put("date", dates[i]);
+                        listItem.put("textColor", getResources().getColor(R.color.blue));
+                        listItems.add(listItem);
+                    }
+                }
+                list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
+                listView_grp.setAdapter(list_adapter);
+                listView_grp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(baseView.getContext(), IndividualGroupActivity.class);
-                        startActivity(intent);
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(baseView.getContext(), IndividualGroupActivity.class);
+                    startActivity(intent);
                     }
                 });
                 break;
             case "EXPENSES":
                 baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
-                final ListView listView = (ListView) baseView.findViewById(R.id.fragment_tab_expenses_listview);
-                List<Map<String, Object>> listItems = new ArrayList<>();
-                int[] imageIDs = new int[]{R.drawable.ic_list_money_off, R.drawable.ic_list_money_in, R.drawable.ic_list_group};
-                String[] infos = new String[]{"You recorded a payment from Jack in group1", "You paid Jack in group1", "You created the group group 1"};
-                String[] alerts = new String[]{"You received $20.00", "You paid $10.00", "2 members in group group 1"};
-                String[] dates = new String[]{"Mar 2", "Mar 2", "Mar 2"};
+                final ListView listView_exp = (ListView) baseView.findViewById(R.id.fragment_tab_expenses_listview);
+                listItems = new ArrayList<>();
+                imageIDs = new int[]{R.drawable.ic_list_money_off, R.drawable.ic_list_money_in, R.drawable.ic_list_group};
+                infos = new String[]{"You recorded a payment from Jack in group1", "You paid Jack in group1", "You created the group group 1"};
+                alerts = new String[]{"You received $20.00", "You paid $10.00", "2 members in group group 1"};
+                dates = new String[]{"Mar 2", "Mar 2", "Mar 2"};
                 for(int ij = 0; ij < 5; ij++){
                     for(int i = 0; i < 3; i++){
                         Map<String, Object> listItem = new HashMap<>();
@@ -184,9 +214,9 @@ public class TabFragment extends Fragment {
                         listItems.add(listItem);
                     }
                 }
-                Expenses_List_Adapter list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
-                listView.setAdapter(list_adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
+                listView_exp.setAdapter(list_adapter);
+                listView_exp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String info = (String) ((TextView)view.findViewById(R.id.fragment_tab_expenses_list_info)).getText();

@@ -53,7 +53,8 @@
     <string-array name="user_options">
         <item>Me</item>
     </string-array>
-    <string name="title_friend_list">Friends</string>
-    <string name="title_friend_detail">Friend Detail</string>
+
+    <string name="friend_activity">Friend</string>
+    <string name="group_activity">Group</string>
 
 </resources>

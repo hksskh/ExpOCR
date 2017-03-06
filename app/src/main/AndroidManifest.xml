@@ -55,25 +55,12 @@
 
         <activity android:name=".AddTransactionActivity" />
         <activity
-            android:name=".FriendListActivity"
-            android:label="@string/title_friend_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".FriendDetailActivity"
-            android:label="@string/title_friend_detail"
-            android:parentActivityName=".FriendListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mihika.expocr.FriendListActivity" />
-        </activity>
-        <activity
             android:name=".IndividualFriendActivity"
-            android:label="@string/title_friend_list"
+            android:label="@string/friend_activity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".IndividualGroupActivity"
-            android:label="Group"
+            android:label="@string/group_activity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
