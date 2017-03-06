@@ -65,6 +65,30 @@
             </android.support.design.widget.TextInputLayout>
 
             <Spinner
+                android:id="@+id/income_or_expense_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:entries="@array/income_or_expense"
+                android:prompt="@string/prompt_fab"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textSize="40sp"
+                android:theme="@style/AlertDialog.AppCompat.Light"
+                android:translationX="-5dp" />
+
+            <Spinner
+                android:id="@+id/transaction_catergory_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:entries="@array/transaction_catergory"
+                android:prompt="@string/prompt_fab"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textSize="40sp"
+                android:theme="@style/AlertDialog.AppCompat.Light"
+                android:translationX="-5dp" />
+
+            <Spinner
                 android:id="@+id/transaction_kind_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -76,18 +100,14 @@
                 android:theme="@style/AlertDialog.AppCompat.Light"
                 android:translationX="-5dp" />
 
-            <Spinner
+            <com.example.mihika.expocr.MultiSelectionSpinner
                 android:id="@+id/user_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:prompt="@string/prompt_fab"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:textSize="40sp"
-                android:entries="@array/user_options"
-                android:theme="@style/AlertDialog.AppCompat.Light"
-                android:translationX="-5dp"
-                android:visibility="invisible" />
+                android:visibility="invisible"/>
 
         </LinearLayout>
 

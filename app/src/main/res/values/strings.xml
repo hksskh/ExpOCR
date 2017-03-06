@@ -50,6 +50,17 @@
         <item>For group</item>
     </string-array>
 
+    <string-array name="income_or_expense">
+        <item>Income</item>
+        <item>Expense</item>
+    </string-array>
+
+    <string-array name="transaction_catergory">
+        <item>Catergory 1</item>
+        <item>Catergory 2</item>
+    </string-array>
+
+
     <string-array name="user_options">
         <item>Me</item>
     </string-array>
