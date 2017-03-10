@@ -6,7 +6,7 @@ def connect():
     return mdb.connect(host="localhost",
                        user="root",
                        passwd="root",
-                       db="expo");
+                       db="test");
 
 def createUser(username, email, password):
 
@@ -33,3 +33,11 @@ def getPassword(email):
 	cursor.execute('SELECT Password FROM USERS WHERE Email =%s', email)
 	db.commit()
 	return cursor.fetchone()
+def addTransaction(sender, receiver, category, memo, amount, date):
+	db=connect()
+	cursor=db.cursor()
+	stmt='INSERT INTO TRANSACTIONS (Sender_Id, Receiver_Id, Category, Memo, Amount, Date) VALUES (%s, %s, %s, %s, %s, %s)'
+	data=(sender, receiver, category, memo, amount, date)
+	cursor.execute(stmt, data)
+	db.commit()
+	return "success"

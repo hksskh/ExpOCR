@@ -1,0 +1,4 @@
+Put useful curl commans in her to test functionality
+
+This tests adding a transaction
+curl --data "funcname=addTransaction&sender=1&receiver=2&category=Entertainment&memo=Batman&amount=5.00&date=1000-01-01 00:20:00" http://0.0.0.0:8080/add

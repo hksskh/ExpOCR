@@ -17,11 +17,13 @@ class add:
         if(input.funcname=="createUser"):
             ret=database.createUser(input.username, input.email, input.password)
             print ret
+        if(input.funcname=="addTransaction"):
+        	ret=database.addTransaction(input.sender, input.receiver, input.category, input.memo, input.amount, input.date)
 		if (input.funcname=="getTransaction"):
-			ret = database.getTransacation(input.tid);
+			ret = database.getTransacation(input.tid)
 			print ret
 		if (input.funcname=="getTransactions"):
-			ret = database.getTransactions(input.uid);
+			ret = database.getTransactions(input.uid)
 		if (input.funcname == "getGroup"):
 			ret = database.getGroup(input.gid)
 		if (input.funcname == "getPassword"):
