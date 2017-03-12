@@ -21,7 +21,7 @@ def createUser(username, email, password):
 	    return "username already exists"
 	cursor.execute('INSERT INTO USERS (U_NAME, Email, Password) VALUES (%s,%s,%s)', (username, email, password))
 	db.commit()
-	return "success"
+	return "true"
 def getTransaction(tid):
 	db=connect()
 	cursor=db.cursor()
