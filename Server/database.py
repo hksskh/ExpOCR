@@ -9,10 +9,17 @@ def connect():
                        db="test");
 
 def createUser(username, email, password):
-
 	db=connect()
 	cursor=db.cursor()
-	cursor.execute('INSERT INTO USERS (username, email, password) VALUES (%s,%s,%s)', (username, email, password))
+	cursor2 = db.cursor()
+	cursor3 = db.cursor()
+	cursor2.execute('SELECT U_Name FROM USERS WHERE Email =%s',email)
+	if (cursor2.fetchone()!=None):
+	    return "email already exists"
+	cursor3.execute('SELECT Email FROM USERS WHERE U_NAME =%s',username)
+	if (cursor3.fetchone()!=None):
+	    return "username already exists"
+	cursor.execute('INSERT INTO USERS (U_NAME, Email, Password) VALUES (%s,%s,%s)', (username, email, password))
 	db.commit()
 	return "success"
 def getTransaction(tid):
@@ -27,12 +34,17 @@ def getGroup(gid):
 	cursor.execute('SELECT * FROM GROUP WHERE G_id = %s', gid)
 	db.commit()
 	return cursor.fetchone()
-def getPassword(email):
+def comparePasswords(email,password):
 	db=connect()
 	cursor=db.cursor()
 	cursor.execute('SELECT Password FROM USERS WHERE Email =%s', email)
 	db.commit()
-	return cursor.fetchone()
+	val = cursor.fetchone()
+	if (val==None):
+	    return false
+	if (val[0] == password):
+	    return "true"
+	return "false"
 def addTransaction(sender, receiver, category, memo, amount, date):
 	db=connect()
 	cursor=db.cursor()
