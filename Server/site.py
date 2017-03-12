@@ -17,6 +17,11 @@ class add:
         if(input.funcname=="createUser"):
             ret=database.createUser(input.username, input.email, input.password)
             print ret
+	    return ret
+	if (input.funcname == "comparePassword"):
+	    ret = database.comparePasswords(input.email, input.password);
+	    print ret
+	    return ret
         if(input.funcname=="addTransaction"):
         	ret=database.addTransaction(input.sender, input.receiver, input.category, input.memo, input.amount, input.date)
 		if (input.funcname=="getTransaction"):
