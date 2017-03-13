@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,17 +52,19 @@ import java.util.concurrent.RunnableFuture;
  * Use the {@link TabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TabFragment extends Fragment {
+public class TabFragment extends Fragment implements FriendAdapter.ListItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "page_title";
 
     private static final int FRAGMENT_REFRESH = 1;
     private static final int DJANGO_TEST = 2;
+    private static final int NUM_LIST_ITEMS = 10;
 
     // TODO: Rename and change types of parameters
     private String page_title;
-
+    private FriendAdapter mFriendAdapter;
+    private RecyclerView mList;
 
     private Handler handler;
 
@@ -152,35 +156,18 @@ public class TabFragment extends Fragment {
     private void asssignView(LayoutInflater inflater, ViewGroup container){
         switch(page_title){
             case "FRIENDS":
-                baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
-                final ListView listView = (ListView) baseView.findViewById(R.id.fragment_tab_expenses_listview);
-                List<Map<String, Object>> listItems = new ArrayList<>();
-                int[] imageIDs = new int[]{R.drawable.ic_list_group, R.drawable.ic_list_group, R.drawable.ic_list_group};
-                String[] infos = new String[]{"First name, Last name", "First name, Last name", "First name, Last name"};
-                String[] alerts = new String[]{"Net balance: $15", "Net balance: -$35", "Net balance: $100"};
-                String[] dates = new String[]{"Last transaction date: Mar 2", "Last transaction date: Mar 1", "Last transaction date: Mar 2"};
-                for(int ij = 0; ij < 5; ij++){
-                    for(int i = 0; i < 3; i++){
-                        Map<String, Object> listItem = new HashMap<>();
-                        listItem.put("imageID", imageIDs[i]);
-                        listItem.put("info", infos[i]);
-                        listItem.put("alert", alerts[i]);
-                        listItem.put("date", dates[i]);
-                        listItem.put("textColor", getResources().getColor(R.color.floatingbtnbgd));
-                        listItems.add(listItem);
-                    }
-                }
-                Expenses_List_Adapter list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
-                listView.setAdapter(list_adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(baseView.getContext(), IndividualFriendActivity.class);
-                    startActivity(intent);
-                    }
-                });
+                baseView = inflater.inflate(R.layout.fragment_tab, container, false);
+
+                mList = (RecyclerView) baseView.findViewById(R.id.rv_friends);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+                mList.setLayoutManager(layoutManager);
+                mList.setHasFixedSize(true);
+
+                mFriendAdapter = new FriendAdapter(NUM_LIST_ITEMS, this);
+
+                mList.setAdapter(mFriendAdapter);
                 break;
-            case "GROUPS":
+            /*case "GROUPS":
                 baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
                 final ListView listView_grp = (ListView) baseView.findViewById(R.id.fragment_tab_expenses_listview);
                 listItems = new ArrayList<>();
@@ -274,7 +261,7 @@ public class TabFragment extends Fragment {
                         }
                     }
                 });
-                break;
+                break;*/
         }
     }
 
@@ -525,6 +512,13 @@ public class TabFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onListItemClick(int clickedItemIndex) {
+        Intent intent = new Intent(this.getActivity(), IndividualFriendActivity.class);
+        intent.putExtra("key", "value");
+        startActivity(intent);
     }
 
     /**
