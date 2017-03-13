@@ -61,6 +61,7 @@ public class TabFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String page_title;
 
+
     private Handler handler;
 
     private View baseView;
