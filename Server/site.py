@@ -17,7 +17,7 @@ class add:
         if(input.funcname=="createUser"):
             ret=database.createUser(input.username, input.email, input.password)
             return ret
-	    if (input.funcname == "comparePassword"):
+	    if (input.funcname == "comparePasswords"):
 	        ret = database.comparePasswords(input.email, input.password);
 	        return ret
         if(input.funcname=="addTransaction"):
