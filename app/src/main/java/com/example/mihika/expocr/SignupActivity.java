@@ -32,8 +32,6 @@ public class SignupActivity extends AppCompatActivity {
     private TextView mPasswordView;
     private TextView mPasswordReEnterView;
     private final String TAG = "SignupActivity";
-    private boolean success = false;
-
 
 
     @Override
@@ -112,7 +110,10 @@ public class SignupActivity extends AppCompatActivity {
                     is.close();
                     conn.disconnect();
                     Log.d(TAG, "From server:" + response);
-                    success = response.equals("true");
+                    if (response.equals("true")) {
+                        Intent gotoMain = new Intent(SignupActivity.this, MainActivity.class);
+                        startActivity(gotoMain);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -159,12 +160,14 @@ public class SignupActivity extends AppCompatActivity {
 
         if (isEmailValid && isPasswordValid && canReEnterPasswordMatch) {
             signup();
+            /*
             if (!success) {
                 Toast.makeText(getApplicationContext(), "Email or user name already used", Toast.LENGTH_SHORT).show();
             } else {
                 Intent gotoMain = new Intent(SignupActivity.this, MainActivity.class);
                 startActivity(gotoMain);
             }
+            */
         } else {
 
             if (!isEmailValid) {
