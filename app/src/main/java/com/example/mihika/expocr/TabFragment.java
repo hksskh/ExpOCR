@@ -19,10 +19,27 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RunnableFuture;
 
 
 /**
@@ -39,6 +56,7 @@ public class TabFragment extends Fragment {
     private static final String ARG_PARAM1 = "page_title";
 
     private static final int FRAGMENT_REFRESH = 1;
+    private static final int DJANGO_TEST = 2;
 
     // TODO: Rename and change types of parameters
     private String page_title;
@@ -100,6 +118,11 @@ public class TabFragment extends Fragment {
                                 TabFragment.this.textView.setText(text);
                             }*/
                             swipeRefreshLayout.setRefreshing(false);
+                            break;
+                        case TabFragment.DJANGO_TEST:
+                            b = msg.getData();
+                            text = b.getString("text");
+                            Toast.makeText(baseView.getContext(), text, Toast.LENGTH_LONG).show();
                             break;
                     }
                 }
@@ -221,12 +244,30 @@ public class TabFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String info = (String) ((TextView)view.findViewById(R.id.fragment_tab_expenses_list_info)).getText();
                         if(info.contains("recorded")){
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TabFragment.this.test_create_user();
+                                }
+                            }).start();
                             Intent intent = new Intent(baseView.getContext(), IndividualFriendActivity.class);
                             startActivity(intent);
                         }else if(info.contains("paid")){
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TabFragment.this.test_get_user_by_id();
+                                }
+                            }).start();
                             Intent intent = new Intent(baseView.getContext(), IndividualFriendActivity.class);
                             startActivity(intent);
                         }else if(info.contains("group")){
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TabFragment.this.test_get_gmail_user();
+                                }
+                            }).start();
                             Intent intent = new Intent(baseView.getContext(), IndividualGroupActivity.class);
                             startActivity(intent);
                         }
@@ -234,6 +275,219 @@ public class TabFragment extends Fragment {
                 });
                 break;
         }
+    }
+
+    private void test_create_user(){
+        String serverUrl = "http://10.0.2.2:8000/user/create";
+        URL url = null;
+        BufferedInputStream bis = null;
+        ByteArrayOutputStream baos;
+        BufferedOutputStream bos = null;
+        byte[] responseBody = null;
+        try {
+            url = new URL(serverUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            OutputStream os = connection.getOutputStream();
+            byte[] requestBody = "username=fwefewf&email=fwefew@qq.com&password=12345".getBytes("UTF-8");
+            os.write(requestBody);
+            os.flush();
+            os.close();
+            InputStream is = connection.getInputStream();
+            bis =  new BufferedInputStream(is);
+            baos = new ByteArrayOutputStream();
+            bos = new BufferedOutputStream(baos);
+            byte[] response_buffer = new byte[1024];
+            int length = 0;
+            while((length = bis.read(response_buffer)) > 0){
+                bos.write(response_buffer, 0, length);
+            }
+            bos.flush();
+            responseBody = baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        String text = null;
+        StringBuilder builder = null;
+        try {
+            text = new String(responseBody, "UTF-8");
+            JSONObject jsonObject = new JSONObject(text);
+            builder = new StringBuilder();
+            builder.append("{U_Id: ").append(jsonObject.get("id")).append(", U_Name: ")
+                    .append(jsonObject.get("name")).append(", Email: ")
+                    .append(jsonObject.get("email")).append("}");
+        } catch (UnsupportedEncodingException | JSONException e) {
+            e.printStackTrace();
+        }
+        text = builder.toString();
+        Message msg = new Message();
+        msg.what = TabFragment.DJANGO_TEST;
+        Bundle b = new Bundle();
+        b.putString("text", text);
+        msg.setData(b);
+        TabFragment.this.handler.sendMessage(msg);
+    }
+
+    private void test_get_user_by_id(){
+        String serverUrl = "http://10.0.2.2:8000/user/get_user_by_id";
+        URL url = null;
+        BufferedInputStream bis = null;
+        ByteArrayOutputStream baos;
+        BufferedOutputStream bos = null;
+        byte[] responseBody = null;
+        try {
+            url = new URL(serverUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            OutputStream os = connection.getOutputStream();
+            byte[] requestBody = "id=9".getBytes("UTF-8");
+            os.write(requestBody);
+            os.flush();
+            os.close();
+            InputStream is = connection.getInputStream();
+            bis =  new BufferedInputStream(is);
+            baos = new ByteArrayOutputStream();
+            bos = new BufferedOutputStream(baos);
+            byte[] response_buffer = new byte[1024];
+            int length = 0;
+            while((length = bis.read(response_buffer)) > 0){
+                bos.write(response_buffer, 0, length);
+            }
+            bos.flush();
+            responseBody = baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        String text = null;
+        StringBuilder builder = new StringBuilder("[");
+        try {
+            text = new String(responseBody, "UTF-8");
+            JSONArray jsonArray = new JSONArray(text);
+            for(int index = 0; index < jsonArray.length(); index++){
+                JSONObject jsonObject = (JSONObject) jsonArray.get(index);
+                builder.append("{U_Id: ").append(jsonObject.get("pk")).append(", U_Name: ");
+                jsonObject = jsonObject.getJSONObject("fields");
+                builder.append(jsonObject.get("U_Name")).append(", Email: ")
+                        .append(jsonObject.get("Email")).append("}, ");
+            }
+            builder.append("]");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        text = builder.toString();
+        Message msg = new Message();
+        msg.what = TabFragment.DJANGO_TEST;
+        Bundle b = new Bundle();
+        b.putString("text", text);
+        msg.setData(b);
+        TabFragment.this.handler.sendMessage(msg);
+    }
+
+    private void test_get_gmail_user(){
+        String serverUrl = "http://10.0.2.2:8000/user/gmail_user";
+        URL url = null;
+        BufferedInputStream bis = null;
+        ByteArrayOutputStream baos;
+        BufferedOutputStream bos = null;
+        byte[] responseBody = null;
+        try {
+            url = new URL(serverUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            OutputStream os = connection.getOutputStream();
+            byte[] requestBody = "".getBytes("UTF-8");
+            os.write(requestBody);
+            os.flush();
+            os.close();
+            InputStream is = connection.getInputStream();
+            bis =  new BufferedInputStream(is);
+            baos = new ByteArrayOutputStream();
+            bos = new BufferedOutputStream(baos);
+            byte[] response_buffer = new byte[1024];
+            int length = 0;
+            while((length = bis.read(response_buffer)) > 0){
+                bos.write(response_buffer, 0, length);
+            }
+            bos.flush();
+            responseBody = baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        String text = null;
+        StringBuilder builder = new StringBuilder("[");
+        try {
+            text = new String(responseBody, "UTF-8");
+            JSONArray jsonArray = new JSONArray(text);
+            for(int index = 0; index < jsonArray.length(); index++){
+                JSONObject jsonObject = jsonArray.getJSONObject(index);
+                jsonObject = jsonObject.getJSONObject("fields");
+                builder.append("{U_Name: ").append((String)jsonObject.get("U_Name"))
+                        .append(", Email: ").append((String)jsonObject.get("Email")).append("}, ");
+            }
+            builder.append("]");
+        } catch (UnsupportedEncodingException | JSONException e) {
+            e.printStackTrace();
+        }
+        text = builder.toString();
+        Message msg = new Message();
+        msg.what = TabFragment.DJANGO_TEST;
+        Bundle b = new Bundle();
+        b.putString("text", text);
+        msg.setData(b);
+        TabFragment.this.handler.sendMessage(msg);
     }
 
     @Override
