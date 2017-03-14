@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'^update_memo', views.expocr_transaction_update_memo),
     url(r'^create', views.expocr_transaction_create),
     url(r'^delete_between', views.expocr_transaction_delete_between),
+    url(r'^get_all_receivers', views.expocr_transaction_get_all_receivers),
+    url(r'^get_between', views.expocr_transaction_get_between),
 ]

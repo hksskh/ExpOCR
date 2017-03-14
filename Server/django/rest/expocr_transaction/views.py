@@ -39,6 +39,37 @@ def expocr_transaction_get_by_sender_id(request):
     return response
 
 @csrf_exempt
+def expocr_transaction_get_all_receivers(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    sender_id = params.get('sender_id')
+    data_list = []
+    result = Transaction.get_all_receivers(sender_id)
+    for entry in result:
+        data = {}
+        data['receiver'] = int(entry['Receiver_Id'])
+        data['balance'] = float(entry['Amount__sum'])
+        data_list.append(data)
+    response = HttpResponse(json.dumps(data_list), content_type="application/json")
+    return response
+
+@csrf_exempt
+def expocr_transaction_get_between(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    sender_id = params.get('sender_id')
+    receiver_id = params.get('receiver_id')
+    result = Transaction.get_transaction_between(sender_id, receiver_id)
+    data = serializers.serialize('json', result,
+                                 fields=('Category', 'Memo', 'Amount', 'Date'))
+    response = HttpResponse(data, content_type="application/json")
+    return response
+
+@csrf_exempt
 def expocr_transaction_update_memo(request):
     if request.method == 'GET':
         params = request.GET

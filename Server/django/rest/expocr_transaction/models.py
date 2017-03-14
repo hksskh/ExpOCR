@@ -1,7 +1,8 @@
+from __future__ import print_function
 from __future__ import unicode_literals
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Sum
 
 
 # Create your models here.
@@ -23,13 +24,27 @@ class Transaction(models.Model):
 
     @staticmethod
     def create_transaction(sender_id, receiver_id, category, memo, amount, date):
-        result = Transaction.manager.create(Sender_Id=sender_id, Receiver_Id=receiver_id, Category=category, Memo=memo, Amount=amount, Date=date)
+        result = Transaction.manager.create(Sender_Id=sender_id,Receiver_Id=receiver_id,
+                                            Category=category, Memo=memo, Amount=amount, Date=date)
         return result
 
     @staticmethod
     def get_transaction_by_sender_id(sender_id):
         query = Q(Sender_Id=sender_id)
-        result = Transaction.manager.filter(query)
+        result = Transaction.manager.filter(query).order_by('Receiver_Id', '-Date')[:5]
+        return result
+
+    @staticmethod
+    def get_all_receivers(sender_id):
+        query = Q(Sender_Id=sender_id)
+        result = Transaction.manager.filter(query).order_by('Receiver_Id').\
+            values('Receiver_Id').annotate(Sum('Amount'))[:2]
+        return result
+
+    @staticmethod
+    def get_transaction_between(sender_id, receiver_id):
+        query = Q(Sender_Id=sender_id) & Q(Receiver_Id=receiver_id)
+        result = Transaction.manager.filter(query).order_by('-Date')[:5]
         return result
 
     @staticmethod
