@@ -8,13 +8,6 @@ import json
 # Create your views here.
 
 @csrf_exempt
-def expocr_user_test(request):
-    data = {}
-    data['test'] = "ExpOCR User Test!"
-    response = HttpResponse(json.dumps(data), content_type="application/json")
-    return response
-
-@csrf_exempt
 def expocr_user_count_edu_user(request):
     data = {}
     data['user_count'] = User.count_edu_user()
