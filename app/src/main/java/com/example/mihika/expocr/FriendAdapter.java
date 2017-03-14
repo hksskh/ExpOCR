@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by mihika on 3/13/17.
  */
@@ -17,11 +20,16 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     private int mNumberItems;
 
     private final ListItemClickListener mOnClickListener;
+    public List<String> mData;
 
     //constructor
     public FriendAdapter(int numberOfItems, ListItemClickListener listener) {
         mNumberItems = numberOfItems;
         mOnClickListener = listener;
+        mData = new ArrayList<>();
+        for(int index = 0;index < 10; index++){
+            mData.add("Friend" + index);
+        }
     }
 
     public interface ListItemClickListener {
@@ -73,11 +81,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     @Override
     public int getItemCount() {
+        mNumberItems = mData.size();
         return mNumberItems;
     }
 
     public int getmNumberItems() {
-
+        mNumberItems = mData.size();
         //TODO should return number of items in the query result
         return mNumberItems;
     }
@@ -99,7 +108,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         void bind(int listIndex){
             //TODO: setText using the query data
 
-            listItemFriendView.setText(String.valueOf(listIndex));
+            listItemFriendView.setText(mData.get(listIndex));
         }
 
         @Override

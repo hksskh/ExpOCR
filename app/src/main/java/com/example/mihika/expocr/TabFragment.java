@@ -2,6 +2,7 @@ package com.example.mihika.expocr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -117,17 +118,24 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
                     super.handleMessage(msg);
                     switch(msg.what){
                         case TabFragment.FRAGMENT_REFRESH:
-                            Bundle b = msg.getData();
-                            String text = b.getString("text");
+                            if(page_title.equals("FRIENDS")){
+                                //mFriendAdapter.mData.remove(0);
+                                mFriendAdapter.notifyDataSetChanged();
+
+
+                            }else{
+                                Bundle b = msg.getData();
+                                String text = b.getString("text");
                             /*if(text != null && TabFragment.this.page_title != "EXPENSES"){
-                                TabFragment.this.textView.setText(text);
                             }*/
+                            }
+
                             swipeRefreshLayout.setRefreshing(false);
                             break;
                         case TabFragment.DJANGO_TEST:
-                            b = msg.getData();
-                            text = b.getString("text");
-                            Toast.makeText(baseView.getContext(), text, Toast.LENGTH_LONG).show();
+                            //b = msg.getData();
+                            //text = b.getString("text");
+                            //Toast.makeText(baseView.getContext(), text, Toast.LENGTH_LONG).show();
                             break;
                     }
                 }
@@ -156,6 +164,8 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
     private void asssignView(LayoutInflater inflater, ViewGroup container){
         switch(page_title){
             case "FRIENDS":
+
+
                 baseView = inflater.inflate(R.layout.fragment_tab, container, false);
 
                 mList = (RecyclerView) baseView.findViewById(R.id.rv_friends);
@@ -167,14 +177,14 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
 
                 mList.setAdapter(mFriendAdapter);
                 break;
-            /*case "GROUPS":
+            case "GROUPS":
                 baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
                 final ListView listView_grp = (ListView) baseView.findViewById(R.id.fragment_tab_expenses_listview);
-                listItems = new ArrayList<>();
-                imageIDs = new int[]{R.drawable.ic_list_group, R.drawable.ic_list_group, R.drawable.ic_list_group};
-                infos = new String[]{"You recorded a payment from Jack in group1", "You paid Jack in group1", "You created the group group 1"};
-                alerts = new String[]{"You received $20.00", "You paid $10.00", "2 members in group group 1"};
-                dates = new String[]{"Mar 2", "Mar 2", "Mar 2"};
+                List listItems = new ArrayList<>();
+                int [] imageIDs = new int[]{R.drawable.ic_list_group, R.drawable.ic_list_group, R.drawable.ic_list_group};
+                String[] infos = new String[]{"You recorded a payment from Jack in group1", "You paid Jack in group1", "You created the group group 1"};
+                String[] alerts = new String[]{"You received $20.00", "You paid $10.00", "2 members in group group 1"};
+                String[] dates = new String[]{"Mar 2", "Mar 2", "Mar 2"};
                 for(int ij = 0; ij < 5; ij++){
                     for(int i = 0; i < 3; i++){
                         Map<String, Object> listItem = new HashMap<>();
@@ -186,7 +196,7 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
                         listItems.add(listItem);
                     }
                 }
-                list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
+                Expenses_List_Adapter list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
                 listView_grp.setAdapter(list_adapter);
                 listView_grp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -261,7 +271,7 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
                         }
                     }
                 });
-                break;*/
+                break;
         }
     }
 
@@ -534,6 +544,20 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
          String onFragmentRefresh(String page_title);
+    }
+}
+
+class FriendsQueryTask extends AsyncTask<String, Void, String>{
+
+    @Override
+    protected String doInBackground(String... params) {
+
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(String s){
+
     }
 }
 
