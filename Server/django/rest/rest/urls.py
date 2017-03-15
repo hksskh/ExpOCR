@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^user/', include('expocr_user.urls')),
     url(r'^transaction/', include('expocr_transaction.urls')),
+    url(r'^group/', include('expocr_group.urls')),
 ]
