@@ -23,6 +23,11 @@ class Transaction(models.Model):
         ordering = ['T_Id']
 
     @staticmethod
+    def get_all_transactions():
+        transactions = Transaction.manager.all()
+        return transactions
+
+    @staticmethod
     def create_transaction(sender_id, receiver_id, category, memo, amount, date):
         result = Transaction.manager.create(Sender_Id=sender_id,Receiver_Id=receiver_id,
                                             Category=category, Memo=memo, Amount=amount, Date=date)
@@ -31,20 +36,20 @@ class Transaction(models.Model):
     @staticmethod
     def get_transaction_by_sender_id(sender_id):
         query = Q(Sender_Id=sender_id)
-        result = Transaction.manager.filter(query).order_by('Receiver_Id', '-Date')[:5]
+        result = Transaction.manager.filter(query).order_by('Receiver_Id', '-Date')
         return result
 
     @staticmethod
     def get_all_receivers(sender_id):
         query = Q(Sender_Id=sender_id)
         result = Transaction.manager.filter(query).order_by('Receiver_Id').\
-            values('Receiver_Id').annotate(Sum('Amount'))[:2]
+            values('Receiver_Id').annotate(Sum('Amount'))
         return result
 
     @staticmethod
     def get_transaction_between(sender_id, receiver_id):
         query = Q(Sender_Id=sender_id) & Q(Receiver_Id=receiver_id)
-        result = Transaction.manager.filter(query).order_by('-Date')[:5]
+        result = Transaction.manager.filter(query).order_by('-Date')
         return result
 
     @staticmethod

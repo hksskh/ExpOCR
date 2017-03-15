@@ -8,6 +8,12 @@ import json
 # Create your views here.
 
 @csrf_exempt
+def expocr_get_all_transactions(request):
+    data = serializers.serialize('json', Transaction.get_all_transactions())
+    response = HttpResponse(data, content_type="application/json")
+    return response
+
+@csrf_exempt
 def expocr_transaction_count_sender(request):
     if request.method == 'GET':
         params = request.GET

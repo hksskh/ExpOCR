@@ -19,6 +19,11 @@ class User(models.Model):
         ordering = ['U_Id']
 
     @staticmethod
+    def get_all_users():
+        users = User.manager.all()
+        return users
+
+    @staticmethod
     def create_user(username, email, password):
         user = User.manager.create(U_Name=username, Email=email, Password=password)
         return user
