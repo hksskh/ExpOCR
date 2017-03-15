@@ -12,11 +12,26 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Date;
+
+import android.widget.Button;
 
 import static android.view.View.VISIBLE;
 
@@ -26,6 +41,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     private MultiSelectionSpinner userSpinner;
     private Spinner catergorySpinner;
     private Spinner incomeOrExpenseSpinner;
+    private final String TAG = "AddTransactionActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +54,65 @@ public class AddTransactionActivity extends AppCompatActivity {
         incomeOrExpenseSpinner = (Spinner) findViewById(R.id.income_or_expense_spinner);
         addEntriesForSpinner();
         addListenerOnSpinnerItemSelection();
+
+        Button add_transaction_button = (Button) findViewById(R.id.add_transaction_button);
+        add_transaction_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendData();
+            }
+        });
     }
 
-    public void addAndReturn(View view) {
-        //TODO: Send data to server
-        Intent returnIntent = new Intent(AddTransactionActivity.this, MainActivity.class);
-        startActivity(returnIntent);
+    public void sendData() {
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                //fake data for demo purpose
+                int sender = 0;
+                int receiver = 1;
+                String category = "Food";
+                String memo = "Chicken Dinner";
+                double amount = 11.57;
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Date date = new Date();
+                String datetime = dateFormat.format(date);
+
+                String url = "http://10.0.2.2:8080/add";
+                String requestString = "funcname=addTransaction&sender=" + sender + "&receiver=" + receiver + "&category=" + category + "&memo=" + memo + "&amount=" + amount + "&date=" + date;
+                Log.d(TAG, requestString);
+                try {
+                    URL wsurl = new URL(url);
+                    HttpURLConnection conn = (HttpURLConnection) wsurl.openConnection();
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setRequestMethod("POST");
+                    OutputStream os = new BufferedOutputStream(conn.getOutputStream());
+                    os.write(requestString.getBytes());
+                    os.close();
+                    InputStream is = new BufferedInputStream(conn.getInputStream());
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    String response = "";
+                    while ((length = is.read(buffer)) != -1)
+                    {
+                        String temp = new String(buffer, 0, length, "UTF-8");
+                        response += temp;
+                        System.out.println(temp);
+                    }
+                    is.close();
+                    conn.disconnect();
+                    Log.d(TAG, "From server:" + response);
+                    if (response.equals("true")) {
+                        Intent gotoMain = new Intent(AddTransactionActivity.this, MainActivity.class);
+                        startActivity(gotoMain);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     protected void addEntriesForSpinner() {
