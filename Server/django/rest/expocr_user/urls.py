@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^create', views.expocr_user_create_user),
     url(r'^update_name', views.expocr_user_update_name),
     url(r'^delete', views.expocr_user_delete),
+    url(r'^all_users', views.expocr_get_all_users),
 ]
