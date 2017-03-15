@@ -164,7 +164,7 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
     private void asssignView(LayoutInflater inflater, ViewGroup container){
         switch(page_title){
             case "FRIENDS":
-
+                new FriendsQueryTask().execute();
 
                 baseView = inflater.inflate(R.layout.fragment_tab, container, false);
 
@@ -526,8 +526,14 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
+        String rawData = mFriendAdapter.mData.get(clickedItemIndex);
+        String[] rawList = rawData.split(",");
         Intent intent = new Intent(this.getActivity(), IndividualFriendActivity.class);
-        intent.putExtra("key", "value");
+        intent.putExtra("receiver_id", rawList[0]);
+        intent.putExtra("receiver_name", rawList[1]);
+        rawList = rawList[2].split(":");
+        intent.putExtra("receiver_email", rawList[0]);
+        intent.putExtra("balance", rawList[1]);
         startActivity(intent);
     }
 
@@ -545,19 +551,45 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
         // TODO: Update argument type and name
          String onFragmentRefresh(String page_title);
     }
-}
 
-class FriendsQueryTask extends AsyncTask<String, Void, String>{
+    class FriendsQueryTask extends AsyncTask<String, Void, String>{
 
-    @Override
-    protected String doInBackground(String... params) {
+        @Override
+        protected String doInBackground(String... params) {
+            return mFriendAdapter.friend_retrieve_all_receivers();
+        }
 
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(String s){
-
+        @Override
+        protected void onPostExecute(String s){
+            JSONArray jsonArray = null;
+            try {
+                jsonArray = new JSONArray(s);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            int limit = mFriendAdapter.getItemCount();
+            mFriendAdapter.mData.clear();
+            for(int index = 0; index < jsonArray.length() && index < limit; index++){
+                JSONObject jsonObj = null;
+                try {
+                    jsonObj = jsonArray.getJSONObject(index);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                StringBuilder builder = new StringBuilder();
+                try {
+                    builder.append(jsonObj.get("receiver_id")).append(",")
+                            .append(jsonObj.get("receiver_name")).append(",")
+                            .append(jsonObj.get("receiver_email")).append(":")
+                            .append(jsonObj.get("balance"));
+                    mFriendAdapter.mData.add(builder.toString());
+                    builder.setLength(0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            mFriendAdapter.notifyDataSetChanged();
+        }
     }
 }
 

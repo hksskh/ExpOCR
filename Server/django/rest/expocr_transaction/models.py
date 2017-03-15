@@ -49,7 +49,7 @@ class Transaction(models.Model):
     @staticmethod
     def get_transaction_between(sender_id, receiver_id):
         query = Q(Sender_Id=sender_id) & Q(Receiver_Id=receiver_id)
-        result = Transaction.manager.filter(query).order_by('-Date')
+        result = Transaction.manager.filter(query).order_by('-Date').values('Category', 'Memo', 'Amount', 'Date')
         return result
 
     @staticmethod

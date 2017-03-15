@@ -14,6 +14,7 @@ import com.example.mihika.expocr.R;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -73,6 +74,10 @@ public class ExpenseAdapter extends BaseAdapter {
         monthTextView.setText(expense.date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
 
         return rowView;
+    }
+
+    public List<Expense> getData(){
+        return this.mDataSource;
     }
 
     public double getNetBalance() {

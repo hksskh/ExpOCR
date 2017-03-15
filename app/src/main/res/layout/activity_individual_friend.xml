@@ -27,30 +27,38 @@
                 android:gravity="center" >
 
                 <TextView
-                    android:text="First and Last Name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:layout_marginTop="0dp"
                     android:gravity="center"
-                    android:id="@+id/name"
+                    android:id="@+id/friend_receiver_name"
                     android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:id="@+id/friend_receiver_email"
+                    android:textColor="@color/black"
+                    android:layout_below="@id/friend_receiver_name" />
 
                 <TextView
                     android:text="Net Balance: "
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/name"
+                    android:layout_below="@+id/friend_receiver_email"
                     android:textSize="16sp"
                     android:layout_marginTop="2dp"
                     android:gravity="center"
-                    android:id="@+id/net_balance" />
+                    android:id="@+id/friend_receiver_net_balance" />
 
                 <Button
                     android:text="Settle Up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/net_balance"
+                    android:layout_below="@+id/friend_receiver_net_balance"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
                     android:textSize="12sp"

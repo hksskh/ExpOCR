@@ -1,8 +1,10 @@
+from __future__ import print_function
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from models import Transaction
+from expocr_user.models import User
 import json
 
 # Create your views here.
@@ -52,12 +54,21 @@ def expocr_transaction_get_all_receivers(request):
         params = request.POST
     sender_id = params.get('sender_id')
     data_list = []
+    id_list = []
     result = Transaction.get_all_receivers(sender_id)
     for entry in result:
         data = {}
-        data['receiver'] = int(entry['Receiver_Id'])
+        data['receiver_id'] = int(entry['Receiver_Id'])
+        id_list.append(data['receiver_id'])
         data['balance'] = float(entry['Amount__sum'])
         data_list.append(data)
+    receiver_bulk = User.manager.in_bulk(id_list)
+    index = 0
+    while index < len(id_list):
+        pk = id_list[index]
+        data_list[index]['receiver_name'] = receiver_bulk[pk].U_Name
+        data_list[index]['receiver_email'] = receiver_bulk[pk].Email
+        index += 1
     response = HttpResponse(json.dumps(data_list), content_type="application/json")
     return response
 
@@ -70,9 +81,12 @@ def expocr_transaction_get_between(request):
     sender_id = params.get('sender_id')
     receiver_id = params.get('receiver_id')
     result = Transaction.get_transaction_between(sender_id, receiver_id)
-    data = serializers.serialize('json', result,
-                                 fields=('Category', 'Memo', 'Amount', 'Date'))
-    response = HttpResponse(data, content_type="application/json")
+    data_list = []
+    for entry in result:
+        data = {'category': entry['Category'], 'memo': entry['Memo'], 'amount': float(entry['Amount']),
+                'date': str(entry['Date'])}
+        data_list.append(data)
+    response = HttpResponse(json.dumps(data_list), content_type="application/json")
     return response
 
 @csrf_exempt

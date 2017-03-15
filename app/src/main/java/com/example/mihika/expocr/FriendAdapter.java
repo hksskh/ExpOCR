@@ -7,6 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +127,61 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         }
     }
 
-
+    public static String friend_retrieve_all_receivers(){
+        String serverUrl = "http://10.0.2.2:8000/transaction/get_all_receivers";
+        URL url = null;
+        BufferedInputStream bis = null;
+        ByteArrayOutputStream baos;
+        BufferedOutputStream bos = null;
+        byte[] responseBody = null;
+        try {
+            url = new URL(serverUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            OutputStream os = connection.getOutputStream();
+            String requestBody = "sender_id=1";
+            os.write(requestBody.getBytes("UTF-8"));
+            os.flush();
+            os.close();
+            InputStream is = connection.getInputStream();
+            bis =  new BufferedInputStream(is);
+            baos = new ByteArrayOutputStream();
+            bos = new BufferedOutputStream(baos);
+            byte[] response_buffer = new byte[1024];
+            int length = 0;
+            while((length = bis.read(response_buffer)) > 0){
+                bos.write(response_buffer, 0, length);
+            }
+            bos.flush();
+            responseBody = baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        String text = null;
+        try {
+            text = new String(responseBody, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return text;
+    }
 
 
 }

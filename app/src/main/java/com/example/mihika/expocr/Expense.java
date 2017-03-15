@@ -34,15 +34,31 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Expense {
 
     public String expense;
     public Double balance;
     public Calendar date;
+
+    public Expense(){
+
+    }
+
+    public Expense(String expense, double balance, String date) throws ParseException {
+        this.expense = expense;
+        this.balance = balance;
+        this.date = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        this.date.setTime(sdf.parse(date));
+
+    }
 
     public static ArrayList<Expense> getRecipesFromFile(String filename, Context context){
         final ArrayList<Expense> expenseList = new ArrayList<>();
