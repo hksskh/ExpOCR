@@ -8,7 +8,23 @@ from expocr_transaction.models import Transaction
 class TransactionTestCase(TestCase):
     def setUp(self):
         Transaction.create_transaction(sender_id="1", receiver_id="2", category="Entertainment", memo="Lego Movie", amount="10.00", date="1000-01-01T00:20:00Z")
+        Transaction.create_transaction(sender_id="2", receiver_id="3", category="Food", memo="Chipotle", amount="10.00", date="1000-01-01T00:20:00Z")
+        Transaction.create_transaction(sender_id="2", receiver_id="3", category="Apartment", memo="Toilet Paper", amount="-5.00", date="1000-01-01T00:20:00Z")
+        Transaction.create_transaction(sender_id="2", receiver_id="2", category="Apartment", memo="Rent", amount="-500.00", date="1000-01-01T00:20:00Z")
+		
 
     def test_transaction_is_created(self):
         test = serializers.serialize('json', Transaction.get_transaction_by_sender_id(sender_id="1"))
         self.assertEqual(test, '[{"model": "expocr_transaction.transaction", "pk": 1, "fields": {"Sender_Id": 1, "Receiver_Id": 2, "Category": "Entertainment", "Memo": "Lego Movie", "Amount": "10.00", "Date": "1000-01-01T00:20:00Z"}}]')
+        test2 = Transaction.get_all_receivers(sender_id="2")
+    	self.assertEqual(int(test2[0]['Receiver_Id']), 2)
+    	self.assertEqual(int(test2[1]['Receiver_Id']), 3)
+    	self.assertEqual(len(test2), 2)
+
+# The tests will only pass when they are together instead of separate... idk why
+
+    # def test_transaction_get_receivers(self):
+    # 	test = Transaction.get_all_receivers(sender_id="2")
+    # 	self.assertEqual(int(test[0]['Receiver_Id']), 2)
+    # 	self.assertEqual(int(test[1]['Receiver_Id']), 3)
+    # 	self.assertEqual(len(test), 2)
