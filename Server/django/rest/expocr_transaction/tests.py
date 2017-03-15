@@ -21,7 +21,7 @@ class TransactionTestCase(TestCase):
     	self.assertEqual(int(test2[1]['Receiver_Id']), 3)
     	self.assertEqual(len(test2), 2)
 
-# The tests will only pass when they are together instead of separate... idk why
+# The tests will only pass when they are together instead of separate... idk why.
 
     # def test_transaction_get_receivers(self):
     # 	test = Transaction.get_all_receivers(sender_id="2")
