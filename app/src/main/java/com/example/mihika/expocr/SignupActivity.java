@@ -2,6 +2,8 @@ package com.example.mihika.expocr;
 
 import android.content.Intent;
 import android.nfc.Tag;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,6 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -25,6 +30,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class SignupActivity extends AppCompatActivity {
 
+    private final int EMAIL_EXIST = 1;
+    private final int USERNAME_EXIST = 2;
 
     private TextView mFirstNameView;
     private TextView mLastNameView;
@@ -32,7 +39,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextView mPasswordView;
     private TextView mPasswordReEnterView;
     private final String TAG = "SignupActivity";
-
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,24 @@ public class SignupActivity extends AppCompatActivity {
         mPasswordView.setText("970530blX!");
         mPasswordReEnterView = (TextView) findViewById(R.id.reenter_password);
         mPasswordReEnterView.setText("970530blX!");
+
+        handler = new Handler(){
+            public void handleMessage(Message msg){
+                super.handleMessage(msg);
+                switch(msg.what){
+                    case EMAIL_EXIST:
+                        Bundle bundle = msg.getData();
+                        String warning = bundle.getString("warning");
+                        mEmailView.setError(warning);
+                        break;
+                    case USERNAME_EXIST:
+                        bundle = msg.getData();
+                        warning = bundle.getString("warning");
+                        mLastNameView.setError(warning);
+                        break;
+                }
+            }
+        };
 
     }
 
@@ -84,8 +109,8 @@ public class SignupActivity extends AppCompatActivity {
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
-                String url = "http://10.0.2.2:8080/add";
-                String requestString = "funcname=createUser&username=" + name + "&email=" + email + "&password=" + encrypted;
+                String url = "http://10.0.2.2:8000/user/create";
+                String requestString = "username=" + name + "&email=" + email + "&password=" + password;//encrypted;
                 Log.d(TAG, requestString);
 
                 try {
@@ -95,7 +120,7 @@ public class SignupActivity extends AppCompatActivity {
                     conn.setDoOutput(true);
                     conn.setRequestMethod("POST");
                     OutputStream os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(requestString.getBytes());
+                    os.write(requestString.getBytes("UTF-8"));
                     os.close();
                     InputStream is = new BufferedInputStream(conn.getInputStream());
                     byte[] buffer = new byte[1024];
@@ -110,11 +135,33 @@ public class SignupActivity extends AppCompatActivity {
                     is.close();
                     conn.disconnect();
                     Log.d(TAG, "From server:" + response);
-                    if (response.equals("true")) {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if(jsonObject.has("warning")){
+                        String warning = jsonObject.getString("warning");
+                        Bundle bundle = new Bundle();
+                        bundle.putString("warning", warning);
+                        if(warning.startsWith("Email")){
+                            Message msg = new Message();
+                            msg.what = EMAIL_EXIST;
+                            msg.setData(bundle);
+                            handler.sendMessage(msg);
+                        }else{
+                            Message msg = new Message();
+                            msg.what = USERNAME_EXIST;
+                            msg.setData(bundle);
+                            handler.sendMessage(msg);
+                        }
+                    }
+                    else {
                         Intent gotoMain = new Intent(SignupActivity.this, MainActivity.class);
+                        gotoMain.putExtra("u_id", jsonObject.getInt("id"));
+                        gotoMain.putExtra("u_name", jsonObject.getString("name"));
+                        gotoMain.putExtra("u_email", jsonObject.getString("email"));
                         startActivity(gotoMain);
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -137,7 +184,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, name);
         Log.d(TAG, password);
         Log.d(TAG, encrypted);
-        sendData(name, email, encrypted);
+        sendData(name, email, password);//encrypted);
     }
 
     protected void attempt_signup(View view) throws NoSuchAlgorithmException {

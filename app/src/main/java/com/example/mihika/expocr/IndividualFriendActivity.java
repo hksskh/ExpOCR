@@ -112,10 +112,11 @@ public class IndividualFriendActivity extends AppCompatActivity {
         BufferedInputStream bis = null;
         ByteArrayOutputStream baos;
         BufferedOutputStream bos = null;
+        HttpURLConnection connection = null;
         byte[] responseBody = null;
         try {
             url = new URL(serverUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -151,6 +152,8 @@ public class IndividualFriendActivity extends AppCompatActivity {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                connection.disconnect();
             }
         }
         String text = null;

@@ -211,10 +211,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         BufferedInputStream bis = null;
         ByteArrayOutputStream baos;
         BufferedOutputStream bos = null;
+        HttpURLConnection connection = null;
         byte[] responseBody = null;
         try {
             url = new URL(serverUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -250,6 +251,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                connection.disconnect();
             }
         }
         String text = null;

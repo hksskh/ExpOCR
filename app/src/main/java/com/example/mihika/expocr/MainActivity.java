@@ -33,6 +33,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TabFragment.OnFragmentInteractionListener {
 
+    private int u_id;
+    private String u_name;
+    private String u_email;
+
     private TabFragmentAdapter tabAdapter;
     private ViewPager tabPager;
     private FloatingActionButton myFAB;
@@ -43,6 +47,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent = getIntent();
+        u_id = intent.getIntExtra("u_id", 1);
+        u_name = intent.getStringExtra("u_name");
+        u_email = intent.getStringExtra("u_email");
+        System.out.println("u_id: " + u_id);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
