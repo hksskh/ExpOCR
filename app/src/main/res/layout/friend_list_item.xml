@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/friend_list_item_avatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="@dimen/tab_list_margin"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <TextView
+        android:id="@+id/friend_list_item_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/friend_item"
-        android:textSize="40sp"/>
+        android:layout_margin="@dimen/tab_list_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/friend_list_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/tab_list_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/black"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/friend_list_item_balance"
+        android:layout_toEndOf="@id/friend_list_item_avatar"
+        android:layout_toLeftOf="@id/friend_list_item_balance"
+        android:layout_toRightOf="@id/friend_list_item_avatar"/>
+
+</RelativeLayout>

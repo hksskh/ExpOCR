@@ -21,7 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="10dp"
             android:textSize="18sp"
             tools:text="Month"
@@ -31,11 +30,22 @@
             android:id="@+id/expense_list_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/expense_list_month"
-            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/expense_list_month"
+            android:layout_marginLeft="4dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="10dp"
             android:textSize="18sp"
             tools:text="Day"
+            android:textColor="?android:attr/textColorTertiary" />
+        <TextView
+            android:id="@+id/expense_list_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expense_list_month"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:textSize="18sp"
+            tools:text="Year"
             android:textColor="?android:attr/textColorTertiary" />
 
     </RelativeLayout>

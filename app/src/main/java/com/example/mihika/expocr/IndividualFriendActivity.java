@@ -70,7 +70,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            return IndividualFriendActivity.friend_get_transaction_between();
+            return friend_get_transaction_between();
         }
 
         @Override
@@ -106,7 +106,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
         }
     }
 
-    private static String friend_get_transaction_between(){
+    private String friend_get_transaction_between(){
         String serverUrl = "http://10.0.2.2:8000/transaction/get_between";
         URL url = null;
         BufferedInputStream bis = null;
@@ -120,7 +120,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
             connection.setDoInput(true);
             connection.setDoOutput(true);
             OutputStream os = connection.getOutputStream();
-            String requestBody = "sender_id=4&receiver_id=5";
+            String requestBody = "sender_id=1&receiver_id=" + receiver_id;
             os.write(requestBody.getBytes("UTF-8"));
             os.flush();
             os.close();

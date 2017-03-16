@@ -53,13 +53,12 @@ import java.util.concurrent.RunnableFuture;
  * Use the {@link TabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TabFragment extends Fragment implements FriendAdapter.ListItemClickListener{
+public class TabFragment extends Fragment implements FriendAdapter.FriendListItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "page_title";
 
-    private static final int FRAGMENT_REFRESH = 1;
-    private static final int DJANGO_TEST = 2;
+    public static final int FRIEND_FRAGMENT_REFRESH = 1;
     private static final int NUM_LIST_ITEMS = 10;
 
     // TODO: Rename and change types of parameters
@@ -111,61 +110,48 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
         // Inflate the layout for this fragment
         if(baseView == null){//if baseView has been created, then we enter into this onCreateView function because of the limited cached pages size in ViewPager, so we can simply restore view from baseView
             asssignView(inflater, container);
-            swipeRefreshLayout = (SwipeRefreshLayout) baseView.findViewById(R.id.tabSwipeRefreshLayout);
-            swipeRefreshLayout.setColorSchemeResources(R.color.red, R.color.green, R.color.blue);
-            handler = new Handler(){
-                public void handleMessage(Message msg){
-                    super.handleMessage(msg);
-                    switch(msg.what){
-                        case TabFragment.FRAGMENT_REFRESH:
-                            if(page_title.equals("FRIENDS")){
-                                //mFriendAdapter.mData.remove(0);
-                                mFriendAdapter.notifyDataSetChanged();
-
-
-                            }else{
-                                Bundle b = msg.getData();
-                                String text = b.getString("text");
-                            /*if(text != null && TabFragment.this.page_title != "EXPENSES"){
-                            }*/
-                            }
-
-                            swipeRefreshLayout.setRefreshing(false);
-                            break;
-                        case TabFragment.DJANGO_TEST:
-                            //b = msg.getData();
-                            //text = b.getString("text");
-                            //Toast.makeText(baseView.getContext(), text, Toast.LENGTH_LONG).show();
-                            break;
-                    }
-                }
-            };
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String text = TabFragment.this.fragmentRefresh();
-                            Message msg = new Message();
-                            msg.what = TabFragment.FRAGMENT_REFRESH;
-                            Bundle b = new Bundle();
-                            b.putString("text", text);
-                            msg.setData(b);
-                            TabFragment.this.handler.sendMessage(msg);
-                        }
-                    }).start();
-                }
-            });
+            setupRefreshLayout();
         }
         return baseView;
+    }
+
+    private void setupRefreshLayout(){
+        swipeRefreshLayout = (SwipeRefreshLayout) baseView.findViewById(R.id.tabSwipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.red, R.color.green, R.color.blue);
+        handler = new Handler(){
+            public void handleMessage(Message msg){
+                super.handleMessage(msg);
+                switch(msg.what){
+                    case FRIEND_FRAGMENT_REFRESH:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        };
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                switch(page_title){
+                    case "FRIENDS":
+                        mFriendAdapter.setIsRefreshing(true);
+                        mFriendAdapter.syncFriendList();
+                        break;
+                    case "GROUPS":
+                        break;
+                    case "EXPENSES":
+                        break;
+                }
+            }
+        });
+    }
+
+    public Handler getHandler(){
+        return this.handler;
     }
 
     private void asssignView(LayoutInflater inflater, ViewGroup container){
         switch(page_title){
             case "FRIENDS":
-                new FriendsQueryTask().execute();
-
                 baseView = inflater.inflate(R.layout.fragment_tab, container, false);
 
                 mList = (RecyclerView) baseView.findViewById(R.id.rv_friends);
@@ -223,7 +209,7 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
                         listItem.put("date", dates[i]);
                         switch(i){
                             case 0:
-                                listItem.put("textColor", getResources().getColor(R.color.floatingbtnbgd));
+                                listItem.put("textColor", getResources().getColor(R.color.orange));
                                 break;
                             case 1:
                                 listItem.put("textColor", getResources().getColor(R.color.green));
@@ -237,255 +223,8 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
                 }
                 list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
                 listView_exp.setAdapter(list_adapter);
-                listView_exp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String info = (String) ((TextView)view.findViewById(R.id.fragment_tab_expenses_list_info)).getText();
-                        if(info.contains("recorded")){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    TabFragment.this.test_create_user();
-                                }
-                            }).start();
-                            Intent intent = new Intent(baseView.getContext(), IndividualFriendActivity.class);
-                            startActivity(intent);
-                        }else if(info.contains("paid")){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    TabFragment.this.test_get_user_by_id();
-                                }
-                            }).start();
-                            Intent intent = new Intent(baseView.getContext(), IndividualFriendActivity.class);
-                            startActivity(intent);
-                        }else if(info.contains("group")){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    TabFragment.this.test_get_gmail_user();
-                                }
-                            }).start();
-                            Intent intent = new Intent(baseView.getContext(), IndividualGroupActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
                 break;
         }
-    }
-
-    private void test_create_user(){
-        String serverUrl = "http://10.0.2.2:8000/user/create";
-        URL url = null;
-        BufferedInputStream bis = null;
-        ByteArrayOutputStream baos;
-        BufferedOutputStream bos = null;
-        byte[] responseBody = null;
-        try {
-            url = new URL(serverUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            OutputStream os = connection.getOutputStream();
-            byte[] requestBody = "username=fwefewf&email=fwefew@qq.com&password=12345".getBytes("UTF-8");
-            os.write(requestBody);
-            os.flush();
-            os.close();
-            InputStream is = connection.getInputStream();
-            bis =  new BufferedInputStream(is);
-            baos = new ByteArrayOutputStream();
-            bos = new BufferedOutputStream(baos);
-            byte[] response_buffer = new byte[1024];
-            int length = 0;
-            while((length = bis.read(response_buffer)) > 0){
-                bos.write(response_buffer, 0, length);
-            }
-            bos.flush();
-            responseBody = baos.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        String text = null;
-        StringBuilder builder = null;
-        try {
-            text = new String(responseBody, "UTF-8");
-            JSONObject jsonObject = new JSONObject(text);
-            builder = new StringBuilder();
-            builder.append("{U_Id: ").append(jsonObject.get("id")).append(", U_Name: ")
-                    .append(jsonObject.get("name")).append(", Email: ")
-                    .append(jsonObject.get("email")).append("}");
-        } catch (UnsupportedEncodingException | JSONException e) {
-            e.printStackTrace();
-        }
-        text = builder.toString();
-        Message msg = new Message();
-        msg.what = TabFragment.DJANGO_TEST;
-        Bundle b = new Bundle();
-        b.putString("text", text);
-        msg.setData(b);
-        TabFragment.this.handler.sendMessage(msg);
-    }
-
-    private void test_get_user_by_id(){
-        String serverUrl = "http://10.0.2.2:8000/user/get_user_by_id";
-        URL url = null;
-        BufferedInputStream bis = null;
-        ByteArrayOutputStream baos;
-        BufferedOutputStream bos = null;
-        byte[] responseBody = null;
-        try {
-            url = new URL(serverUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            OutputStream os = connection.getOutputStream();
-            byte[] requestBody = "id=9".getBytes("UTF-8");
-            os.write(requestBody);
-            os.flush();
-            os.close();
-            InputStream is = connection.getInputStream();
-            bis =  new BufferedInputStream(is);
-            baos = new ByteArrayOutputStream();
-            bos = new BufferedOutputStream(baos);
-            byte[] response_buffer = new byte[1024];
-            int length = 0;
-            while((length = bis.read(response_buffer)) > 0){
-                bos.write(response_buffer, 0, length);
-            }
-            bos.flush();
-            responseBody = baos.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        String text = null;
-        StringBuilder builder = new StringBuilder("[");
-        try {
-            text = new String(responseBody, "UTF-8");
-            JSONArray jsonArray = new JSONArray(text);
-            for(int index = 0; index < jsonArray.length(); index++){
-                JSONObject jsonObject = (JSONObject) jsonArray.get(index);
-                builder.append("{U_Id: ").append(jsonObject.get("pk")).append(", U_Name: ");
-                jsonObject = jsonObject.getJSONObject("fields");
-                builder.append(jsonObject.get("U_Name")).append(", Email: ")
-                        .append(jsonObject.get("Email")).append("}, ");
-            }
-            builder.append("]");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        text = builder.toString();
-        Message msg = new Message();
-        msg.what = TabFragment.DJANGO_TEST;
-        Bundle b = new Bundle();
-        b.putString("text", text);
-        msg.setData(b);
-        TabFragment.this.handler.sendMessage(msg);
-    }
-
-    private void test_get_gmail_user(){
-        String serverUrl = "http://10.0.2.2:8000/user/gmail_user";
-        URL url = null;
-        BufferedInputStream bis = null;
-        ByteArrayOutputStream baos;
-        BufferedOutputStream bos = null;
-        byte[] responseBody = null;
-        try {
-            url = new URL(serverUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            OutputStream os = connection.getOutputStream();
-            byte[] requestBody = "".getBytes("UTF-8");
-            os.write(requestBody);
-            os.flush();
-            os.close();
-            InputStream is = connection.getInputStream();
-            bis =  new BufferedInputStream(is);
-            baos = new ByteArrayOutputStream();
-            bos = new BufferedOutputStream(baos);
-            byte[] response_buffer = new byte[1024];
-            int length = 0;
-            while((length = bis.read(response_buffer)) > 0){
-                bos.write(response_buffer, 0, length);
-            }
-            bos.flush();
-            responseBody = baos.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        String text = null;
-        StringBuilder builder = new StringBuilder("[");
-        try {
-            text = new String(responseBody, "UTF-8");
-            JSONArray jsonArray = new JSONArray(text);
-            for(int index = 0; index < jsonArray.length(); index++){
-                JSONObject jsonObject = jsonArray.getJSONObject(index);
-                jsonObject = jsonObject.getJSONObject("fields");
-                builder.append("{U_Name: ").append((String)jsonObject.get("U_Name"))
-                        .append(", Email: ").append((String)jsonObject.get("Email")).append("}, ");
-            }
-            builder.append("]");
-        } catch (UnsupportedEncodingException | JSONException e) {
-            e.printStackTrace();
-        }
-        text = builder.toString();
-        Message msg = new Message();
-        msg.what = TabFragment.DJANGO_TEST;
-        Bundle b = new Bundle();
-        b.putString("text", text);
-        msg.setData(b);
-        TabFragment.this.handler.sendMessage(msg);
     }
 
     @Override
@@ -525,8 +264,8 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
     }
 
     @Override
-    public void onListItemClick(int clickedItemIndex) {
-        String rawData = mFriendAdapter.mData.get(clickedItemIndex);
+    public void onFriendListItemClick(int clickedItemIndex) {
+        String rawData = mFriendAdapter.getmData().get(clickedItemIndex);
         String[] rawList = rawData.split(",");
         Intent intent = new Intent(this.getActivity(), IndividualFriendActivity.class);
         intent.putExtra("receiver_id", rawList[0]);
@@ -550,46 +289,6 @@ public class TabFragment extends Fragment implements FriendAdapter.ListItemClick
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
          String onFragmentRefresh(String page_title);
-    }
-
-    class FriendsQueryTask extends AsyncTask<String, Void, String>{
-
-        @Override
-        protected String doInBackground(String... params) {
-            return mFriendAdapter.friend_retrieve_all_receivers();
-        }
-
-        @Override
-        protected void onPostExecute(String s){
-            JSONArray jsonArray = null;
-            try {
-                jsonArray = new JSONArray(s);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            int limit = mFriendAdapter.getItemCount();
-            mFriendAdapter.mData.clear();
-            for(int index = 0; index < jsonArray.length() && index < limit; index++){
-                JSONObject jsonObj = null;
-                try {
-                    jsonObj = jsonArray.getJSONObject(index);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                StringBuilder builder = new StringBuilder();
-                try {
-                    builder.append(jsonObj.get("receiver_id")).append(",")
-                            .append(jsonObj.get("receiver_name")).append(",")
-                            .append(jsonObj.get("receiver_email")).append(":")
-                            .append(jsonObj.get("balance"));
-                    mFriendAdapter.mData.add(builder.toString());
-                    builder.setLength(0);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            mFriendAdapter.notifyDataSetChanged();
-        }
     }
 }
 

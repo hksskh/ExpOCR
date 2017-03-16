@@ -56,6 +56,7 @@ public class ExpenseAdapter extends BaseAdapter {
         TextView balanceTextView = (TextView)rowView.findViewById(R.id.expense_list_balance);
         TextView dayTextView = (TextView)rowView.findViewById(R.id.expense_list_day);
         TextView monthTextView = (TextView)rowView.findViewById(R.id.expense_list_month);
+        TextView yearTextView = (TextView) rowView.findViewById(R.id.expense_list_year);
 
         Expense expense = (Expense) getItem(position);
         DecimalFormat df = new DecimalFormat("#.00");
@@ -72,6 +73,7 @@ public class ExpenseAdapter extends BaseAdapter {
         }
         dayTextView.setText(Integer.toString(expense.date.get(Calendar.DAY_OF_MONTH)));
         monthTextView.setText(expense.date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
+        yearTextView.setText(Integer.toString(expense.date.get(Calendar.YEAR)));
 
         return rowView;
     }

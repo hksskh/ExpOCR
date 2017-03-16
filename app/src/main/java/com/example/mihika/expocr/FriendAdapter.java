@@ -1,11 +1,18 @@
 package com.example.mihika.expocr;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -27,22 +34,23 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     //number of views it will hold
     private int mNumberItems;
+    private int maxItemNumber;
+    private boolean isRefreshing;
 
-    private final ListItemClickListener mOnClickListener;
-    public List<String> mData;
+    private final TabFragment mOnClickListener;
+    private List<String> mData;
 
     //constructor
-    public FriendAdapter(int numberOfItems, ListItemClickListener listener) {
-        mNumberItems = numberOfItems;
+    public FriendAdapter(int numberOfItems, TabFragment listener) {
+        maxItemNumber = numberOfItems;
         mOnClickListener = listener;
         mData = new ArrayList<>();
-        for(int index = 0;index < 10; index++){
-            mData.add("Friend" + index);
-        }
+        isRefreshing = false;
+        syncFriendList();
     }
 
-    public interface ListItemClickListener {
-        void onListItemClick(int clickedItemIndex);
+    interface FriendListItemClickListener {
+        void onFriendListItemClick(int clickedItemIndex);
     }
 
     /**
@@ -94,40 +102,110 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         return mNumberItems;
     }
 
-    public int getmNumberItems() {
-        mNumberItems = mData.size();
-        //TODO should return number of items in the query result
-        return mNumberItems;
+    public List<String> getmData(){
+        return this.mData;
+    }
+
+    public void setIsRefreshing(boolean isRefreshing){
+        this.isRefreshing = isRefreshing;
+    }
+
+    public void syncFriendList(){
+        new FriendsQueryTask().execute();
     }
 
     //inner class
     class FriendViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView listItemFriendView;
+        ImageView item_avatar;
+        TextView item_name;
+        TextView item_balance;
 
         //constructor
         FriendViewHolder(View itemView){
-
             super(itemView);
             itemView.setOnClickListener(this);
-            listItemFriendView = (TextView) itemView.findViewById(R.id.friend_item);
+
+            item_avatar = (ImageView) itemView.findViewById(R.id.friend_list_item_avatar);
+            item_name = (TextView) itemView.findViewById(R.id.friend_list_item_name);
+            item_balance = (TextView) itemView.findViewById(R.id.friend_list_item_balance);
 
         }
 
         void bind(int listIndex){
-            //TODO: setText using the query data
 
-            listItemFriendView.setText(mData.get(listIndex));
+            String rawData = mData.get(listIndex);
+            String[] rawList = rawData.split(",");
+            item_avatar.setImageResource(R.drawable.ic_list_group);
+            item_name.setText(rawList[1]);
+            rawList = rawList[2].split(":");
+            item_balance.setText(rawList[1]);
+            if(Double.parseDouble(item_balance.getText().toString()) < 0){
+                item_balance.setTextColor(mOnClickListener.getResources().getColor(R.color.orange));
+            }else{
+                item_balance.setTextColor(mOnClickListener.getResources().getColor(R.color.green));
+            }
         }
 
         @Override
         public void onClick(View v) {
             int clickedPostion = getAdapterPosition();
-            mOnClickListener.onListItemClick(clickedPostion);
+            mOnClickListener.onFriendListItemClick(clickedPostion);
         }
     }
 
-    public static String friend_retrieve_all_receivers(){
+    private class FriendsQueryTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            return friend_retrieve_all_receivers();
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            fill_receivers_list(s);
+            mNumberItems = mData.size() > maxItemNumber ? maxItemNumber : mData.size();
+            if(isRefreshing){
+                isRefreshing = false;//do not forget
+                Message msg = new Message();
+                msg.what = mOnClickListener.FRIEND_FRAGMENT_REFRESH;
+                mOnClickListener.getHandler().sendMessage(msg);
+            }
+        }
+    }
+
+    private void fill_receivers_list(String s){
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = new JSONArray(s);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        int limit = maxItemNumber;
+        mData.clear();
+        for(int index = 0; index < jsonArray.length() && index < limit; index++){
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = jsonArray.getJSONObject(index);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            StringBuilder builder = new StringBuilder();
+            try {
+                builder.append(jsonObj.get("receiver_id")).append(",")
+                        .append(jsonObj.get("receiver_name")).append(",")
+                        .append(jsonObj.get("receiver_email")).append(":")
+                        .append(jsonObj.get("balance"));
+                mData.add(builder.toString());
+                builder.setLength(0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    private String friend_retrieve_all_receivers(){
         String serverUrl = "http://10.0.2.2:8000/transaction/get_all_receivers";
         URL url = null;
         BufferedInputStream bis = null;
