@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^update_name', views.expocr_user_update_name),
     url(r'^delete', views.expocr_user_delete),
     url(r'^all_users', views.expocr_get_all_users),
+    url(r'^compare_pwd_by_email', views.expocr_user_compare_pwd_by_email),
 ]

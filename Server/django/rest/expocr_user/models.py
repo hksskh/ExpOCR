@@ -25,8 +25,16 @@ class User(models.Model):
 
     @staticmethod
     def create_user(username, email, password):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() > 0:
+            return 'Email Exists', result.count()
+        query = Q(U_Name__exact=username)
+        result = User.manager.filter(query)
+        if result.count() > 0:
+            return 'Username Exists', result.count()
         user = User.manager.create(U_Name=username, Email=email, Password=password)
-        return user
+        return user, 0
 
     @staticmethod
     def get_user_by_id(id):
@@ -39,6 +47,15 @@ class User(models.Model):
         query = Q(Email__contains='@gmail.com') & Q(U_Id__gte=4)
         users = User.manager.filter(query).exclude(U_Id=5).order_by('U_Id', 'U_Name')
         return users
+
+    @staticmethod
+    def compare_pwd_by_email(email, password):
+        query = Q(Email__exact=email) & Q(Password__exact=password)
+        result = User.manager.filter(query)
+        if result.count() == 0:
+            return False
+        else:
+            return True
 
     @staticmethod
     def count_edu_user():

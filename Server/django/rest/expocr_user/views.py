@@ -38,6 +38,19 @@ def expocr_user_get_user_by_id(request):
     return response
 
 @csrf_exempt
+def expocr_user_compare_pwd_by_email(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    email = params.get('email')
+    password = params.get("password")
+    result = User.compare_pwd_by_email(email, password)
+    data = {'match': result}
+    response = HttpResponse(json.dumps(data), content_type='application/json')
+    return response
+
+@csrf_exempt
 def expocr_user_update_name(request):
     if request.method == 'GET':
         params = request.GET
@@ -46,9 +59,8 @@ def expocr_user_update_name(request):
     email = params.get('email')
     password = params.get('password')
     username = params.get('username')
-    data = {}
     result = User.update_user_name(email, password, username)
-    data['updated rows'] = result
+    data = {'updated rows': result}
     response = HttpResponse(json.dumps(data), content_type="application/json")
     return response
 
@@ -63,9 +75,12 @@ def expocr_user_create_user(request):
     password = params.get('password')
     data = {}
     user = User.create_user(username, email, password)
-    data['id'] = user.U_Id
-    data['name'] = user.U_Name
-    data['email'] = user.Email
+    if user[1] == 0:
+        data['id'] = user[0].U_Id
+        data['name'] = user[0].U_Name
+        data['email'] = user[0].Email
+    else:
+        data['warning'] = user[0]
     response = HttpResponse(json.dumps(data), content_type="application/json")
     return response
 
