@@ -26,11 +26,9 @@ class UserTestCase(TestCase):
     	for user in test:
     		self.assertTrue('@gmail.com' in user.Email)
 
-    def test_user_compare_pwd_by_email(self):
-    	test = User.compare_pwd_by_email(email="joesmith1@gmail.com", password="joesmith1password")
-    	self.assertTrue(test)
-    	test2 = User.compare_pwd_by_email(email="joesmith1@gmail.com", password="joesmith")
-    	self.assertFalse(test2)
+    def test_user_get_user_by_email(self):
+    	test = User.get_user_by_email(email="joesmith1@gmail.com")
+    	self.assertEqual(test[0].U_Name, 'joesmith1')
 
     def test_user_count_edu_user(self):
     	test = User.count_edu_user()
