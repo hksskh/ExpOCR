@@ -29,8 +29,13 @@ def expocr_transaction_count_sender(request):
 
 @csrf_exempt
 def expocr_transaction_get_entertain(request):
-    data = serializers.serialize('json', Transaction.get_entertain_transaction(),
-                                 fields=('Sender_Id', 'Receiver_Id', 'Memo', 'Amount', 'Date'))
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    sender_id = params.get('sender_id')
+    data = serializers.serialize('json', Transaction.get_entertain_transaction(sender_id),
+                                 fields=('Receiver_Id', 'Memo', 'Amount', 'Date'))
     response = HttpResponse(data, content_type="application/json")
     return response
 

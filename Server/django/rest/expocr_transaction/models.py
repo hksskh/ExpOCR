@@ -54,9 +54,9 @@ class Transaction(models.Model):
         return result
 
     @staticmethod
-    def get_entertain_transaction():
-        query = Q(Category='Entertainment') & Q(Sender_Id=1)
-        result = Transaction.manager.filter(query).exclude(Receiver_Id=5).order_by('Sender_Id', 'Receiver_Id')
+    def get_entertain_transaction(sender_id):
+        query = Q(Category='Entertainment') & Q(Sender_Id=sender_id)
+        result = Transaction.manager.filter(query).order_by('Receiver_Id')
         return result
 
     @staticmethod
