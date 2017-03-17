@@ -145,10 +145,6 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
             String[] rawList = rawData.split(",");
             StringBuilder builder = new StringBuilder();
 
-            builder.append("You received a payment from ").append(rawList[1]);
-            item_info.setText(builder.toString());
-            builder.setLength(0);
-
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             try {
@@ -167,11 +163,17 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
                 builder.append("You received $").append(Math.abs(amount));
                 item_alert.setText(builder.toString());
                 item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.orange));
+                builder.setLength(0);
+                builder.append("You received a payment from ").append(rawList[1]);
+                item_info.setText(builder.toString());
                 item_avatar.setImageResource(R.drawable.ic_list_money_in);
             }else{
                 builder.append("You paid $").append(amount);
                 item_alert.setText(builder.toString());
                 item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.green));
+                builder.setLength(0);
+                builder.append("You made a payment to ").append(rawList[1]);
+                item_info.setText(builder.toString());
                 item_avatar.setImageResource(R.drawable.ic_list_money_off);
             }
             builder.setLength(0);

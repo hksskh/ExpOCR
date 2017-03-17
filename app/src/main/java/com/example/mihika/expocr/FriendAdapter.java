@@ -25,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by mihika on 3/13/17.
@@ -40,6 +41,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     private final FriendListItemClickListener mOnClickListener;
     private List<String> mData;
+    private static Vector<String> friend_name_list = new Vector<>();
 
     //constructor
     public FriendAdapter(int numberOfItems, int u_id, TabFragment listener) {
@@ -110,6 +112,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     public int getU_id(){
         return this.u_id;
+    }
+
+    public static Vector<String> get_friend_name_list(){
+        return friend_name_list;
     }
 
     public void setIsRefreshing(boolean isRefreshing){
@@ -189,6 +195,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         }
         int limit = maxItemNumber;
         mData.clear();
+        friend_name_list.clear();
         for(int index = 0; index < jsonArray.length() && index < limit; index++){
             JSONObject jsonObj = null;
             try {
@@ -203,6 +210,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                         .append(jsonObj.get("receiver_email")).append(":")
                         .append(jsonObj.get("balance"));
                 mData.add(builder.toString());
+                friend_name_list.add(jsonObj.getString("receiver_name"));
                 builder.setLength(0);
             } catch (JSONException e) {
                 e.printStackTrace();

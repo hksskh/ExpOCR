@@ -37,7 +37,22 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/transaction_amonut"
+                    android:id="@+id/add_transaction_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter friend's name"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:visibility="visible"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/add_transaction_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_amount"
@@ -53,7 +68,7 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/transaction_memo"
+                    android:id="@+id/add_transaction_memo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -77,10 +92,10 @@
                 android:translationX="-5dp" />
 
             <Spinner
-                android:id="@+id/transaction_catergory_spinner"
+                android:id="@+id/transaction_category_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:entries="@array/transaction_catergory"
+                android:entries="@array/transaction_category"
                 android:prompt="@string/prompt_fab"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
@@ -120,8 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Add"
-        android:textStyle="bold"
-        android:onClick="addAndReturn"/>
+        android:textStyle="bold" />
 
 
 </LinearLayout>

@@ -3,6 +3,8 @@ package com.example.mihika.expocr;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.util.Log;
@@ -30,30 +33,55 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Vector;
 
 import android.widget.Button;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static android.view.View.VISIBLE;
 
 public class AddTransactionActivity extends AppCompatActivity {
 
+    private int u_id;
+    private final int FRIEND_NAME_NOT_EXIST = 1;
+
     private Spinner transactionKindSpinner;
     private MultiSelectionSpinner userSpinner;
-    private Spinner catergorySpinner;
+    private Spinner categorySpinner;
     private Spinner incomeOrExpenseSpinner;
+    private AutoCompleteTextView name_text;
+    private AutoCompleteTextView amount_text;
+    private AutoCompleteTextView memo_text;
+    private Handler handler;
     private final String TAG = "AddTransactionActivity";
+
+    private final Vector friend_autos = new Vector();
+    private static final String[] amount_autos = new String[]{
+            "1", "10", "100", "1000"
+    };
+    private static final String[] memo_autos = new String[]{
+            "Movie", "Snack", "Popcorn"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
 
+        Intent inIntent = getIntent();
+        u_id = inIntent.getIntExtra("u_id", 1);
+        friend_autos.addAll(FriendAdapter.get_friend_name_list());
+
         transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
         userSpinner = (MultiSelectionSpinner) findViewById(R.id.user_spinner);
-        catergorySpinner = (Spinner) findViewById(R.id.transaction_catergory_spinner);
+        categorySpinner = (Spinner) findViewById(R.id.transaction_category_spinner);
         incomeOrExpenseSpinner = (Spinner) findViewById(R.id.income_or_expense_spinner);
         addEntriesForSpinner();
         addListenerOnSpinnerItemSelection();
+        set_autotext_adapters();
 
         Button add_transaction_button = (Button) findViewById(R.id.add_transaction_button);
         add_transaction_button.setOnClickListener(new View.OnClickListener() {
@@ -62,26 +90,42 @@ public class AddTransactionActivity extends AppCompatActivity {
                 sendData();
             }
         });
+
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch(msg.what){
+                    case FRIEND_NAME_NOT_EXIST:
+                        Bundle bundle = msg.getData();
+                        name_text.setError(bundle.getString("warning"));
+                        break;
+                }
+            }
+        };
     }
 
     public void sendData() {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                //fake data for demo purpose
-                int sender = 0;
-                int receiver = 1;
-                String category = "Food";
-                String memo = "Chicken Dinner";
-                double amount = 11.57;
-
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 Date date = new Date();
                 String datetime = dateFormat.format(date);
 
-                String url = "http://10.0.2.2:8080/add";
-                String requestString = "funcname=addTransaction&sender=" + sender + "&receiver=" + receiver + "&category=" + category + "&memo=" + memo + "&amount=" + amount + "&date=" + date;
-                Log.d(TAG, requestString);
+                String url = "http://10.0.2.2:8000/transaction/create_by_name";
+                StringBuilder requestString = new StringBuilder();
+                requestString.append("sender_id=").append(u_id)
+                        .append("&receiver_name=").append(name_text.getText())
+                        .append("&category=").append(categorySpinner.getSelectedItem().toString())
+                        .append("&memo=").append(memo_text.getText())
+                        .append("&amount=");
+                if(incomeOrExpenseSpinner.getSelectedItem().toString().equals("Income")){
+                    requestString.append("-");
+                }
+                requestString.append(Math.abs(Double.parseDouble(amount_text.getText().toString())))
+                        .append("&date=").append(datetime);
+                Log.d(TAG, requestString.toString());
                 try {
                     URL wsurl = new URL(url);
                     HttpURLConnection conn = (HttpURLConnection) wsurl.openConnection();
@@ -89,7 +133,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                     conn.setDoOutput(true);
                     conn.setRequestMethod("POST");
                     OutputStream os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(requestString.getBytes());
+                    os.write(requestString.toString().getBytes("UTF-8"));
                     os.close();
                     InputStream is = new BufferedInputStream(conn.getInputStream());
                     byte[] buffer = new byte[1024];
@@ -104,15 +148,45 @@ public class AddTransactionActivity extends AppCompatActivity {
                     is.close();
                     conn.disconnect();
                     Log.d(TAG, "From server:" + response);
-                    if (response.equals("true")) {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if(jsonObject.has("warning")){
+                        Bundle bundle = new Bundle();
+                        bundle.putString("warning", jsonObject.getString("warning"));
+                        Message msg = new Message();
+                        msg.what = FRIEND_NAME_NOT_EXIST;
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
+                    }else{
                         Intent gotoMain = new Intent(AddTransactionActivity.this, MainActivity.class);
+                        gotoMain.putExtra("addTransaction", true);
                         startActivity(gotoMain);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }).start();
+    }
+
+    private void set_autotext_adapters(){
+        //adapters for AutoCompleteTextViews
+        ArrayAdapter<String> friend_adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, friend_autos);
+        name_text = (AutoCompleteTextView)
+                findViewById(R.id.add_transaction_name);
+        name_text.setAdapter(friend_adapter);
+        ArrayAdapter<String> amount_adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, amount_autos);
+        amount_text = (AutoCompleteTextView)
+                findViewById(R.id.add_transaction_amount);
+        amount_text.setAdapter(amount_adapter);
+        ArrayAdapter<String> memo_adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, memo_autos);
+        memo_text = (AutoCompleteTextView)
+                findViewById(R.id.add_transaction_memo);
+        memo_text.setAdapter(memo_adapter);
     }
 
     protected void addEntriesForSpinner() {
@@ -133,7 +207,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         list2.add("Salary");
         //List<String> list = getCatergoriesFromServer();
         ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list2);
-        catergorySpinner.setAdapter(dataAdapter2);
+        categorySpinner.setAdapter(dataAdapter2);
     }
 
     protected String getUsersFromServer() {
@@ -147,9 +221,11 @@ public class AddTransactionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).toString().equals("For group")) {
                     userSpinner.setVisibility(View.VISIBLE);
+                    name_text.setVisibility(View.GONE);
                 }
                 else {
                     userSpinner.setVisibility(View.INVISIBLE);
+                    name_text.setVisibility(View.VISIBLE);
                 }
             }
 

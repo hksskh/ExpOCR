@@ -61,10 +61,9 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Todo: jump to activity for adding a bill here
-                Snackbar.make(view, "Add Bill", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, AddTransactionActivity.class);
+                intent.putExtra("u_id", u_id);
+                startActivity(intent);
             }
         });
 
@@ -99,6 +98,15 @@ public class MainActivity extends AppCompatActivity
                 startActivity(transaciton);
             }
         });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if(intent.hasExtra("addTransaction")){
+            tabAdapter.refreshTabs();
+        }
     }
 
     @Override
@@ -223,5 +231,11 @@ class TabFragmentAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position){
         return tab_titles[position % tab_titles.length];
+    }
+
+    public void refreshTabs(){
+        for(Fragment tab: tab_fragments){
+            ((TabFragment)tab).refreshTabFragment();
+        }
     }
 }

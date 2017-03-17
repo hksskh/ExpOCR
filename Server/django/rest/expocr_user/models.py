@@ -43,6 +43,18 @@ class User(models.Model):
         return user
 
     @staticmethod
+    def get_user_by_name(name):
+        query = Q(U_Name__exact=name)
+        result = User.manager.filter(query).values('U_Id')
+        return result
+
+    @staticmethod
+    def get_user_by_email(email):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        return result
+
+    @staticmethod
     def get_gmail_user():
         query = Q(Email__contains='@gmail.com') & Q(U_Id__gte=4)
         users = User.manager.filter(query).exclude(U_Id=5).order_by('U_Id', 'U_Name')
@@ -75,10 +87,4 @@ class User(models.Model):
     def delete_user(username, email, password):
         query = Q(U_Id__gt=12) & Q(U_Name__exact=username) & Q(Email__exact=email) & Q(Password__exact=password)
         result = User.manager.filter(query).delete()
-        return result
-
-    @staticmethod
-    def get_user_by_email(email):
-        query = Q(Email__exact=email)
-        result = User.manager.filter(query)
         return result

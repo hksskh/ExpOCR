@@ -216,17 +216,6 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         }
     }
 
-    private String fragmentRefresh(){
-        for(long index = 0; index < 10000000; index++){
-            index <<= 1;
-            index >>= 1;
-        }
-        if (mListener != null) {
-            return mListener.onFragmentRefresh(page_title);
-        }
-        return null;
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -261,6 +250,30 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
     @Override
     public void onExpenseListItemClick(int clickedItemIndex) {
 
+    }
+
+    public void refreshTabFragment(){
+        switch(page_title){
+            case "FRIENDS":
+                mFriendAdapter.syncFriendList();
+                break;
+            case "GROUPS":
+                break;
+            case "EXPENSES":
+                mExpenseAdapter.syncExpenseList();
+                break;
+        }
+    }
+
+    private String fragmentRefresh(){
+        for(long index = 0; index < 10000000; index++){
+            index <<= 1;
+            index >>= 1;
+        }
+        if (mListener != null) {
+            return mListener.onFragmentRefresh(page_title);
+        }
+        return null;
     }
 
     /**
