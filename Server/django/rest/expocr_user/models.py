@@ -18,7 +18,6 @@ class User(models.Model):
     class Meta:
         db_table = 'users'
         ordering = ['U_Id']
-        app_label = ExpocrUserConfig.name
 
     @staticmethod
     def get_all_users():
