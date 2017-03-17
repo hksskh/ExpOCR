@@ -41,9 +41,23 @@ def expocr_transaction_get_by_sender_id(request):
     elif request.method == 'POST':
         params = request.POST
     sender_id = params.get('sender_id')
-    data = serializers.serialize('json', Transaction.get_transaction_by_sender_id(sender_id),
-                                 fields=('Receiver_Id', 'Category', 'Memo', 'Amount', 'Date'))
-    response = HttpResponse(data, content_type="application/json")
+    data_list = []
+    id_list = []
+    result = Transaction.get_transaction_by_sender_id(sender_id)
+    for entry in result:
+        data = {}
+        data['receiver_id'] = int(entry['Receiver_Id'])
+        id_list.append(data['receiver_id'])
+        data['amount'] = float(entry['Amount'])
+        data['date'] = str(entry['Date'])
+        data_list.append(data)
+    receiver_bulk = User.manager.in_bulk(id_list)
+    index = 0
+    while index < len(id_list):
+        pk = id_list[index]
+        data_list[index]['receiver_name'] = receiver_bulk[pk].U_Name
+        index += 1
+    response = HttpResponse(json.dumps(data_list), content_type="application/json")
     return response
 
 @csrf_exempt

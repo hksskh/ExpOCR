@@ -36,7 +36,8 @@ class Transaction(models.Model):
     @staticmethod
     def get_transaction_by_sender_id(sender_id):
         query = Q(Sender_Id=sender_id)
-        result = Transaction.manager.filter(query).order_by('Receiver_Id', '-Date')
+        result = Transaction.manager.filter(query).order_by('-Date')\
+            .values('Receiver_Id', 'Amount', 'Date')
         return result
 
     @staticmethod

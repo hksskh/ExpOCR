@@ -53,17 +53,19 @@ import java.util.concurrent.RunnableFuture;
  * Use the {@link TabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TabFragment extends Fragment implements FriendAdapter.FriendListItemClickListener{
+public class TabFragment extends Fragment implements FriendAdapter.FriendListItemClickListener, ExpenseTabAdapter.ExpenseListItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "page_title";
 
     public static final int FRIEND_FRAGMENT_REFRESH = 1;
+    public static final int EXPENSE_FRAGMENT_REFRESH = 2;
     private static final int NUM_LIST_ITEMS = 10;
 
     // TODO: Rename and change types of parameters
     private String page_title;
     private FriendAdapter mFriendAdapter;
+    private ExpenseTabAdapter mExpenseAdapter;
     private RecyclerView mList;
 
     private Handler handler;
@@ -125,6 +127,9 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                     case FRIEND_FRAGMENT_REFRESH:
                         swipeRefreshLayout.setRefreshing(false);
                         break;
+                    case EXPENSE_FRAGMENT_REFRESH:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
                 }
             }
         };
@@ -140,7 +145,8 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                         swipeRefreshLayout.setRefreshing(false);
                         break;
                     case "EXPENSES":
-                        swipeRefreshLayout.setRefreshing(false);
+                        mExpenseAdapter.setIsRefreshing(true);
+                        mExpenseAdapter.syncExpenseList();
                         break;
                 }
             }
@@ -188,36 +194,16 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                 listView_grp.setAdapter(list_adapter);
                 break;
             case "EXPENSES":
-                baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
-                final ListView listView_exp = (ListView) baseView.findViewById(R.id.fragment_tab_expenses_listview);
-                listItems = new ArrayList<>();
-                imageIDs = new int[]{R.drawable.ic_list_money_off, R.drawable.ic_list_money_in, R.drawable.ic_list_group};
-                infos = new String[]{"You recorded a payment from Jack in group1", "You paid Jack in group1", "You created the group group 1"};
-                alerts = new String[]{"You received $20.00", "You paid $10.00", "2 members in group group 1"};
-                dates = new String[]{"Mar 2", "Mar 2", "Mar 2"};
-                for(int ij = 0; ij < 5; ij++){
-                    for(int i = 0; i < 3; i++){
-                        Map<String, Object> listItem = new HashMap<>();
-                        listItem.put("imageID", imageIDs[i]);
-                        listItem.put("info", infos[i]);
-                        listItem.put("alert", alerts[i]);
-                        listItem.put("date", dates[i]);
-                        switch(i){
-                            case 0:
-                                listItem.put("textColor", getResources().getColor(R.color.orange));
-                                break;
-                            case 1:
-                                listItem.put("textColor", getResources().getColor(R.color.green));
-                                break;
-                            case 2:
-                                listItem.put("textColor", getResources().getColor(R.color.blue));
-                                break;
-                        }
-                        listItems.add(listItem);
-                    }
-                }
-                list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
-                listView_exp.setAdapter(list_adapter);
+                baseView = inflater.inflate(R.layout.fragment_tab, container, false);
+
+                mList = (RecyclerView) baseView.findViewById(R.id.rv_friends);
+                layoutManager = new LinearLayoutManager(this.getContext());
+                mList.setLayoutManager(layoutManager);
+                mList.setHasFixedSize(true);
+
+                mExpenseAdapter = new ExpenseTabAdapter(NUM_LIST_ITEMS, ((MainActivity)mListener).getU_id(), this);
+
+                mList.setAdapter(mExpenseAdapter);
                 break;
         }
     }
@@ -270,6 +256,11 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         intent.putExtra("balance", rawList[1]);
         intent.putExtra("u_id", mFriendAdapter.getU_id());
         startActivity(intent);
+    }
+
+    @Override
+    public void onExpenseListItemClick(int clickedItemIndex) {
+
     }
 
     /**
