@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +55,9 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -62,6 +67,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    private final int EMAIL_NOT_EXIST = 1;
+    private final int PASSWORD_INCORRECT = 2;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -79,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private Handler handler;
     private final String TAG = "LoginActivity";
 
     private LoginButton loginButton;
@@ -145,17 +153,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        //jump to main menu page
-        /*
-        ((Button) findViewById(R.id.email_sign_in_button)).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                //some bundle data to transfer
-                startActivity(intent);
+        handler = new Handler(){
+            public void handleMessage(Message msg){
+                super.handleMessage(msg);
+                switch(msg.what){
+                    case EMAIL_NOT_EXIST:
+                        Bundle bundle = msg.getData();
+                        String warning = bundle.getString("warning");
+                        mEmailView.setError(warning);
+                        break;
+                    case PASSWORD_INCORRECT:
+                        bundle = msg.getData();
+                        warning = bundle.getString("warning");
+                        mPasswordView.setError(warning);
+                        break;
+                }
             }
-        });
-        */
+        };
 
     }
 
@@ -237,8 +251,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
-                String url = "http://10.0.2.2:8080/add";
-                String requestString = "funcname=comparePasswords&email=" + email + "&password=" + encrypted;
+                String url = "http://10.0.2.2:8000/user/login_by_email";
+                String requestString = "email=" + email + "&password=" + password;//encrypted;
                 Log.d(TAG, requestString);
 
                 try {
@@ -248,7 +262,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     conn.setDoOutput(true);
                     conn.setRequestMethod("POST");
                     OutputStream os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(requestString.getBytes());
+                    os.write(requestString.getBytes("UTF-8"));
                     os.close();
                     InputStream is = new BufferedInputStream(conn.getInputStream());
                     byte[] buffer = new byte[1024];
@@ -263,11 +277,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     is.close();
                     conn.disconnect();
                     Log.d(TAG, "From server:" + response);
-                    if (response.equals("true")) {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if(jsonObject.has("warning")){
+                        String warning = jsonObject.getString("warning");
+                        Bundle bundle = new Bundle();
+                        bundle.putString("warning", warning);
+                        if(warning.startsWith("Email")){
+                            Message msg = new Message();
+                            msg.what = EMAIL_NOT_EXIST;
+                            msg.setData(bundle);
+                            handler.sendMessage(msg);
+                        }else{
+                            Message msg = new Message();
+                            msg.what = PASSWORD_INCORRECT;
+                            msg.setData(bundle);
+                            handler.sendMessage(msg);
+                        }
+                    }
+                    else {
                         Intent gotoMain = new Intent(LoginActivity.this, MainActivity.class);
+                        gotoMain.putExtra("u_id", jsonObject.getInt("id"));
+                        gotoMain.putExtra("u_name", jsonObject.getString("name"));
+                        gotoMain.putExtra("u_email", jsonObject.getString("email"));
                         startActivity(gotoMain);
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
