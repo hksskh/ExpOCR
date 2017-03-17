@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.db.models import Q
+from apps import ExpocrUserConfig
 
 
 # Create your models here.
@@ -17,6 +18,7 @@ class User(models.Model):
     class Meta:
         db_table = 'users'
         ordering = ['U_Id']
+        app_label = ExpocrUserConfig.name
 
     @staticmethod
     def get_all_users():
@@ -71,7 +73,6 @@ class User(models.Model):
         if result.count() == 0:
             return False, 'Password incorrect'
         return True, result.values('U_Id', 'U_Name', 'Email')
-
 
     @staticmethod
     def count_edu_user():
