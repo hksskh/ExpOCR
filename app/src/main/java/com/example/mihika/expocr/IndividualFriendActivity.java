@@ -31,6 +31,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
     private ListView mListView;
     private int receiver_id;
+    private int u_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_individual_friend);
 
         Intent inIntent = getIntent();
+        u_id = inIntent.getIntExtra("u_id", 1);
         receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
         ((TextView)findViewById(R.id.friend_receiver_name)).setText(inIntent.getStringExtra("receiver_name"));
         ((TextView)findViewById(R.id.friend_receiver_email)).setText(inIntent.getStringExtra("receiver_email"));
@@ -121,7 +123,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
             connection.setDoInput(true);
             connection.setDoOutput(true);
             OutputStream os = connection.getOutputStream();
-            String requestBody = "sender_id=1&receiver_id=" + receiver_id;
+            String requestBody = "sender_id=" + u_id + "&receiver_id=" + receiver_id;
             os.write(requestBody.getBytes("UTF-8"));
             os.flush();
             os.close();

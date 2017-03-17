@@ -137,8 +137,10 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                         mFriendAdapter.syncFriendList();
                         break;
                     case "GROUPS":
+                        swipeRefreshLayout.setRefreshing(false);
                         break;
                     case "EXPENSES":
+                        swipeRefreshLayout.setRefreshing(false);
                         break;
                 }
             }
@@ -159,7 +161,7 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                 mList.setLayoutManager(layoutManager);
                 mList.setHasFixedSize(true);
 
-                mFriendAdapter = new FriendAdapter(NUM_LIST_ITEMS, this);
+                mFriendAdapter = new FriendAdapter(NUM_LIST_ITEMS, ((MainActivity)mListener).getU_id(), this);
 
                 mList.setAdapter(mFriendAdapter);
                 break;
@@ -184,13 +186,6 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                 }
                 Expenses_List_Adapter list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
                 listView_grp.setAdapter(list_adapter);
-                listView_grp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(baseView.getContext(), IndividualGroupActivity.class);
-                    startActivity(intent);
-                    }
-                });
                 break;
             case "EXPENSES":
                 baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
@@ -273,6 +268,7 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         rawList = rawList[2].split(":");
         intent.putExtra("receiver_email", rawList[0]);
         intent.putExtra("balance", rawList[1]);
+        intent.putExtra("u_id", mFriendAdapter.getU_id());
         startActivity(intent);
     }
 

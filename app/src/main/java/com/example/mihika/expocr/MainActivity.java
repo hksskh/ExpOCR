@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity
         u_name = intent.getStringExtra("u_name");
         u_email = intent.getStringExtra("u_email");
         System.out.println("u_id: " + u_id);
+        System.out.println("u_name: " + u_name);
+        System.out.println("u_email: " + u_email);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +76,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View nav_header_view = navigationView.getHeaderView(0);
+        TextView nav_header_name = (TextView) nav_header_view.findViewById(R.id.nav_header_name);
+        nav_header_name.setText(u_name);
+        TextView nav_header_email = (TextView) nav_header_view.findViewById(R.id.nav_header_email);
+        nav_header_email.setText(u_email);
 
         tabAdapter = new TabFragmentAdapter(getSupportFragmentManager());
         tabPager = (ViewPager) findViewById(R.id.tabPager);
@@ -178,6 +186,10 @@ public class MainActivity extends AppCompatActivity
         builder.append("You are in page ").append(page_title).append("!\n");
         builder.append("Current Time: ").append(DateFormat.getDateTimeInstance().format(new Date()));
         return builder.toString();
+    }
+
+    public int getU_id(){
+        return this.u_id;
     }
 
 }

@@ -35,14 +35,16 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     //number of views it will hold
     private int mNumberItems;
     private int maxItemNumber;
+    private int u_id;
     private boolean isRefreshing;
 
-    private final TabFragment mOnClickListener;
+    private final FriendListItemClickListener mOnClickListener;
     private List<String> mData;
 
     //constructor
-    public FriendAdapter(int numberOfItems, TabFragment listener) {
+    public FriendAdapter(int numberOfItems, int u_id, TabFragment listener) {
         maxItemNumber = numberOfItems;
+        this.u_id = u_id;
         mOnClickListener = listener;
         mData = new ArrayList<>();
         isRefreshing = false;
@@ -106,6 +108,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         return this.mData;
     }
 
+    public int getU_id(){
+        return this.u_id;
+    }
+
     public void setIsRefreshing(boolean isRefreshing){
         this.isRefreshing = isRefreshing;
     }
@@ -141,9 +147,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             rawList = rawList[2].split(":");
             item_balance.setText(rawList[1]);
             if(Double.parseDouble(item_balance.getText().toString()) < 0){
-                item_balance.setTextColor(mOnClickListener.getResources().getColor(R.color.orange));
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.orange));
             }else{
-                item_balance.setTextColor(mOnClickListener.getResources().getColor(R.color.green));
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.green));
             }
         }
 
@@ -168,8 +174,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             if(isRefreshing){
                 isRefreshing = false;//do not forget
                 Message msg = new Message();
-                msg.what = mOnClickListener.FRIEND_FRAGMENT_REFRESH;
-                mOnClickListener.getHandler().sendMessage(msg);
+                msg.what = ((TabFragment)mOnClickListener).FRIEND_FRAGMENT_REFRESH;
+                ((TabFragment)mOnClickListener).getHandler().sendMessage(msg);
             }
         }
     }
@@ -220,7 +226,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             connection.setDoInput(true);
             connection.setDoOutput(true);
             OutputStream os = connection.getOutputStream();
-            String requestBody = "sender_id=1";
+            String requestBody = "sender_id=" + u_id;
             os.write(requestBody.getBytes("UTF-8"));
             os.flush();
             os.close();
