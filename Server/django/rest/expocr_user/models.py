@@ -49,13 +49,17 @@ class User(models.Model):
         return users
 
     @staticmethod
-    def compare_pwd_by_email(email, password):
-        query = Q(Email__exact=email) & Q(Password__exact=password)
+    def login_by_email(email, password):
+        query = Q(Email__exact=email)
         result = User.manager.filter(query)
         if result.count() == 0:
-            return False
-        else:
-            return True
+            return False, 'Email not exists'
+        query = Q(Password__exact=password)
+        result = result.filter(query)
+        if result.count() == 0:
+            return False, 'Password incorrect'
+        return True, result.values('U_Id', 'U_Name', 'Email')
+
 
     @staticmethod
     def count_edu_user():

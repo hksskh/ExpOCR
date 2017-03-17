@@ -38,15 +38,22 @@ def expocr_user_get_user_by_id(request):
     return response
 
 @csrf_exempt
-def expocr_user_compare_pwd_by_email(request):
+def expocr_user_login_by_email(request):
     if request.method == 'GET':
         params = request.GET
     elif request.method == 'POST':
         params = request.POST
     email = params.get('email')
     password = params.get("password")
-    result = User.compare_pwd_by_email(email, password)
-    data = {'match': result}
+    result = User.login_by_email(email, password)
+    data = {}
+    if result[0]:
+        for entry in result[1]:
+            data['id'] = int(entry['U_Id'])
+            data['name'] = entry['U_Name']
+            data['email'] = entry['Email']
+    else:
+        data['warning'] = result[1]
     response = HttpResponse(json.dumps(data), content_type='application/json')
     return response
 
