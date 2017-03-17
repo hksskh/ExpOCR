@@ -76,3 +76,9 @@ class User(models.Model):
         query = Q(U_Id__gt=12) & Q(U_Name__exact=username) & Q(Email__exact=email) & Q(Password__exact=password)
         result = User.manager.filter(query).delete()
         return result
+
+    @staticmethod
+    def get_user_by_email(email):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        return result
