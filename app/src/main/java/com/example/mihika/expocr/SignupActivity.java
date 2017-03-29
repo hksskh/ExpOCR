@@ -57,6 +57,14 @@ public class SignupActivity extends AppCompatActivity {
         mPasswordReEnterView = (TextView) findViewById(R.id.reenter_password);
         mPasswordReEnterView.setText("970530blX!");
 
+        Button SignupBtn = (Button) findViewById(R.id.sign_up_button);
+        SignupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attempt_signup();
+            }
+        });
+
         handler = new Handler(){
             public void handleMessage(Message msg){
                 super.handleMessage(msg);
@@ -187,7 +195,7 @@ public class SignupActivity extends AppCompatActivity {
         sendData(name, email, password);//encrypted);
     }
 
-    protected void attempt_signup(View view) throws NoSuchAlgorithmException {
+    private void attempt_signup() {
         Log.d(TAG, "Called attempt_signup");
 
         boolean isEmailValid = isValidEmail(mEmailView.getText());

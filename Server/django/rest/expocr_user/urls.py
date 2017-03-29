@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^delete', views.expocr_user_delete),
     url(r'^all_users', views.expocr_get_all_users),
     url(r'^login_by_email', views.expocr_user_login_by_email),
+    url(r'^email_auth_test', views.expocr_user_email_auth_test),
 ]
