@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^login_by_email', views.expocr_user_login_by_email),
     url(r'^email_auth_test', views.expocr_user_email_auth_test),
     url(r'^request_vericode', views.expocr_user_send_vericode),
+    url(r'^check_vericode', views.expocr_user_check_vericode),
+    url(r'^change_password', views.expocr_user_change_password),
 ]

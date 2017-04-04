@@ -61,6 +61,23 @@ def expocr_user_login_by_email(request):
     return response
 
 @csrf_exempt
+def expocr_user_check_vericode(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    email = params.get('email')
+    vericode = params.get('vericode')
+    result = User.check_vericode(email, vericode)
+    data = {}
+    if result[0]:
+        data['email'] = result[1]
+    else:
+        data['warning'] = result[1]
+    response = HttpResponse(json.dumps(data), content_type='application/json')
+    return response
+
+@csrf_exempt
 def expocr_user_update_name(request):
     if request.method == 'GET':
         params = request.GET
@@ -158,4 +175,17 @@ def expocr_user_send_vericode(request):
         data['email sending status'] = ret
 
     response = HttpResponse(json.dumps(data), content_type='application/json')
+    return response
+
+@csrf_exempt
+def expocr_user_change_password(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    email = params.get('email')
+    password = params.get('password')
+    result = User.change_user_password(email, password)
+    data = {'updated rows': result}
+    response = HttpResponse(json.dumps(data), content_type="application/json")
     return response

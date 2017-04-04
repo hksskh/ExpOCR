@@ -99,3 +99,22 @@ class User(models.Model):
             return 'Email Does Not Exist', 0
         user = User.manager.filter(query).update(Vericode=vericode)
         return user, 1
+
+    @staticmethod
+    def check_vericode(email, vericode):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() == 0:
+            return False, 'Email not exists'
+        query = Q(Vericode__exact=vericode)
+        result = result.filter(query)
+        if result.count() == 0:
+            return False, 'Vericode incorrect'
+        return True, email
+
+    @staticmethod
+    def change_user_password(email, password):
+        query = Q(Email__exact=email)
+        d = {"Password": password, "Vericode": ""}
+        result = User.manager.filter(query).update(**d)
+        return result

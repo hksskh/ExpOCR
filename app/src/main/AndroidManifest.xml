@@ -64,6 +64,7 @@
             android:label="@string/group_activity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".ChangePasswordActivity" />
     </application>
 
 </manifest>
