@@ -192,6 +192,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if(intent.hasExtra("signup")){
+            mEmailView.setText(intent.getStringExtra("email"));
+            mPasswordView.setText(intent.getStringExtra("password"));
+            Toast.makeText(getApplicationContext(), intent.getStringExtra("signup"), Toast.LENGTH_LONG).show();
+        }
+    }
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {

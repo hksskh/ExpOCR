@@ -32,6 +32,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private final int EMAIL_EXIST = 1;
     private final int USERNAME_EXIST = 2;
+    private final int FAIL_TO_SEND_ACTIVATION = 3;
 
     private TextView mFirstNameView;
     private TextView mLastNameView;
@@ -79,6 +80,9 @@ public class SignupActivity extends AppCompatActivity {
                         warning = bundle.getString("warning");
                         mLastNameView.setError(warning);
                         break;
+                    case FAIL_TO_SEND_ACTIVATION:
+                        Toast.makeText(SignupActivity.this.getApplicationContext(), "Fail to send activation email. Please try again!", Toast.LENGTH_LONG).show();
+                        break;
                 }
             }
         };
@@ -117,7 +121,7 @@ public class SignupActivity extends AppCompatActivity {
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
-                String url = "http://10.0.2.2:8000/user/create";
+                String url = "http://10.0.2.2:8000/user/try_create";
                 String requestString = "username=" + name + "&email=" + email + "&password=" + password;//encrypted;
                 Log.d(TAG, requestString);
 
@@ -161,11 +165,17 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                     else {
-                        Intent gotoMain = new Intent(SignupActivity.this, MainActivity.class);
-                        gotoMain.putExtra("u_id", jsonObject.getInt("id"));
-                        gotoMain.putExtra("u_name", jsonObject.getString("name"));
-                        gotoMain.putExtra("u_email", jsonObject.getString("email"));
-                        startActivity(gotoMain);
+                        if(jsonObject.getInt("email_sending_status") == 0){
+                            Message msg = new Message();
+                            msg.what = FAIL_TO_SEND_ACTIVATION;
+                            handler.sendMessage(msg);
+                        }else{
+                            Intent gotoActivate = new Intent(SignupActivity.this, LoginActivity.class);
+                            gotoActivate.putExtra("signup", jsonObject.getString("activate"));
+                            gotoActivate.putExtra("email", email);
+                            gotoActivate.putExtra("password", password);
+                            startActivity(gotoActivate);
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
