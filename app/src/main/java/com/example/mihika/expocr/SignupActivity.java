@@ -1,5 +1,6 @@
 package com.example.mihika.expocr;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Handler;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.mihika.expocr.util.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +35,8 @@ public class SignupActivity extends AppCompatActivity {
 
     private final int EMAIL_EXIST = 1;
     private final int USERNAME_EXIST = 2;
+    private final int FAIL_TO_SEND_ACTIVATION = 3;
+    private final int FINISH_LOADING = 4;
 
     private TextView mFirstNameView;
     private TextView mLastNameView;
@@ -40,6 +45,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextView mPasswordReEnterView;
     private final String TAG = "SignupActivity";
     private Handler handler;
+    private Dialog loading_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +85,12 @@ public class SignupActivity extends AppCompatActivity {
                         warning = bundle.getString("warning");
                         mLastNameView.setError(warning);
                         break;
+                    case FAIL_TO_SEND_ACTIVATION:
+                        Toast.makeText(SignupActivity.this.getApplicationContext(), "Fail to send activation email. Please try again!", Toast.LENGTH_LONG).show();
+                        break;
+                    case FINISH_LOADING:
+                        LoadingDialog.closeDialog(loading_dialog);
+                        break;
                 }
             }
         };
@@ -117,7 +129,7 @@ public class SignupActivity extends AppCompatActivity {
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
-                String url = "http://10.0.2.2:8000/user/create";
+                String url = "http://10.0.2.2:8000/user/try_create";
                 String requestString = "username=" + name + "&email=" + email + "&password=" + password;//encrypted;
                 Log.d(TAG, requestString);
 
@@ -142,6 +154,9 @@ public class SignupActivity extends AppCompatActivity {
                     }
                     is.close();
                     conn.disconnect();
+                    Message msg = new Message();
+                    msg.what = FINISH_LOADING;
+                    handler.sendMessage(msg);
                     Log.d(TAG, "From server:" + response);
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.has("warning")){
@@ -149,23 +164,29 @@ public class SignupActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putString("warning", warning);
                         if(warning.startsWith("Email")){
-                            Message msg = new Message();
+                            msg = new Message();
                             msg.what = EMAIL_EXIST;
                             msg.setData(bundle);
                             handler.sendMessage(msg);
                         }else{
-                            Message msg = new Message();
+                            msg = new Message();
                             msg.what = USERNAME_EXIST;
                             msg.setData(bundle);
                             handler.sendMessage(msg);
                         }
                     }
                     else {
-                        Intent gotoMain = new Intent(SignupActivity.this, MainActivity.class);
-                        gotoMain.putExtra("u_id", jsonObject.getInt("id"));
-                        gotoMain.putExtra("u_name", jsonObject.getString("name"));
-                        gotoMain.putExtra("u_email", jsonObject.getString("email"));
-                        startActivity(gotoMain);
+                        if(jsonObject.getInt("email_sending_status") == 0){
+                            msg = new Message();
+                            msg.what = FAIL_TO_SEND_ACTIVATION;
+                            handler.sendMessage(msg);
+                        }else{
+                            Intent gotoActivate = new Intent(SignupActivity.this, LoginActivity.class);
+                            gotoActivate.putExtra("signup", jsonObject.getString("activate"));
+                            gotoActivate.putExtra("email", email);
+                            gotoActivate.putExtra("password", password);
+                            startActivity(gotoActivate);
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -192,6 +213,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, name);
         Log.d(TAG, password);
         Log.d(TAG, encrypted);
+        loading_dialog = LoadingDialog.showDialog(SignupActivity.this, "Signing Up...");
         sendData(name, email, password);//encrypted);
     }
 

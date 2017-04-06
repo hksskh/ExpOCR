@@ -26,6 +26,19 @@ class User(models.Model):
         return users
 
     @staticmethod
+    def try_create_user(username, email, password):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() > 0:
+            return 'Email Exists', result.count()
+        query = Q(U_Name__exact=username)
+        result = User.manager.filter(query)
+        if result.count() > 0:
+            return 'Username Exists', result.count()
+        msg = 'Please check activation mail in ' + email
+        return msg, 0
+
+    @staticmethod
     def create_user(username, email, password):
         query = Q(Email__exact=email)
         result = User.manager.filter(query)
