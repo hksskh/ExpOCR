@@ -12,6 +12,7 @@ class User(models.Model):
     U_Name = models.CharField(max_length=255)
     Email = models.EmailField(max_length=255, unique=True)
     Password = models.CharField(max_length=255)
+    Vericode = models.CharField(max_length=255)
 
     manager = models.Manager()
 
@@ -86,6 +87,7 @@ class User(models.Model):
             return False, 'Password incorrect'
         return True, result.values('U_Id', 'U_Name', 'Email')
 
+
     @staticmethod
     def count_edu_user():
         return User.manager.filter(Email__regex=r'^.+@.+\.edu').count()
@@ -100,4 +102,32 @@ class User(models.Model):
     def delete_user(username, email, password):
         query = Q(U_Id__gt=12) & Q(U_Name__exact=username) & Q(Email__exact=email) & Q(Password__exact=password)
         result = User.manager.filter(query).delete()
+        return result
+
+    @staticmethod
+    def add_vericode(email, vericode):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() == 0:
+            return 'Email Does Not Exist', 0
+        user = User.manager.filter(query).update(Vericode=vericode)
+        return user, 1
+
+    @staticmethod
+    def check_vericode(email, vericode):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() == 0:
+            return False, 'Email not exists'
+        query = Q(Vericode__exact=vericode)
+        result = result.filter(query)
+        if result.count() == 0:
+            return False, 'Vericode incorrect'
+        return True, email
+
+    @staticmethod
+    def change_user_password(email, password):
+        query = Q(Email__exact=email)
+        d = {"Password": password, "Vericode": ""}
+        result = User.manager.filter(query).update(**d)
         return result

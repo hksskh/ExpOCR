@@ -158,6 +158,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mForgotPasswordButton = (Button) findViewById(R.id.forgot_password);
+        mForgotPasswordButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                forgotPassword();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
@@ -184,6 +192,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void loginTosignup() {
         Intent iSignup = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(iSignup);
+    }
+
+    private void forgotPassword() {
+        Intent iRequestVericode = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+        startActivity(iRequestVericode);
     }
 
     @Override
