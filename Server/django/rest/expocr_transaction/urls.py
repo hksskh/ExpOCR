@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^get_all_receivers', views.expocr_transaction_get_all_receivers),
     url(r'^get_between', views.expocr_transaction_get_between),
     url(r'^all_transactions', views.expocr_get_all_transactions),
+    url(r'^ocr_test', views.expocr_transaction_ocr_test),
 ]
