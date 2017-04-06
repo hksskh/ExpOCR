@@ -53,15 +53,10 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         mFirstNameView = (TextView) findViewById(R.id.First_name);
-        mFirstNameView.setText("Lanxiao");
         mLastNameView = (TextView) findViewById(R.id.Last_name);
-        mLastNameView.setText("Bai");
         mEmailView = (TextView) findViewById(R.id.signup_email);
-        mEmailView.setText("hermitebai@outlook.com");
         mPasswordView = (TextView) findViewById(R.id.signup_password);
-        mPasswordView.setText("970530blX!");
         mPasswordReEnterView = (TextView) findViewById(R.id.reenter_password);
-        mPasswordReEnterView.setText("970530blX!");
 
         Button SignupBtn = (Button) findViewById(R.id.sign_up_button);
         SignupBtn.setOnClickListener(new View.OnClickListener() {

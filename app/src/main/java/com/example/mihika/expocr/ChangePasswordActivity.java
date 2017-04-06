@@ -58,6 +58,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         userEmail = getIntent().getStringExtra("u_email");
 
+        mEmailView.setText(userEmail);
+
         handler = new Handler(){
             public void handleMessage(Message msg){
                 super.handleMessage(msg);
