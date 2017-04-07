@@ -41,9 +41,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".PhotoCaptureActivity"
-            android:launchMode="singleTask" />
+        <activity android:name=".PhotoCaptureActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -55,17 +53,23 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".AddTransactionActivity" />
+        <activity
+            android:name=".AddTransactionActivity"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".IndividualFriendActivity"
             android:label="@string/friend_activity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".IndividualGroupActivity"
             android:label="@string/group_activity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ForgotPasswordActivity" />
-        <activity android:name=".ChangePasswordActivity" />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>
