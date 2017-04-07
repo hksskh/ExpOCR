@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,6 +34,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
     private ListView mListView;
     private int receiver_id;
     private int u_id;
+    private Button mSettleUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
         new TransactionBetweenQueryTask().execute();
 
         mListView = (ListView) findViewById(R.id.expenses_list_view);
-        final ArrayList<Expense> expenseList = Expense.getRecipesFromFile("recipes.json", this);
+        final ArrayList<Expense> expenseList = Expense.getRecipesFromFile("blank.json", this);
 
         ExpenseAdapter adapter = new ExpenseAdapter(this, expenseList);
 
@@ -66,6 +69,17 @@ public class IndividualFriendActivity extends AppCompatActivity {
         }*/
 
         mListView.setAdapter(adapter);
+
+        mSettleUpButton = (Button) findViewById(R.id.settle_up);
+        mSettleUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToRecordPayment = new Intent(IndividualFriendActivity.this, RecordPaymentActivity.class);
+                goToRecordPayment.putExtra("u_id", u_id);
+                goToRecordPayment.putExtra("receiver_id", receiver_id);
+                startActivity(goToRecordPayment);
+            }
+        });
     }
 
     class TransactionBetweenQueryTask extends AsyncTask<String, Void, String> {

@@ -189,6 +189,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+
     private void loginTosignup() {
         Intent iSignup = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(iSignup);
@@ -213,6 +214,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setText(intent.getStringExtra("email"));
             mPasswordView.setText(intent.getStringExtra("password"));
             Toast.makeText(getApplicationContext(), intent.getStringExtra("signup"), Toast.LENGTH_LONG).show();
+        }
+        else if(intent.hasExtra("forgotPassword")) {
+            mEmailView.setText(intent.getStringExtra("u_email"));
+            mPasswordView.setText(intent.getStringExtra("u_password"));
         }
     }
 

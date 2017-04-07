@@ -58,6 +58,12 @@ class User(models.Model):
         return user
 
     @staticmethod
+    def get_two_users_by_id(id1, id2    ):
+        query = Q(U_Id=id1) | Q(U_Id=id2)
+        users = User.manager.filter(query)
+        return users
+
+    @staticmethod
     def get_user_by_name(name):
         query = Q(U_Name__exact=name)
         result = User.manager.filter(query).values('U_Id')

@@ -13,65 +13,53 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="5"
         android:orientation="vertical"
         android:layout_gravity="center">
 
-
-            <RelativeLayout
-                android:id="@+id/user_information"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginTop="4dp"
-                android:gravity="center" >
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:id="@+id/friend_receiver_name"
+                android:textColor="@color/black" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:id="@+id/friend_receiver_email"
+                android:textColor="@color/black"
+                android:layout_below="@id/friend_receiver_name" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:layout_marginTop="0dp"
-                    android:gravity="center"
-                    android:id="@+id/friend_receiver_name"
-                    android:textColor="@color/black" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center"
-                    android:id="@+id/friend_receiver_email"
-                    android:textColor="@color/black"
-                    android:layout_below="@id/friend_receiver_name" />
+            <TextView
+                android:text="Net Balance: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/friend_receiver_email"
+                android:textSize="16sp"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:id="@+id/friend_receiver_net_balance" />
 
-                <TextView
-                    android:text="Net Balance: "
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/friend_receiver_email"
-                    android:textSize="16sp"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center"
-                    android:id="@+id/friend_receiver_net_balance" />
-
-                <Button
-                    android:text="Settle Up"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/friend_receiver_net_balance"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="2dp"
-                    android:textSize="12sp"
-                    android:id="@+id/settle_up" />
+            <Button
+                android:text="Settle Up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/friend_receiver_net_balance"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                android:textSize="12sp"
+                android:id="@+id/settle_up" />
 
 
-            </RelativeLayout>
 
         <ListView
             android:id="@+id/expenses_list_view"
-            android:layout_height="0dp"
-            android:layout_width="match_parent"
-            android:layout_weight="4">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
         </ListView>
 
     </LinearLayout>
