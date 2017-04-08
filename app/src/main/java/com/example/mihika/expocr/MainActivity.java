@@ -227,7 +227,8 @@ public class MainActivity extends AppCompatActivity
             //Todo: bundle data to be transferred
             startActivity(intent);
         } else if (id == R.id.nav_summary) {
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, Summary.class);
+            startActivity(intent);
         } else if (id == R.id.nav_trend) {
             Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_settings) {
