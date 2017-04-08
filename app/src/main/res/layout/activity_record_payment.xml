@@ -33,6 +33,19 @@
         android:layout_marginRight="10dp"
         android:hint="$ 0.00"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:text=" via "/>
+
+    <Spinner
+        android:id="@+id/payment_method"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"/>
+
     <Button
         android:id="@+id/record_payment"
         android:layout_width="match_parent"
