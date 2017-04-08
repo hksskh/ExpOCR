@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mihika.expocr.util.ServerUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -153,32 +155,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 String email = mEmailView.getText().toString();
                 String vericode = mVericodeView.getText().toString();
 
-                String url = "http://10.0.2.2:8000/user/check_vericode";
+                String url = "http://" + ServerUtil.getEmulatorAddress() + "user/check_vericode";
                 String requestString = "email=" + email + "&vericode=" + vericode;
                 Log.d(TAG, requestString);
 
+                String response = ServerUtil.sendData(url, requestString, "UTF-8");
+                Log.d(TAG, "From server:" + response);
                 try {
-                    URL wsurl = new URL(url);
-                    HttpURLConnection conn = (HttpURLConnection) wsurl.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    conn.setRequestMethod("POST");
-                    OutputStream os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(requestString.getBytes("UTF-8"));
-                    os.close();
-                    InputStream is = new BufferedInputStream(conn.getInputStream());
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    String response = "";
-                    while ((length = is.read(buffer)) != -1)
-                    {
-                        String temp = new String(buffer, 0, length, "UTF-8");
-                        response += temp;
-                        System.out.println(temp);
-                    }
-                    is.close();
-                    conn.disconnect();
-                    Log.d(TAG, "From server:" + response);
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.has("warning")){
                         String warning = jsonObject.getString("warning");
@@ -196,8 +179,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         changePassword.putExtra("u_email", email);
                         startActivity(changePassword);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -211,32 +192,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void run() {
                 String email = mEmailView.getText().toString();
 
-                String url = "http://10.0.2.2:8000/user/request_vericode";
+                String url = "http://" + ServerUtil.getEmulatorAddress() + "user/request_vericode";
                 String requestString = "email=" + email;
                 Log.d(TAG, requestString);
 
+                String response = ServerUtil.sendData(url, requestString, "UTF-8");
+                Log.d(TAG, "From server:" + response);
                 try {
-                    URL wsurl = new URL(url);
-                    HttpURLConnection conn = (HttpURLConnection) wsurl.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    conn.setRequestMethod("POST");
-                    OutputStream os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(requestString.getBytes("UTF-8"));
-                    os.close();
-                    InputStream is = new BufferedInputStream(conn.getInputStream());
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    String response = "";
-                    while ((length = is.read(buffer)) != -1)
-                    {
-                        String temp = new String(buffer, 0, length, "UTF-8");
-                        response += temp;
-                        System.out.println(temp);
-                    }
-                    is.close();
-                    conn.disconnect();
-                    Log.d(TAG, "From server:" + response);
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.has("warning")){
                         String warning = jsonObject.getString("warning");
@@ -258,8 +220,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         msg.setData(bundle);
                         handler.sendMessage(msg);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

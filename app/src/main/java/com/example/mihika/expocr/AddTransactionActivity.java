@@ -38,6 +38,8 @@ import java.util.Vector;
 
 import android.widget.Button;
 
+import com.example.mihika.expocr.util.ServerUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -113,7 +115,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 Date date = new Date();
                 String datetime = dateFormat.format(date);
 
-                String url = "http://10.0.2.2:8000/transaction/create_by_name";
+                String url = "http://" + ServerUtil.getEmulatorAddress() + "transaction/create_by_name";
                 StringBuilder requestString = new StringBuilder();
                 requestString.append("sender_id=").append(u_id)
                         .append("&receiver_name=").append(name_text.getText())
@@ -126,46 +128,27 @@ public class AddTransactionActivity extends AppCompatActivity {
                 requestString.append(Math.abs(Double.parseDouble(amount_text.getText().toString())))
                         .append("&date=").append(datetime);
                 Log.d(TAG, requestString.toString());
+                String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
+
+                Log.d(TAG, "From server:" + response);
                 try {
-                    URL wsurl = new URL(url);
-                    HttpURLConnection conn = (HttpURLConnection) wsurl.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    conn.setRequestMethod("POST");
-                    OutputStream os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(requestString.toString().getBytes("UTF-8"));
-                    os.close();
-                    InputStream is = new BufferedInputStream(conn.getInputStream());
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    String response = "";
-                    while ((length = is.read(buffer)) != -1)
-                    {
-                        String temp = new String(buffer, 0, length, "UTF-8");
-                        response += temp;
-                        System.out.println(temp);
-                    }
-                    is.close();
-                    conn.disconnect();
-                    Log.d(TAG, "From server:" + response);
                     JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.has("warning")){
+                    if (jsonObject.has("warning")) {
                         Bundle bundle = new Bundle();
                         bundle.putString("warning", jsonObject.getString("warning"));
                         Message msg = new Message();
                         msg.what = FRIEND_NAME_NOT_EXIST;
                         msg.setData(bundle);
                         handler.sendMessage(msg);
-                    }else{
+                    } else {
                         Intent gotoMain = new Intent(AddTransactionActivity.this, MainActivity.class);
                         gotoMain.putExtra("addTransaction", true);
                         startActivity(gotoMain);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } catch (JSONException jsex){
+                    jsex.printStackTrace();
                 }
+
             }
         }).start();
     }

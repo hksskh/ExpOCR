@@ -140,7 +140,7 @@ public class PhotoCaptureActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String url = "http://192.168.0.100:8000/transaction/ocr_test";
+                String url = "http://" + ServerUtil.getEmulatorAddress() + "transaction/ocr_test";
                 String requestString = null;
                 try {
                     requestString = new String("image=".getBytes(), "ISO-8859-1") + image_string;

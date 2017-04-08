@@ -21,6 +21,22 @@ import java.net.URL;
 
 public class ServerUtil {
 
+    private static final String ADDR_LOCALHOST = "127.0.0.1:8000/";
+    private static final String ADDR_EMULATOR = "10.0.2.2:8000/";
+    private static final String ADDR_AZURE = "cs428-expocr2200.cloudapp.net:8000/";
+
+    public static String getLocalAdresss(){
+        return ADDR_LOCALHOST;
+    }
+
+    public static String getEmulatorAddress(){
+        return ADDR_EMULATOR;
+    }
+
+    public static String getAzureAddress(){
+        return ADDR_AZURE;
+    }
+
     public static String sendData(String url, String requestString, String requestEncoding){
         StringBuilder response = new StringBuilder();
 
