@@ -103,27 +103,27 @@ public class Summary extends AppCompatActivity {
         donutSizeTextView = (TextView) findViewById(R.id.donutSizeTextView);
         updateDonutText();
 
-        s1 = new Segment("s1", 25);
-        s2 = new Segment("s2", 25);
-        s3 = new Segment("s3", 25);
-        s4 = new Segment("s4", 25);
+        s1 = new Segment("Food \n20%", 20);
+        s2 = new Segment("Clothes \n20%", 20);
+        s3 = new Segment("Rent \n30%", 30);
+        s4 = new Segment("Misc. \n30%", 30);
 
         EmbossMaskFilter emf = new EmbossMaskFilter(
                 new float[]{1, 1, 1}, 0.4f, 10, 8.2f);
 
-        SegmentFormatter sf1 = new SegmentFormatter(Color.BLUE);
+        SegmentFormatter sf1 = new SegmentFormatter(this, R.xml.pie_segment_formatter_blue);
         sf1.getLabelPaint().setShadowLayer(30, 0, 0, Color.BLUE);
         sf1.getFillPaint().setMaskFilter(emf);
 
-        SegmentFormatter sf2 = new SegmentFormatter(Color.GREEN);
+        SegmentFormatter sf2 = new SegmentFormatter(this, R.xml.pie_segment_formatter_green);
         sf2.getLabelPaint().setShadowLayer(30, 0, 0, Color.GREEN);
         sf2.getFillPaint().setMaskFilter(emf);
 
-        SegmentFormatter sf3 = new SegmentFormatter(Color.RED);
+        SegmentFormatter sf3 = new SegmentFormatter(this, R.xml.pie_segment_formatter_red);
         sf3.getLabelPaint().setShadowLayer(30, 0, 0, Color.RED);
         sf3.getFillPaint().setMaskFilter(emf);
 
-        SegmentFormatter sf4 = new SegmentFormatter(Color.YELLOW);
+        SegmentFormatter sf4 = new SegmentFormatter(this, R.xml.pie_segment_formatter_yellow);
         sf4.getLabelPaint().setShadowLayer(30, 0, 0, Color.YELLOW);
         sf4.getFillPaint().setMaskFilter(emf);
 

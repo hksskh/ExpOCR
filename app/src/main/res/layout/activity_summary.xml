@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,9 +15,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         androidPlot.title.text="Expenses by Category"
-        androidPlot.title.labelPaint.textSize="100"
-        androidPlot.title.labelPaint.textColor=""/>
-
+        androidPlot.title.labelPaint.textSize="100"/>
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -44,6 +43,5 @@
             android:text="unknown"
             android:id="@+id/donutSizeTextView"/>
     </LinearLayout>
-</LinearLayout>
 
-
+    </LinearLayout>
