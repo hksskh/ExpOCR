@@ -31,10 +31,6 @@ class User(models.Model):
         result = User.manager.filter(query)
         if result.count() > 0:
             return 'Email Exists', result.count()
-        query = Q(U_Name__exact=username)
-        result = User.manager.filter(query)
-        if result.count() > 0:
-            return 'Username Exists', result.count()
         msg = 'Please check activation mail in ' + email
         return msg, 0
 
@@ -44,10 +40,6 @@ class User(models.Model):
         result = User.manager.filter(query)
         if result.count() > 0:
             return 'Email Exists', result.count()
-        query = Q(U_Name__exact=username)
-        result = User.manager.filter(query)
-        if result.count() > 0:
-            return 'Username Exists', result.count()
         user = User.manager.create(U_Name=username, Email=email, Password=password)
         return user, 0
 
