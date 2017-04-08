@@ -202,11 +202,13 @@ def expocr_transaction_ocr_test(request):
         print(request.method)
         body = request.body
         print(len(body))
+
         image_index = body.index('image=')
         print(image_index)
         image_string = body[image_index + len('image='):]
         print('image_string_length: ')
         print(len(image_string))
+
         image_jpg = Image.open(io.BytesIO(image_string))
         print('image size: ')
         print(image_jpg.size)
@@ -214,6 +216,8 @@ def expocr_transaction_ocr_test(request):
 
         result = CVAPI.send_image_on_disk(image_string)
         print(result)
+
+
         data = {'image_string_length': len(image_string)}
         response = HttpResponse(json.dumps(data), content_type="application/json")
     except Exception as e:

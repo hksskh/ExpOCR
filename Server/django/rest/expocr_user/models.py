@@ -8,10 +8,10 @@ from apps import ExpocrUserConfig
 # Create your models here.
 
 class User(models.Model):
-    U_Id = models.AutoField(primary_key=True, unique=True)
-    U_Name = models.CharField(max_length=255)
-    Email = models.EmailField(max_length=255, unique=True)
-    Password = models.CharField(max_length=255)
+    U_Id = models.AutoField(primary_key=True, null=False, unique=True)
+    U_Name = models.CharField(max_length=255, null=False)
+    Email = models.EmailField(max_length=255, null=False, unique=True)
+    Password = models.CharField(max_length=255, null=False)
     Vericode = models.CharField(max_length=255)
 
     manager = models.Manager()

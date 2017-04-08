@@ -8,8 +8,8 @@ from django.db.models import Q
 # Create your models here.
 
 class Group(models.Model):
-    G_Id = models.AutoField(primary_key=True, unique=True)
-    G_Name = models.CharField(max_length=255)
+    G_Id = models.AutoField(primary_key=True, null=False, unique=True)
+    G_Name = models.CharField(max_length=255, null=False)
 
     manager = models.Manager()
 
@@ -42,8 +42,8 @@ class Group(models.Model):
 
 
 class Member(models.Model):
-    G_Id = models.IntegerField()
-    U_Id = models.IntegerField()
+    G_Id = models.IntegerField(null=False)
+    U_Id = models.IntegerField(null=False)
 
     manager = models.Manager()
 
@@ -84,9 +84,9 @@ class Member(models.Model):
 
 
 class Group_Transaction(models.Model):
-    GT_Id = models.AutoField(primary_key=True, unique=True)
-    G_Id = models.IntegerField()
-    T_Id = models.IntegerField()
+    GT_Id = models.AutoField(primary_key=True, null=False, unique=True)
+    G_Id = models.IntegerField(null=False)
+    T_Id = models.IntegerField(null=False)
 
     manager = models.Manager()
 

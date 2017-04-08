@@ -8,13 +8,13 @@ from django.db.models import Q, Sum
 # Create your models here.
 
 class Transaction(models.Model):
-    T_Id = models.AutoField(primary_key=True, unique=True)
-    Sender_Id = models.IntegerField()
-    Receiver_Id = models.IntegerField()
-    Category = models.CharField(max_length=255)
-    Memo = models.CharField(max_length=255)
-    Amount = models.DecimalField(max_digits=17, decimal_places=2)
-    Date = models.DateTimeField()
+    T_Id = models.AutoField(primary_key=True, null=False, unique=True)
+    Sender_Id = models.IntegerField(null=False)
+    Receiver_Id = models.IntegerField(null=False)
+    Category = models.CharField(max_length=255, null=False)
+    Memo = models.CharField(max_length=255, null=False)
+    Amount = models.DecimalField(max_digits=17, decimal_places=2, null=False)
+    Date = models.DateTimeField(null=False)
 
     manager = models.Manager()
 
