@@ -166,7 +166,8 @@ def expocr_transaction_create_by_email(request):
         data = {'warning': 'Friend email not exists'};
         response = HttpResponse(json.dumps(data), content_type="application/json")
         return response
-    receiver_id = result.U_Id
+    for entry in result:
+        receiver_id = entry.U_Id
     result = Transaction.create_transaction(sender_id, receiver_id, category, memo, amount, date)
     data = {}
     data['t_id'] = result.T_Id
