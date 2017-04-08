@@ -14,8 +14,13 @@ class Group(models.Model):
     manager = models.Manager()
 
     class Meta:
-        db_table = 'groups'
+        db_table = 'GROUPS'
         ordering = ['G_Id']
+
+    @staticmethod
+    def get_all_groups():
+        result = Group.manager.all()
+        return result
 
     @staticmethod
     def create_group(name):
@@ -42,13 +47,20 @@ class Group(models.Model):
 
 
 class Member(models.Model):
+    GU_Id = models.AutoField(primary_key=True, null=False, unique=True)
     G_Id = models.IntegerField(null=False)
     U_Id = models.IntegerField(null=False)
 
     manager = models.Manager()
 
     class Meta:
-        db_table = 'members'
+        db_table = 'MEMBERS'
+        ordering = ['GU_Id']
+
+    @staticmethod
+    def get_all_members():
+        result = Member.manager.all()
+        return result
 
     @staticmethod
     def add_member(g_id, u_id):
@@ -91,8 +103,13 @@ class Group_Transaction(models.Model):
     manager = models.Manager()
 
     class Meta:
-        db_table = 'group_transactions'
+        db_table = 'GROUP_TRANSACTIONS'
         ordering = ['GT_Id']
+
+    @staticmethod
+    def get_all_group_transactions():
+        result = Group_Transaction.manager.all()
+        return result
 
     @staticmethod
     def add_transaction(g_id, t_id):

@@ -17,7 +17,7 @@ class User(models.Model):
     manager = models.Manager()
 
     class Meta:
-        db_table = 'users'
+        db_table = 'USERS'
         ordering = ['U_Id']
 
     @staticmethod

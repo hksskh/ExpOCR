@@ -19,7 +19,7 @@ class Transaction(models.Model):
     manager = models.Manager()
 
     class Meta:
-        db_table = 'transactions'
+        db_table = 'TRANSACTIONS'
         ordering = ['T_Id']
 
     @staticmethod

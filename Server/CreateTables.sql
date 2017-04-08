@@ -58,8 +58,11 @@ DROP TABLE IF EXISTS MEMBERS;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE MEMBERS (
+  GU_Id int(11) NOT NULL,
   G_Id int(11) NOT NULL,
   U_Id int(11) NOT NULL,
+  PRIMARY KEY (GU_Id),
+  UNIQUE KEY M_Id_UNIQUE (GU_Id),
   KEY G_Id (G_Id),
   KEY U_Id (U_Id),
   CONSTRAINT members_ibfk_1 FOREIGN KEY (G_Id) REFERENCES `GROUPS` (G_Id),
@@ -119,4 +122,4 @@ CREATE TABLE USERS (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-08  2:08:44
+-- Dump completed on 2017-04-08  4:56:54

@@ -7,6 +7,24 @@ import json
 # Create your views here.
 
 @csrf_exempt
+def expocr_get_all_groups(request):
+    data = serializers.serialize('json', Group.get_all_groups())
+    response = HttpResponse(data, content_type="application/json")
+    return response
+
+@csrf_exempt
+def expocr_get_all_members(request):
+    data = serializers.serialize('json', Member.get_all_members())
+    response = HttpResponse(data, content_type="application/json")
+    return response
+
+@csrf_exempt
+def expocr_get_all_group_transactions(request):
+    data = serializers.serialize('json', Group_Transaction.get_all_group_transactions())
+    response = HttpResponse(data, content_type="application/json")
+    return response
+
+@csrf_exempt
 def expocr_group_create(request):
     if request.method == 'GET':
         params = request.GET
