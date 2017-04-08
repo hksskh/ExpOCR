@@ -25,15 +25,19 @@ public class ServerUtil {
     private static final String ADDR_EMULATOR = "10.0.2.2:8000/";
     private static final String ADDR_AZURE = "cs428-expocr2200.cloudapp.net:8000/";
 
-    public static String getLocalAdresss(){
+    public static String getServerAddress(){
+        return getEmulatorAddress();
+    }
+
+    private static String getLocalAdresss(){
         return ADDR_LOCALHOST;
     }
 
-    public static String getEmulatorAddress(){
+    private static String getEmulatorAddress(){
         return ADDR_EMULATOR;
     }
 
-    public static String getAzureAddress(){
+    private static String getAzureAddress(){
         return ADDR_AZURE;
     }
 

@@ -125,7 +125,7 @@ public class SignupActivity extends AppCompatActivity {
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
-                String url = "http://" + ServerUtil.getEmulatorAddress() + "user/try_create";
+                String url = "http://" + ServerUtil.getServerAddress() + "user/try_create";
                 String requestString = "username=" + name + "&email=" + email + "&password=" + password;//encrypted;
                 Log.d(TAG, requestString);
 

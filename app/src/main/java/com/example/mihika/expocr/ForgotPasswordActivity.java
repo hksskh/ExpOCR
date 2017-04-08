@@ -155,7 +155,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 String email = mEmailView.getText().toString();
                 String vericode = mVericodeView.getText().toString();
 
-                String url = "http://" + ServerUtil.getEmulatorAddress() + "user/check_vericode";
+                String url = "http://" + ServerUtil.getServerAddress() + "user/check_vericode";
                 String requestString = "email=" + email + "&vericode=" + vericode;
                 Log.d(TAG, requestString);
 
@@ -192,7 +192,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void run() {
                 String email = mEmailView.getText().toString();
 
-                String url = "http://" + ServerUtil.getEmulatorAddress() + "user/request_vericode";
+                String url = "http://" + ServerUtil.getServerAddress() + "user/request_vericode";
                 String requestString = "email=" + email;
                 Log.d(TAG, requestString);
 

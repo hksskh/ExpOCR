@@ -113,7 +113,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 Date date = new Date();
                 String datetime = dateFormat.format(date);
 
-                String url = "http://" + ServerUtil.getEmulatorAddress() + "transaction/create_by_email";
+                String url = "http://" + ServerUtil.getServerAddress() + "transaction/create_by_email";
                 StringBuilder requestString = new StringBuilder();
                 requestString.append("sender_id=").append(MainActivity.getU_id())
                         .append("&receiver_email=").append(email_text.getText())

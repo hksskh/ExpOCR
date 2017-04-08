@@ -143,7 +143,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 String email = mEmailView.getText().toString();
                 String password = mPasswordView.getText().toString();
 
-                String url = "http://" + ServerUtil.getEmulatorAddress() + "user/change_password";
+                String url = "http://" + ServerUtil.getServerAddress() + "user/change_password";
                 String requestString = "email=" + email + "&password=" + password;
                 Log.d(TAG, requestString);
 

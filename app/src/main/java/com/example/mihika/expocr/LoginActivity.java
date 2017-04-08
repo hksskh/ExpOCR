@@ -283,7 +283,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
-                String url = "http://" + ServerUtil.getEmulatorAddress() + "user/login_by_email";
+                String url = "http://" + ServerUtil.getServerAddress() + "user/login_by_email";
                 String requestString = "email=" + email + "&password=" + password;//encrypted;
                 Log.d(TAG, requestString);
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
