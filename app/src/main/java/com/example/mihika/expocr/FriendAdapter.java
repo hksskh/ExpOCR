@@ -38,7 +38,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     //number of views it will hold
     private int mNumberItems;
     private int maxItemNumber;
-    private int u_id;
     private boolean isRefreshing;
 
     private final FriendListItemClickListener mOnClickListener;
@@ -46,9 +45,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     private static Vector<String> friend_name_list = new Vector<>();
 
     //constructor
-    public FriendAdapter(int numberOfItems, int u_id, TabFragment listener) {
+    public FriendAdapter(int numberOfItems, TabFragment listener) {
         maxItemNumber = numberOfItems;
-        this.u_id = u_id;
         mOnClickListener = listener;
         mData = new ArrayList<>();
         isRefreshing = false;
@@ -110,10 +108,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     public List<String> getmData(){
         return this.mData;
-    }
-
-    public int getU_id(){
-        return this.u_id;
     }
 
     public static Vector<String> get_friend_name_list(){
@@ -223,7 +217,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     private String friend_retrieve_all_receivers(){
         String serverUrl = "http://" + ServerUtil.getEmulatorAddress() + "transaction/get_all_receivers";
-        String requestBody = "sender_id=" + u_id;
+        String requestBody = "sender_id=" + MainActivity.getU_id();
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
 

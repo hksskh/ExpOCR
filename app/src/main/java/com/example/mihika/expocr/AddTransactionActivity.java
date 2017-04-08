@@ -47,7 +47,6 @@ import static android.view.View.VISIBLE;
 
 public class AddTransactionActivity extends AppCompatActivity {
 
-    private int u_id;
     private final int FRIEND_EMAIL_NOT_EXIST = 1;
 
     private Spinner transactionKindSpinner;
@@ -74,7 +73,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_transaction);
 
         Intent inIntent = getIntent();
-        u_id = inIntent.getIntExtra("u_id", 1);
         friend_autos.addAll(FriendAdapter.get_friend_name_list());
 
         transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
@@ -115,9 +113,9 @@ public class AddTransactionActivity extends AppCompatActivity {
                 Date date = new Date();
                 String datetime = dateFormat.format(date);
 
-                String url = "http://" + ServerUtil.getAzureAddress() + "transaction/create_by_email";
+                String url = "http://" + ServerUtil.getEmulatorAddress() + "transaction/create_by_email";
                 StringBuilder requestString = new StringBuilder();
-                requestString.append("sender_id=").append(u_id)
+                requestString.append("sender_id=").append(MainActivity.getU_id())
                         .append("&receiver_email=").append(email_text.getText())
                         .append("&category=").append(categorySpinner.getSelectedItem().toString())
                         .append("&memo=").append(memo_text.getText())

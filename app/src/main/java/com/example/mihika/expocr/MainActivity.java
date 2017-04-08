@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
     private final int AVATAR_REQUEST_FROM_CAMERA = 2;
     private final int CROP_PHOTO = 3;
 
-    private int u_id;
+    private static int u_id;
     private String u_name;
     private String u_email;
     private Uri tempFileUri;
@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddTransactionActivity.class);
-                intent.putExtra("u_id", u_id);
                 startActivity(intent);
             }
         });
@@ -136,6 +135,13 @@ public class MainActivity extends AppCompatActivity
         setIntent(intent);
         if(intent.hasExtra("addTransaction")){
             tabAdapter.refreshTabs();
+        } else if(intent.hasExtra("u_id")){//crucial
+            u_id = intent.getIntExtra("u_id", 1);
+            u_name = intent.getStringExtra("u_name");
+            u_email = intent.getStringExtra("u_email");
+            System.out.println("u_id: " + u_id);
+            System.out.println("u_name: " + u_name);
+            System.out.println("u_email: " + u_email);
         }
     }
 
@@ -247,8 +253,8 @@ public class MainActivity extends AppCompatActivity
         return builder.toString();
     }
 
-    public int getU_id(){
-        return this.u_id;
+    public static int getU_id(){
+        return u_id;
     }
 
     private void initAvatar(ImageView avatarView){

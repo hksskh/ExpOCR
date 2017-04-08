@@ -37,16 +37,14 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
     //number of views it will hold
     private int mNumberItems;
     private int maxItemNumber;
-    private int u_id;
     private boolean isRefreshing;
 
     private final ExpenseListItemClickListener mOnClickListener;
     private List<String> mData;
 
     //constructor
-    public ExpenseTabAdapter(int numberOfItems, int u_id, TabFragment listener) {
+    public ExpenseTabAdapter(int numberOfItems, TabFragment listener) {
         maxItemNumber = numberOfItems;
-        this.u_id = u_id;
         mOnClickListener = listener;
         mData = new ArrayList<>();
         isRefreshing = false;
@@ -108,10 +106,6 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
 
     public List<String> getmData(){
         return this.mData;
-    }
-
-    public int getU_id(){
-        return this.u_id;
     }
 
     public void setIsRefreshing(boolean isRefreshing){
@@ -241,7 +235,7 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
 
     private String expense_retrieve_all(){
         String serverUrl = "http://" + ServerUtil.getEmulatorAddress() + "transaction/get_by_sender";
-        String requestBody = "sender_id=" + u_id;
+        String requestBody = "sender_id=" + MainActivity.getU_id();
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
 

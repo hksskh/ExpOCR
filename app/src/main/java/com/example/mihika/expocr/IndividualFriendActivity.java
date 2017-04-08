@@ -33,7 +33,6 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
     private ListView mListView;
     private int receiver_id;
-    private int u_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public class IndividualFriendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_individual_friend);
 
         Intent inIntent = getIntent();
-        u_id = inIntent.getIntExtra("u_id", 1);
         receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
         ((TextView)findViewById(R.id.friend_receiver_name)).setText(inIntent.getStringExtra("receiver_name"));
         ((TextView)findViewById(R.id.friend_receiver_email)).setText(inIntent.getStringExtra("receiver_email"));
@@ -112,7 +110,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
     private String friend_get_transaction_between(){
         String serverUrl = "http://" + ServerUtil.getEmulatorAddress() + "transaction/get_between";
-        String requestBody = "sender_id=" + u_id + "&receiver_id=" + receiver_id;
+        String requestBody = "sender_id=" + MainActivity.getU_id() + "&receiver_id=" + receiver_id;
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
 
