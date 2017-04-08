@@ -48,13 +48,13 @@ import static android.view.View.VISIBLE;
 public class AddTransactionActivity extends AppCompatActivity {
 
     private int u_id;
-    private final int FRIEND_NAME_NOT_EXIST = 1;
+    private final int FRIEND_EMAIL_NOT_EXIST = 1;
 
     private Spinner transactionKindSpinner;
     private MultiSelectionSpinner userSpinner;
     private Spinner categorySpinner;
     private Spinner incomeOrExpenseSpinner;
-    private AutoCompleteTextView name_text;
+    private AutoCompleteTextView email_text;
     private AutoCompleteTextView amount_text;
     private AutoCompleteTextView memo_text;
     private Handler handler;
@@ -98,9 +98,9 @@ public class AddTransactionActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 switch(msg.what){
-                    case FRIEND_NAME_NOT_EXIST:
+                    case FRIEND_EMAIL_NOT_EXIST:
                         Bundle bundle = msg.getData();
-                        name_text.setError(bundle.getString("warning"));
+                        email_text.setError(bundle.getString("warning"));
                         break;
                 }
             }
@@ -115,10 +115,10 @@ public class AddTransactionActivity extends AppCompatActivity {
                 Date date = new Date();
                 String datetime = dateFormat.format(date);
 
-                String url = "http://" + ServerUtil.getEmulatorAddress() + "transaction/create_by_name";
+                String url = "http://" + ServerUtil.getAzureAddress() + "transaction/create_by_email";
                 StringBuilder requestString = new StringBuilder();
                 requestString.append("sender_id=").append(u_id)
-                        .append("&receiver_name=").append(name_text.getText())
+                        .append("&receiver_email=").append(email_text.getText())
                         .append("&category=").append(categorySpinner.getSelectedItem().toString())
                         .append("&memo=").append(memo_text.getText())
                         .append("&amount=");
@@ -137,7 +137,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putString("warning", jsonObject.getString("warning"));
                         Message msg = new Message();
-                        msg.what = FRIEND_NAME_NOT_EXIST;
+                        msg.what = FRIEND_EMAIL_NOT_EXIST;
                         msg.setData(bundle);
                         handler.sendMessage(msg);
                     } else {
@@ -157,9 +157,9 @@ public class AddTransactionActivity extends AppCompatActivity {
         //adapters for AutoCompleteTextViews
         ArrayAdapter<String> friend_adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, friend_autos);
-        name_text = (AutoCompleteTextView)
+        email_text = (AutoCompleteTextView)
                 findViewById(R.id.add_transaction_name);
-        name_text.setAdapter(friend_adapter);
+        email_text.setAdapter(friend_adapter);
         ArrayAdapter<String> amount_adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, amount_autos);
         amount_text = (AutoCompleteTextView)
@@ -204,11 +204,11 @@ public class AddTransactionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).toString().equals("For group")) {
                     userSpinner.setVisibility(View.VISIBLE);
-                    name_text.setVisibility(View.GONE);
+                    email_text.setVisibility(View.GONE);
                 }
                 else {
                     userSpinner.setVisibility(View.INVISIBLE);
-                    name_text.setVisibility(View.VISIBLE);
+                    email_text.setVisibility(View.VISIBLE);
                 }
             }
 

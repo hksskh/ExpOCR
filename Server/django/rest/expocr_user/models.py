@@ -50,12 +50,6 @@ class User(models.Model):
         return user
 
     @staticmethod
-    def get_user_by_name(name):
-        query = Q(U_Name__exact=name)
-        result = User.manager.filter(query).values('U_Id')
-        return result
-
-    @staticmethod
     def get_user_by_email(email):
         query = Q(Email__exact=email)
         result = User.manager.filter(query)
