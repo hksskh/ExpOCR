@@ -58,11 +58,11 @@
         <activity
             android:name=".IndividualFriendActivity"
             android:label="@string/friend_activity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".IndividualGroupActivity"
             android:label="@string/group_activity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
