@@ -53,18 +53,20 @@ import java.util.concurrent.RunnableFuture;
  * Use the {@link TabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TabFragment extends Fragment implements FriendAdapter.FriendListItemClickListener, ExpenseTabAdapter.ExpenseListItemClickListener{
+public class TabFragment extends Fragment implements FriendAdapter.FriendListItemClickListener, GroupAdapter.GroupListItemClickListener, ExpenseTabAdapter.ExpenseListItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "page_title";
 
     public static final int FRIEND_FRAGMENT_REFRESH = 1;
     public static final int EXPENSE_FRAGMENT_REFRESH = 2;
+    public static final int GROUP_FRAGMENT_REFRESH = 3;
     private static final int NUM_LIST_ITEMS = 10;
 
     // TODO: Rename and change types of parameters
     private String page_title;
     private FriendAdapter mFriendAdapter;
+    private GroupAdapter mGroupAdapter;
     private ExpenseTabAdapter mExpenseAdapter;
     private RecyclerView mList;
 
@@ -127,6 +129,9 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                     case FRIEND_FRAGMENT_REFRESH:
                         swipeRefreshLayout.setRefreshing(false);
                         break;
+                    case GROUP_FRAGMENT_REFRESH:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
                     case EXPENSE_FRAGMENT_REFRESH:
                         swipeRefreshLayout.setRefreshing(false);
                         break;
@@ -142,7 +147,8 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                         mFriendAdapter.syncFriendList();
                         break;
                     case "GROUPS":
-                        swipeRefreshLayout.setRefreshing(false);
+                        mGroupAdapter.setIsRefreshing(true);
+                        mGroupAdapter.syncGroupList();
                         break;
                     case "EXPENSES":
                         mExpenseAdapter.setIsRefreshing(true);
@@ -172,27 +178,18 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                 mList.setAdapter(mFriendAdapter);
                 break;
             case "GROUPS":
-                baseView = inflater.inflate(R.layout.fragment_tab_expenses, container, false);
-                final ListView listView_grp = (ListView) baseView.findViewById(R.id.fragment_tab_expenses_listview);
-                List listItems = new ArrayList<>();
-                int [] imageIDs = new int[]{R.drawable.ic_list_group, R.drawable.ic_list_group, R.drawable.ic_list_group};
-                String[] infos = new String[]{"You recorded a payment from Jack in group1", "You paid Jack in group1", "You created the group group 1"};
-                String[] alerts = new String[]{"You received $20.00", "You paid $10.00", "2 members in group group 1"};
-                String[] dates = new String[]{"Mar 2", "Mar 2", "Mar 2"};
-                for(int ij = 0; ij < 5; ij++){
-                    for(int i = 0; i < 3; i++){
-                        Map<String, Object> listItem = new HashMap<>();
-                        listItem.put("imageID", imageIDs[i]);
-                        listItem.put("info", infos[i]);
-                        listItem.put("alert", alerts[i]);
-                        listItem.put("date", dates[i]);
-                        listItem.put("textColor", getResources().getColor(R.color.blue));
-                        listItems.add(listItem);
-                    }
-                }
-                Expenses_List_Adapter list_adapter = new Expenses_List_Adapter(this.getContext(), listItems, R.layout.fragment_tab_expenses_list_item, new String[]{"imageID", "info", "alert", "date", "textColor"}, new int[]{R.id.fragment_tab_expenses_list_icon, R.id.fragment_tab_expenses_list_info, R.id.fragment_tab_expenses_list_alert, R.id.fragment_tab_expenses_list_date});
-                listView_grp.setAdapter(list_adapter);
+                baseView = inflater.inflate(R.layout.fragment_tab, container, false);
+
+                mList = (RecyclerView) baseView.findViewById(R.id.rv_friends);
+                layoutManager = new LinearLayoutManager(this.getContext());
+                mList.setLayoutManager(layoutManager);
+                mList.setHasFixedSize(true);
+
+                mGroupAdapter = new GroupAdapter(NUM_LIST_ITEMS, ((MainActivity)mListener).getU_id(), this);
+
+                mList.setAdapter(mGroupAdapter);
                 break;
+
             case "EXPENSES":
                 baseView = inflater.inflate(R.layout.fragment_tab, container, false);
 
@@ -248,6 +245,20 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
     }
 
     @Override
+    public void onGroupListItemClick(int clickedItemIndex) {
+        String rawData = mGroupAdapter.getmData().get(clickedItemIndex);
+        String[] rawList = rawData.split(",");
+        Intent intent = new Intent(this.getActivity(), IndividualGroupActivity.class);
+        intent.putExtra("group_id", rawList[0]);
+        intent.putExtra("group_name", rawList[1]);
+        rawList = rawList[2].split(":");
+        //intent.putExtra("receiver_email", rawList[0]);
+        intent.putExtra("balance", rawList[1]);
+        intent.putExtra("u_id", mGroupAdapter.getU_id());
+        startActivity(intent);
+    }
+
+    @Override
     public void onExpenseListItemClick(int clickedItemIndex) {
 
     }
@@ -258,6 +269,7 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                 mFriendAdapter.syncFriendList();
                 break;
             case "GROUPS":
+                mGroupAdapter.syncGroupList();
                 break;
             case "EXPENSES":
                 mExpenseAdapter.syncExpenseList();
@@ -291,7 +303,7 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
          String onFragmentRefresh(String page_title);
     }
 }
-
+//TODO is this used anywhere?
 class Expenses_List_Adapter extends SimpleAdapter {
 
     private Context mContext;
