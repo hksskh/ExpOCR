@@ -1,4 +1,4 @@
-package com.example.mikiha.expoocr
+package com.example.mikiha.expoocr;
 //import com.example.mihika.expoocr.util.ServerUtil;
 //import org.json.JSONArray;
 //import org.json.JSONException;
