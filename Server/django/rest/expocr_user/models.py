@@ -117,3 +117,10 @@ class User(models.Model):
         d = {"Password": password, "Vericode": ""}
         result = User.manager.filter(query).update(**d)
         return result
+
+    @staticmethod
+    def get_two_users_by_id(id1, id2    ):
+        query = Q(U_Id=id1) | Q(U_Id=id2)
+        users = User.manager.filter(query)
+    
+        return users

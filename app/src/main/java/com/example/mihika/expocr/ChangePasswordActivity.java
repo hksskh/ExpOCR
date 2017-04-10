@@ -155,6 +155,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         int rowsUpdated = jsonObject.getInt("updated rows");
                         if(rowsUpdated == 1) {
                             Intent gotoLogin = new Intent(ChangePasswordActivity.this, LoginActivity.class);
+                            gotoLogin.putExtra("u_email", email);
+                            gotoLogin.putExtra("u_password", password);
+                            gotoLogin.putExtra("forgotPassword", "");
                             startActivity(gotoLogin);
                         }
 

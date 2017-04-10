@@ -76,6 +76,7 @@
             android:name=".ChangePasswordActivity"
             android:launchMode="singleTask" />
         <activity android:name=".Summary"></activity>
+        <activity android:name=".RecordPaymentActivity" />
     </application>
 
 </manifest>

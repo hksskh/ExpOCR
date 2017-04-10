@@ -1,11 +1,14 @@
 package com.example.mihika.expocr;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 //import android.animation.Animator;
 import android.animation.ValueAnimator;
 //import android.app.Activity;
 import android.graphics.*;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -16,33 +19,68 @@ import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
 import com.androidplot.util.*;
+import com.example.mihika.expocr.util.ServerUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
+import java.util.logging.LogRecord;
 
 public class Summary extends AppCompatActivity {
 
     public static final int SELECTED_SEGMENT_OFFSET = 50;
+    private static final int PLOT_FINISH = 1;
 
     private TextView donutSizeTextView;
     private SeekBar donutSizeSeekBar;
 
     public PieChart pie;
+    private Handler handler;
 
     private Segment s1;
     private Segment s2;
     private Segment s3;
     private Segment s4;
 
+    private final String TAG = "Summary";
+    public ArrayList<SegmentFormatter> segmentFormatters = new ArrayList<>();
+    public Map<String, Double> percents;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
+        System.out.println("Reach 48");
+
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg){
+                switch(msg.what){
+                    case PLOT_FINISH:
+                        int count = 0;
+                        for (String category : percents.keySet()) {
+                            Double percent = percents.get(category);
+                            Segment segment = new Segment(category + " \n" + Double.toString(percent) + "%", percent);
+                            pie.addSegment(segment, segmentFormatters.get(count % segmentFormatters.size()));
+                            count++;
+                        }
+                        pie.getBorderPaint().setColor(Color.GRAY);
+                        pie.getBackgroundPaint().setColor(Color.GRAY);
+                        setupIntroAnimation();
+                        break;
+                }
+            }
+        };
 
         // initialize our XYPlot reference:
         pie = (PieChart) findViewById(R.id.mySimplePieChart);
 
         final float padding = PixelUtils.dpToPix(30);
         pie.getPie().setPadding(padding, padding, padding, padding);
+        //setupIntroAnimation();
 
         // detect segment clicks:
         pie.setOnTouchListener(new View.OnTouchListener() {
@@ -102,44 +140,55 @@ public class Summary extends AppCompatActivity {
 
         donutSizeTextView = (TextView) findViewById(R.id.donutSizeTextView);
         updateDonutText();
+        //ArrayList<SegmentFormatter> segmentFormatters = new ArrayList<>();
+        segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_blue));
+        segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_green));
+        segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_red));
+        segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_yellow));
+        Log.d(TAG, "Reach line 119");
+        //plot();
 
-        s1 = new Segment("Food \n20%", 20);
-        s2 = new Segment("Clothes \n20%", 20);
-        s3 = new Segment("Rent \n30%", 30);
-        s4 = new Segment("Misc. \n30%", 30);
+        if (false) {
+            s1 = new Segment("Food \n10%", 10);
+            s2 = new Segment("Clothes \n20%", 20);
+            s3 = new Segment("Rent \n50%", 50);
+            s4 = new Segment("Misc. \n20%", 20);
 
-        EmbossMaskFilter emf = new EmbossMaskFilter(
-                new float[]{1, 1, 1}, 0.4f, 10, 8.2f);
+            SegmentFormatter sf1 = new SegmentFormatter(this, R.xml.pie_segment_formatter_blue);
 
-        SegmentFormatter sf1 = new SegmentFormatter(this, R.xml.pie_segment_formatter_blue);
-        sf1.getLabelPaint().setShadowLayer(30, 0, 0, Color.BLUE);
-        sf1.getFillPaint().setMaskFilter(emf);
+            SegmentFormatter sf2 = new SegmentFormatter(this, R.xml.pie_segment_formatter_green);
 
-        SegmentFormatter sf2 = new SegmentFormatter(this, R.xml.pie_segment_formatter_green);
-        sf2.getLabelPaint().setShadowLayer(30, 0, 0, Color.GREEN);
-        sf2.getFillPaint().setMaskFilter(emf);
+            SegmentFormatter sf3 = new SegmentFormatter(this, R.xml.pie_segment_formatter_red);
 
-        SegmentFormatter sf3 = new SegmentFormatter(this, R.xml.pie_segment_formatter_red);
-        sf3.getLabelPaint().setShadowLayer(30, 0, 0, Color.RED);
-        sf3.getFillPaint().setMaskFilter(emf);
+            SegmentFormatter sf4 = new SegmentFormatter(this, R.xml.pie_segment_formatter_yellow);
 
-        SegmentFormatter sf4 = new SegmentFormatter(this, R.xml.pie_segment_formatter_yellow);
-        sf4.getLabelPaint().setShadowLayer(30, 0, 0, Color.YELLOW);
-        sf4.getFillPaint().setMaskFilter(emf);
+            pie.addSegment(s1, sf1);
+            pie.addSegment(s2, sf2);
+            pie.addSegment(s3, sf3);
+            pie.addSegment(s4, sf4);
 
-        pie.addSegment(s1, sf1);
-        pie.addSegment(s2, sf2);
-        pie.addSegment(s3, sf3);
-        pie.addSegment(s4, sf4);
+            pie.getBorderPaint().setColor(Color.GRAY);
+            pie.getBackgroundPaint().setColor(Color.GRAY);
+        } else {
+            plot();
+        }
+    }
 
-        pie.getBorderPaint().setColor(Color.GRAY);
-        pie.getBackgroundPaint().setColor(Color.GRAY);
+    private void plot() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                percents = parse(expense_retrieve_all());
+                Message msg = new Message();
+                msg.what = PLOT_FINISH;
+                handler.sendMessage(msg);
+            }
+        }).start();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        setupIntroAnimation();
     }
 
     protected void updateDonutText() {
@@ -168,33 +217,55 @@ public class Summary extends AppCompatActivity {
                 pie.redraw();
             }
         });
-//        animator.addListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animator) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animator) {
-//                // the animation is over, so show point labels:
-//                series1Format.getPointLabelFormatter().getTextPaint().setColor(Color.WHITE);
-//                series2Format.getPointLabelFormatter().getTextPaint().setColor(Color.WHITE);
-//                plot.redraw();
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animator) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animator) {
-//
-//            }
-//        });
 
-        // the animation will run for 1.5 seconds:
         animator.setDuration(1500);
         animator.start();
+    }
+
+    protected String expense_retrieve_all(){
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_by_sender";
+        String requestBody = "sender_id=" + MainActivity.getU_id();
+
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+        Log.d(TAG, text);
+        return text;
+    }
+
+    protected Map<String, Double> parse(String s) {
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = new JSONArray(s);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Map<String, Double> amounts = new HashMap<>();
+        int totalAmount = 0;
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = jsonArray.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                String category = jsonObject.getString("Category");
+                Double amount = Math.abs(jsonObject.getDouble("amount"));
+                if (amount > 0) {
+                    if (!amounts.containsKey(category)) {
+                        amounts.put(category, amount);
+                    } else {
+                        amounts.put(category, amount + amounts.get(category));
+                    }
+                    totalAmount += amount;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Map<String, Double> percents = new HashMap<>();
+        for (String key : amounts.keySet()) {
+            percents.put(key, BigDecimal.valueOf(amounts.get(key) / totalAmount).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        }
+        return percents;
     }
 }

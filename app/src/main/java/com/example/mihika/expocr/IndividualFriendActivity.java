@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,6 +35,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
     private ListView mListView;
     private int receiver_id;
+    private Button mSettleUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,17 @@ public class IndividualFriendActivity extends AppCompatActivity {
         }*/
 
         mListView.setAdapter(adapter);
+
+        mSettleUpButton = (Button) findViewById(R.id.settle_up);
+        mSettleUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToRecordPayment = new Intent(IndividualFriendActivity.this, RecordPaymentActivity.class);
+                goToRecordPayment.putExtra("u_id", MainActivity.getU_id());
+                goToRecordPayment.putExtra("receiver_id", receiver_id);
+                startActivity(goToRecordPayment);
+            }
+        });
     }
 
     class TransactionBetweenQueryTask extends AsyncTask<String, Void, String> {
