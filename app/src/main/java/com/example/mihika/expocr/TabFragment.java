@@ -180,14 +180,14 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
             case "GROUPS":
                 baseView = inflater.inflate(R.layout.fragment_tab, container, false);
 
-                mList = (RecyclerView) baseView.findViewById(R.id.rv_friends);
+                /*mList = (RecyclerView) baseView.findViewById(R.id.rv_friends);
                 layoutManager = new LinearLayoutManager(this.getContext());
                 mList.setLayoutManager(layoutManager);
                 mList.setHasFixedSize(true);
 
                 mGroupAdapter = new GroupAdapter(NUM_LIST_ITEMS, ((MainActivity)mListener).getU_id(), this);
 
-                mList.setAdapter(mGroupAdapter);
+                mList.setAdapter(mGroupAdapter);*/
                 break;
 
             case "EXPENSES":
@@ -297,88 +297,9 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+    //Todo: an interface left for interaction between fragments and the MainActivity
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
          String onFragmentRefresh(String page_title);
-    }
-}
-//TODO is this used anywhere?
-class Expenses_List_Adapter extends SimpleAdapter {
-
-    private Context mContext;
-    private int[] mTo;
-    private String[] mFrom;
-    private ViewBinder mViewBinder;
-    private List<? extends Map<String, ?>> mData;
-    private int mResource;
-    private LayoutInflater mInflater;
-
-    /**
-     * Constructor
-     *
-     * @param context  The context where the View associated with this SimpleAdapter is running
-     * @param data     A List of Maps. Each entry in the List corresponds to one row in the list. The
-     *                 Maps contain the data for each row, and should include all the entries specified in
-     *                 "from"
-     * @param resource Resource identifier of a view layout that defines the views for this list
-     *                 item. The layout file should include at least those named views defined in "to"
-     * @param from     A list of column names that will be added to the Map associated with each
-     *                 item.
-     * @param to       The views that should display column in the "from" parameter. These should all be
-     *                 TextViews. The first N views in this list are given the values of the first N columns
-     */
-    public Expenses_List_Adapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
-        super(context, data, resource, from, to);
-        mContext = context;
-        mData = data;
-        mResource = resource;
-        mFrom = from;
-        mTo = to;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View v;
-        if (convertView == null) {
-            v = mInflater.inflate(mResource, parent, false);
-        } else {
-            v = convertView;
-        }
-
-        bindView(position, v);
-
-        return v;
-    }
-
-    private void bindView(int position, View view){
-        final Map<String, ?> dataSet = mData.get(position);
-        if(dataSet == null){
-            return;
-        }
-        final String[] from = mFrom;
-        final int[] to = mTo;
-        final int count = to.length;
-        for(int index = 0; index < count; index++){
-            final View v = view.findViewById(to[index]);
-            if(v != null){
-                final Object data = dataSet.get(from[index]);
-                switch(index){
-                    case 0:
-                        ((ImageView)v).setImageResource((Integer) data);
-                        break;
-                    case 1:
-                        ((TextView)v).setText((String) data);
-                        break;
-                    case 2:
-                        ((TextView)v).setText((String) data);
-                        ((TextView)v).setTextColor((Integer) (dataSet.get(from[count])));
-                        break;
-                    case 3:
-                        ((TextView)v).setText((String) data);
-                        break;
-                }
-            }
-        }
     }
 }

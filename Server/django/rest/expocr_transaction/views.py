@@ -58,6 +58,7 @@ def expocr_transaction_get_by_sender_id(request):
         id_list.append(data['receiver_id'])
         data['amount'] = float(entry['Amount'])
         data['date'] = str(entry['Date'])
+        data['Category'] = str(entry['Category'])
         data_list.append(data)
     receiver_bulk = User.manager.in_bulk(id_list)
     index = 0

@@ -3,6 +3,7 @@ package com.example.mihika.expocr;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
@@ -36,6 +37,11 @@ import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -45,9 +51,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
+import com.example.mihika.expocr.util.LoadingDialog;
 import com.example.mihika.expocr.util.ServerUtil;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -62,6 +70,7 @@ import org.json.JSONObject;
 /**
  * A login screen that offers login via email/password.
  */
+//Todo: Why does LoginActivity implement LoaderCallbacks<Cursor> ?
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
@@ -70,14 +79,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
     private final int EMAIL_NOT_EXIST = 1;
     private final int PASSWORD_INCORRECT = 2;
+    private final int LOGIN_SUCCESS = 3;
 
     /**
      * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+    private List<String> DUMMY_CREDENTIALS = new ArrayList<>();
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -88,6 +95,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private Handler handler;
+    private Dialog loading_dialog;
+    private ArrayAdapter<String> emailAdapter;
+
     private final String TAG = "LoginActivity";
 
     private LoginButton loginButton;
@@ -106,6 +116,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        //Todo: Connect Facebook login to Systen Login
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -147,6 +158,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                loading_dialog = LoadingDialog.showDialog(LoginActivity.this, "Try to Login...");
                 attemptLogin();
             }
         });
@@ -175,14 +187,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 super.handleMessage(msg);
                 switch(msg.what){
                     case EMAIL_NOT_EXIST:
+                        LoadingDialog.closeDialog(loading_dialog);
                         Bundle bundle = msg.getData();
                         String warning = bundle.getString("warning");
                         mEmailView.setError(warning);
                         break;
                     case PASSWORD_INCORRECT:
+                        LoadingDialog.closeDialog(loading_dialog);
                         bundle = msg.getData();
                         warning = bundle.getString("warning");
                         mPasswordView.setError(warning);
+                        break;
+                    case LOGIN_SUCCESS:
+                        LoadingDialog.closeDialog(loading_dialog);
                         break;
                 }
             }
@@ -215,12 +232,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mPasswordView.setText(intent.getStringExtra("password"));
             Toast.makeText(getApplicationContext(), intent.getStringExtra("signup"), Toast.LENGTH_LONG).show();
         }
+        else if(intent.hasExtra("forgotPassword")) {
+            mEmailView.setText(intent.getStringExtra("u_email"));
+            mPasswordView.setText(intent.getStringExtra("u_password"));
+
+        }
     }
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
         }
+
+        File userListFile = new File(getExternalCacheDir(), "user.list");
+        try {
+            if(!userListFile.exists()){
+                userListFile.createNewFile();
+            }
+            BufferedReader br = new BufferedReader(new FileReader(userListFile));
+            String tempLine = null;
+            while((tempLine = br.readLine()) != null){
+                DUMMY_CREDENTIALS.add(tempLine);
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        addEmailsToAutoComplete();
 
         getLoaderManager().initLoader(0, null, this);
     }
@@ -308,13 +346,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         }
                     }
                     else {
+                        Message msg = new Message();
+                        msg.what = LOGIN_SUCCESS;
+                        handler.sendMessage(msg);
+
+                        String u_email = jsonObject.getString("email");
+                        if(!DUMMY_CREDENTIALS.contains(u_email)){
+                            DUMMY_CREDENTIALS.add(u_email);
+                            emailAdapter.add(u_email);
+                            FileWriter fw = new FileWriter(new File(getExternalCacheDir(), "user.list"), true);
+                            fw.write(u_email + System.getProperty("line.separator"));
+                            fw.close();
+                        }
+
                         Intent gotoMain = new Intent(LoginActivity.this, MainActivity.class);
                         gotoMain.putExtra("u_id", jsonObject.getInt("id"));
                         gotoMain.putExtra("u_name", jsonObject.getString("name"));
-                        gotoMain.putExtra("u_email", jsonObject.getString("email"));
+                        gotoMain.putExtra("u_email", u_email);
                         startActivity(gotoMain);
                     }
-                } catch (JSONException e) {
+                } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -361,6 +412,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
+            LoadingDialog.closeDialog(loading_dialog);//do not forget
         } else {
             login();
             /*
@@ -439,6 +491,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     @Override
+    //Todo: what is this function used for ?
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
@@ -447,7 +500,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+        //addEmailsToAutoComplete(emails);
     }
 
     @Override
@@ -455,13 +508,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+    private void addEmailsToAutoComplete() {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+        emailAdapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, DUMMY_CREDENTIALS);
 
-        mEmailView.setAdapter(adapter);
+        mEmailView.setAdapter(emailAdapter);
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.mihika.expocr;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mihika.expocr.util.LoadingDialog;
 import com.example.mihika.expocr.util.ServerUtil;
 
 import org.json.JSONException;
@@ -34,22 +36,26 @@ import java.security.NoSuchAlgorithmException;
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private AutoCompleteTextView mEmailView;
+    Button mRequestVericodeButton;
     private EditText mVericodeView;
     private final String TAG = "ForgotPasswordActivity";
     private final int EMAIL_NOT_EXIST = 1;
     private final int VERICODE_NOT_EXIST = 2;
     private final int EMAIL_EXISTS = 3;
+    private final int VERICODE_EXISTS = 4;
     private Handler handler;
+    private Dialog loading_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
-        Button mRequestVericodeButton = (Button) findViewById(R.id.request_vericode_button);
+        mRequestVericodeButton = (Button) findViewById(R.id.request_vericode_button);
         mRequestVericodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loading_dialog = LoadingDialog.showDialog(ForgotPasswordActivity.this, "Sending Verification Code...");
                 attemptRequestVericode();
             }
         });
@@ -58,6 +64,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loading_dialog = LoadingDialog.showDialog(ForgotPasswordActivity.this, "Verifying code...");
                 attemptEnterVericode();
             }
         });
@@ -70,20 +77,27 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 switch(msg.what){
                     case EMAIL_NOT_EXIST:
+                        LoadingDialog.closeDialog(loading_dialog);
                         Bundle bundle = msg.getData();
                         String warning = bundle.getString("warning");
                         mEmailView.setError(warning);
                         break;
                     case VERICODE_NOT_EXIST:
+                        LoadingDialog.closeDialog(loading_dialog);
                         bundle = msg.getData();
                         warning = bundle.getString("warning");
                         mVericodeView.setError(warning);
                         break;
                     case EMAIL_EXISTS:
+                        LoadingDialog.closeDialog(loading_dialog);
                         bundle = msg.getData();
                         warning = bundle.getString("success");
-                        Toast.makeText(getApplicationContext(), warning, Toast.LENGTH_LONG);
-
+                        Toast.makeText(getApplicationContext(), warning, Toast.LENGTH_LONG).show();
+                        mRequestVericodeButton.setText("Code already sent. Request again.");
+                        break;
+                    case VERICODE_EXISTS:
+                        LoadingDialog.closeDialog(loading_dialog);
+                        break;
                 }
             }
         };
@@ -115,6 +129,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             // form field with an error.
             Log.d(TAG, "cancel");
             focusView.requestFocus();
+            LoadingDialog.closeDialog(loading_dialog);//do not forget
         } else {
             requestVericode();
         }
@@ -142,6 +157,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             // form field with an error.
             Log.d(TAG, "cancel");
             focusView.requestFocus();
+            LoadingDialog.closeDialog(loading_dialog);//do not forget
         } else {
             enterVericode();
         }
@@ -175,6 +191,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         }
                     }
                     else {
+                        Message msg = new Message();
+                        msg.what = VERICODE_EXISTS;
+                        handler.sendMessage(msg);
                         Intent changePassword = new Intent(ForgotPasswordActivity.this, ChangePasswordActivity.class);
                         changePassword.putExtra("u_email", email);
                         startActivity(changePassword);

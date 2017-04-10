@@ -37,7 +37,7 @@ public class SignupActivity extends AppCompatActivity {
     private final int EMAIL_EXIST = 1;
     private final int USERNAME_EXIST = 2;
     private final int FAIL_TO_SEND_ACTIVATION = 3;
-    private final int FINISH_LOADING = 4;
+    private final int SIGNUP_SUCCESS = 4;
 
     private TextView mFirstNameView;
     private TextView mLastNameView;
@@ -63,6 +63,7 @@ public class SignupActivity extends AppCompatActivity {
         SignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loading_dialog = LoadingDialog.showDialog(SignupActivity.this, "Signing up...");
                 attempt_signup();
             }
         });
@@ -72,19 +73,22 @@ public class SignupActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 switch(msg.what){
                     case EMAIL_EXIST:
+                        LoadingDialog.closeDialog(loading_dialog);
                         Bundle bundle = msg.getData();
                         String warning = bundle.getString("warning");
                         mEmailView.setError(warning);
                         break;
                     case USERNAME_EXIST:
+                        LoadingDialog.closeDialog(loading_dialog);
                         bundle = msg.getData();
                         warning = bundle.getString("warning");
                         mLastNameView.setError(warning);
                         break;
                     case FAIL_TO_SEND_ACTIVATION:
+                        LoadingDialog.closeDialog(loading_dialog);
                         Toast.makeText(SignupActivity.this.getApplicationContext(), "Fail to send activation email. Please try again!", Toast.LENGTH_LONG).show();
                         break;
-                    case FINISH_LOADING:
+                    case SIGNUP_SUCCESS:
                         LoadingDialog.closeDialog(loading_dialog);
                         break;
                 }
@@ -130,9 +134,6 @@ public class SignupActivity extends AppCompatActivity {
                 Log.d(TAG, requestString);
 
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
-                Message msg = new Message();
-                msg.what = FINISH_LOADING;
-                handler.sendMessage(msg);
                 Log.d(TAG, "From server:" + response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -141,12 +142,12 @@ public class SignupActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putString("warning", warning);
                         if(warning.startsWith("Email")){
-                            msg = new Message();
+                            Message msg = new Message();
                             msg.what = EMAIL_EXIST;
                             msg.setData(bundle);
                             handler.sendMessage(msg);
                         }else{
-                            msg = new Message();
+                            Message msg = new Message();
                             msg.what = USERNAME_EXIST;
                             msg.setData(bundle);
                             handler.sendMessage(msg);
@@ -154,10 +155,13 @@ public class SignupActivity extends AppCompatActivity {
                     }
                     else {
                         if(jsonObject.getInt("email_sending_status") == 0){
-                            msg = new Message();
+                            Message msg = new Message();
                             msg.what = FAIL_TO_SEND_ACTIVATION;
                             handler.sendMessage(msg);
                         }else{
+                            Message msg = new Message();
+                            msg.what = SIGNUP_SUCCESS;
+                            handler.sendMessage(msg);
                             Intent gotoActivate = new Intent(SignupActivity.this, LoginActivity.class);
                             gotoActivate.putExtra("signup", jsonObject.getString("activate"));
                             gotoActivate.putExtra("email", email);
@@ -188,7 +192,6 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, name);
         Log.d(TAG, password);
         Log.d(TAG, encrypted);
-        loading_dialog = LoadingDialog.showDialog(SignupActivity.this, "Signing Up...");
         sendData(name, email, password);//encrypted);
     }
 
@@ -222,6 +225,7 @@ public class SignupActivity extends AppCompatActivity {
             */
         } else {
 
+            LoadingDialog.closeDialog(loading_dialog);//do not forget
             if (!isEmailValid) {
                 mEmailView.setError(getString(R.string.error_invalid_email));
             }

@@ -244,3 +244,15 @@ def expocr_user_change_password(request):
     data = {'updated rows': result}
     response = HttpResponse(json.dumps(data), content_type="application/json")
     return response
+
+@csrf_exempt
+def expocr_user_get_two_users_by_id(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    id1 = params.get('id1')
+    id2 = params.get('id2')
+    data = serializers.serialize('json', User.get_two_users_by_id(id1, id2), fields=('U_Id', 'U_Name', 'Email'))
+    response = HttpResponse(data, content_type="application/json")
+    return response

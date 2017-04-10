@@ -1,5 +1,6 @@
 package com.example.mihika.expocr;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mihika.expocr.util.LoadingDialog;
 import com.example.mihika.expocr.util.ServerUtil;
 
 import org.json.JSONException;
@@ -38,8 +40,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private EditText mReenterPasswordView;
     private final String TAG = "ChangePasswordActivity";
     private Handler handler;
-    private final int EMAIL_EXIST = 1;
+    private final int CHANGE_PWD_SUCCESS = 1;
     private String userEmail;
+    private Dialog loading_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         mChangePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loading_dialog = LoadingDialog.showDialog(ChangePasswordActivity.this, "Changing Password...");
                 attemptChangePassword();
             }
         });
@@ -66,10 +70,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
             public void handleMessage(Message msg){
                 super.handleMessage(msg);
                 switch(msg.what){
-                    case EMAIL_EXIST:
-                        Bundle bundle = msg.getData();
-                        String warning = bundle.getString("warning");
-                        mEmailView.setError(warning);
+                    case CHANGE_PWD_SUCCESS:
+                        LoadingDialog.closeDialog(loading_dialog);
                         break;
                 }
             }
@@ -110,6 +112,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             changePassword();
         } else {
 
+            LoadingDialog.closeDialog(loading_dialog);//do not forget
             if (!isEmailValid) {
                 mEmailView.setError(getString(R.string.error_incorrect_email));
             }
@@ -154,7 +157,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     if(jsonObject.has("updated rows")){
                         int rowsUpdated = jsonObject.getInt("updated rows");
                         if(rowsUpdated == 1) {
+                            Message msg = new Message();
+                            msg.what = CHANGE_PWD_SUCCESS;
+                            handler.sendMessage(msg);
                             Intent gotoLogin = new Intent(ChangePasswordActivity.this, LoginActivity.class);
+                            gotoLogin.putExtra("u_email", email);
+                            gotoLogin.putExtra("u_password", password);
+                            gotoLogin.putExtra("forgotPassword", "");
                             startActivity(gotoLogin);
                         }
 
