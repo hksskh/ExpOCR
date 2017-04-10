@@ -3,6 +3,7 @@ package com.example.mihika.expocr;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.example.mihika.expocr.util.ServerUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,11 +48,13 @@ public class RecordPaymentActivity extends AppCompatActivity {
     private final String TAG = "RecordPaymentActivity";
     private HashMap<String, String> usernameIdMap = new HashMap<String, String>();
     private List<String> spinnerArray =  new ArrayList<String>();
-    private ArrayAdapter<String> adapter;
     private Spinner dropdown1;
     private Spinner dropdown2;
     private Spinner paymentDropdown;
     private EditText paymentAmount;
+    private Handler handler;
+    private final int SIGNAL_MESSAGE = 0;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,6 @@ public class RecordPaymentActivity extends AppCompatActivity {
         dropdown1 = (Spinner) findViewById(R.id.payer_1);
         dropdown2 = (Spinner) findViewById(R.id.payer_2);
         paymentAmount = (EditText) findViewById(R.id.payment_amount);
-
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -84,6 +88,16 @@ public class RecordPaymentActivity extends AppCompatActivity {
                 attemptRecordPayment();
             }
         });
+
+        handler = new Handler(){
+            public void handleMessage(Message message) {
+                switch (message.what) {
+                    case SIGNAL_MESSAGE:
+                        RecordPaymentActivity.this.adapter.notifyDataSetChanged();
+                        break;
+                }
+            }
+        };
 
     }
 
@@ -132,7 +146,7 @@ public class RecordPaymentActivity extends AppCompatActivity {
                 Date date = new Date();
                 String datetime = dateFormat.format(date);
 
-                String url = "http://10.0.2.2:8000/transaction/create_by_id";
+                String url = "http://" + ServerUtil.getServerAddress() + "transaction/create_by_id";
                 StringBuilder requestString = new StringBuilder();
                 requestString.append("sender_id=").append(senderId)
                         .append("&receiver_id=").append(receiverId)
@@ -141,28 +155,10 @@ public class RecordPaymentActivity extends AppCompatActivity {
                         .append("&amount=").append(paymentAmount.getText().toString())
                         .append("&date=").append(datetime);
                 Log.d(TAG, requestString.toString());
+                String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
+                Log.d(TAG, "From server:" + response);
+
                 try {
-                    URL wsurl = new URL(url);
-                    HttpURLConnection conn = (HttpURLConnection) wsurl.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    conn.setRequestMethod("POST");
-                    OutputStream os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(requestString.toString().getBytes("UTF-8"));
-                    os.close();
-                    InputStream is = new BufferedInputStream(conn.getInputStream());
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    String response = "";
-                    while ((length = is.read(buffer)) != -1)
-                    {
-                        String temp = new String(buffer, 0, length, "UTF-8");
-                        response += temp;
-                        System.out.println(temp);
-                    }
-                    is.close();
-                    conn.disconnect();
-                    Log.d(TAG, "From server:" + response);
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.has("warning")){
                         ;
@@ -171,8 +167,6 @@ public class RecordPaymentActivity extends AppCompatActivity {
                         gotoMain.putExtra("addTransaction", true);
                         startActivity(gotoMain);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -190,44 +184,27 @@ public class RecordPaymentActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                String url = "http://10.0.2.2:8000/user/get_two_users";
+                String url = "http://" + ServerUtil.getServerAddress() + "user/get_two_users";
                 String requestString = "id1=" + u_id + "&id2=" + receiver_id;
                 Log.d(TAG, requestString);
 
+                String response = ServerUtil.sendData(url, requestString, "UTF-8");
+                Log.d(TAG, "From server:" + response);
+
                 try {
-                    URL wsurl = new URL(url);
-                    HttpURLConnection conn = (HttpURLConnection) wsurl.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    conn.setRequestMethod("POST");
-                    OutputStream os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(requestString.getBytes("UTF-8"));
-                    os.close();
-                    InputStream is = new BufferedInputStream(conn.getInputStream());
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    String response = "";
-                    while ((length = is.read(buffer)) != -1)
-                    {
-                        String temp = new String(buffer, 0, length, "UTF-8");
-                        response += temp;
-                        System.out.println(temp);
-                    }
-                    is.close();
-                    conn.disconnect();
-                    Log.d(TAG, "From server:" + response);
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         int id = jsonObject.getInt("pk");
                         String name = jsonObject.getJSONObject("fields").getString("U_Name");
-                        usernameIdMap.put(name, Integer.toString(id));
-                        spinnerArray.add(name);
+                        String email = jsonObject.getJSONObject("fields").getString("Email");
+                        usernameIdMap.put((name + " (" + email + ")"), Integer.toString(id));
+                        spinnerArray.add((name + " (" + email + ")"));
                     }
-                    adapter.notifyDataSetChanged();
+                    Message msg = new Message();
+                    msg.what = SIGNAL_MESSAGE;
+                    handler.sendMessage(msg);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
