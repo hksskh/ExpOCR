@@ -51,13 +51,13 @@ public class IndividualFriendActivity extends AppCompatActivity {
         new TransactionBetweenQueryTask().execute();
 
         mListView = (ListView) findViewById(R.id.expenses_list_view);
-        final ArrayList<Expense> expenseList = Expense.getRecipesFromFile("recipes.json", this);
+        final ArrayList<Expense> expenseList = new ArrayList<>();//Expense.getRecipesFromFile("recipes.json", this);
 
         ExpenseAdapter adapter = new ExpenseAdapter(this, expenseList);
 
-        TextView netBalanceText = (TextView)findViewById(R.id.net_balance);
+        /*TextView netBalanceText = (TextView)findViewById(R.id.net_balance);
 
-        /*if(adapter.getNetBalance() > 0){
+        if(adapter.getNetBalance() > 0){
             netBalanceText.append(Double.toString(adapter.getNetBalance()));
             netBalanceText.setTextColor(getResources().getColor(R.color.moneyGreen));
         }
@@ -98,9 +98,9 @@ public class IndividualFriendActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             List<Expense> data = ((ExpenseAdapter)mListView.getAdapter()).getData();
-            int limit = data.size();
+            //int limit = data.size();
             data.clear();
-            for(int index = 0; index < jsonArray.length() && index < limit; index++){
+            for(int index = 0; index < jsonArray.length(); index++){ //&& index < limit; index++){
                 JSONObject jsonObj = null;
                 try {
                     jsonObj = jsonArray.getJSONObject(index);

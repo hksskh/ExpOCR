@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mihika.expocr.util.ServerUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +54,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             mData = new ArrayList<>();
             isRefreshing = false;
             syncGroupList();
-            }
+    }
 
     interface GroupListItemClickListener {
         void onGroupListItemClick(int clickedItemIndex);
@@ -246,120 +248,18 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
 
         private String get_group_name(String group_id){
-            String serverUrl = "http://10.0.2.2:8000/group/get_name";
-            URL url = null;
-            BufferedInputStream bis = null;
-            ByteArrayOutputStream baos;
-            BufferedOutputStream bos = null;
-            HttpURLConnection connection = null;
-            byte[] responseBody = null;
-            try {
-                url = new URL(serverUrl);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                OutputStream os = connection.getOutputStream();
-                String requestBody = "id=" + group_id;
-                os.write(requestBody.getBytes("UTF-8"));
-                os.flush();
-                os.close();
-                InputStream is = connection.getInputStream();
-                bis =  new BufferedInputStream(is);
-                baos = new ByteArrayOutputStream();
-                bos = new BufferedOutputStream(baos);
-                byte[] response_buffer = new byte[1024];
-                int length = 0;
-                while((length = bis.read(response_buffer)) > 0){
-                    bos.write(response_buffer, 0, length);
-                }
-                bos.flush();
-                responseBody = baos.toByteArray();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (bos != null) {
-                        bos.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    if (bis != null) {
-                        bis.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    connection.disconnect();
-                }
-            }
-            String text = null;
-            try {
-                text = new String(responseBody, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_name";
+            String requestBody = "id=" + group_id;
+
+            String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
             return text;
         }
 
         private String retrieve_all_groups(){
-            String serverUrl = "http://10.0.2.2:8000/group/get_groups_by_member";
-            URL url = null;
-            BufferedInputStream bis = null;
-            ByteArrayOutputStream baos;
-            BufferedOutputStream bos = null;
-            HttpURLConnection connection = null;
-            byte[] responseBody = null;
-            try {
-                url = new URL(serverUrl);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                OutputStream os = connection.getOutputStream();
-                String requestBody = "u_id=" + u_id;
-                os.write(requestBody.getBytes("UTF-8"));
-                os.flush();
-                os.close();
-                InputStream is = connection.getInputStream();
-                bis =  new BufferedInputStream(is);
-                baos = new ByteArrayOutputStream();
-                bos = new BufferedOutputStream(baos);
-                byte[] response_buffer = new byte[1024];
-                int length = 0;
-                while((length = bis.read(response_buffer)) > 0){
-                    bos.write(response_buffer, 0, length);
-                }
-                bos.flush();
-                responseBody = baos.toByteArray();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (bos != null) {
-                        bos.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    if (bis != null) {
-                        bis.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    connection.disconnect();
-                }
-            }
-            String text = null;
-            try {
-                text = new String(responseBody, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_groups_by_member";
+            String requestBody = "u_id=" + u_id;
+
+            String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
             return text;
         }
 
