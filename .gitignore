@@ -1,0 +1,14 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+/app/tess-two
+/Server/django/rest/expocr_user/migrations/
+/Server/django/rest/expocr_transaction/migrations/
+/Server/django/rest/expocr_group/migrations/
+

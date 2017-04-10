@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'm4_6d3)(d_w&zt9etn8fkh0z+-3isqc3zh8j_s6f^e9j^9%uq6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # host ip/domain names that this django site can serve(the ip specified when typing runserver command.
 # i.e. the server ip for this django project)
@@ -82,7 +82,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ExpOCR',
         'USER': 'root',
+<<<<<<< HEAD
         'PASSWORD': 'root',
+=======
+        'PASSWORD': 'UIUCcs428SP17',
+>>>>>>> c7a7af6e1e87b2ed1b3e7654159b8f234eee8817
         'HOST': 'localhost',
         'PORT': '3306',
     }

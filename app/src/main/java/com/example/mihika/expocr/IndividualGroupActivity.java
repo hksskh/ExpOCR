@@ -41,8 +41,8 @@ public class IndividualGroupActivity extends AppCompatActivity {
 
         Intent inIntent = getIntent();
         u_id = inIntent.getIntExtra("u_id", 1);
-        receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
-        ((TextView)findViewById(R.id.group_name)).setText(inIntent.getStringExtra("receiver_name"));
+        //receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
+        ((TextView)findViewById(R.id.group_name)).setText(inIntent.getStringExtra("group_name"));
 
         ((TextView)findViewById(R.id.net_balance)).setText("Net Balance: " + inIntent.getStringExtra("balance"));
 
@@ -74,7 +74,32 @@ public class IndividualGroupActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            return group_get_transaction_between();
+
+            String ret=group_get_transaction_list_for(getIntent().getStringExtra("group_id"));
+            JSONArray tidList=null;
+            JSONArray transactionsArray=new JSONArray();
+            int limit=10;
+            try {
+                tidList = new JSONArray(ret);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            for(int i=0;i<tidList.length() && i < limit; i++)
+            {
+                JSONObject jsonObj=null;
+                try {
+                    jsonObj = tidList.getJSONObject(i);
+                    String s=group_get_transactions_by_t_id(jsonObj.getInt("t_id"));
+                    JSONArray t= new JSONArray(s);
+                    JSONObject jo=t.getJSONObject(0);
+                    transactionsArray.put(jo);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+            return transactionsArray.toString();
         }
 
         @Override
@@ -91,7 +116,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
             for(int index = 0; index < jsonArray.length() && index < limit; index++){
                 JSONObject jsonObj = null;
                 try {
-                    jsonObj = jsonArray.getJSONObject(index);
+                    jsonObj=jsonArray.getJSONObject(index);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -111,8 +136,8 @@ public class IndividualGroupActivity extends AppCompatActivity {
         }
     }
 
-    private String group_get_transaction_between(){
-        String serverUrl = "http://10.0.2.2:8000/transaction/get_between";
+    private String group_get_transaction_list_for(String g_id){
+        String serverUrl = "http://10.0.2.2:8000/group/get_transactions";
         URL url = null;
         BufferedInputStream bis = null;
         ByteArrayOutputStream baos;
@@ -126,7 +151,66 @@ public class IndividualGroupActivity extends AppCompatActivity {
             connection.setDoInput(true);
             connection.setDoOutput(true);
             OutputStream os = connection.getOutputStream();
-            String requestBody = "sender_id=" + u_id + "&receiver_id=" + receiver_id;
+            String requestBody = "g_id="+g_id;
+            os.write(requestBody.getBytes("UTF-8"));
+            os.flush();
+            os.close();
+            InputStream is = connection.getInputStream();
+            bis =  new BufferedInputStream(is);
+            baos = new ByteArrayOutputStream();
+            bos = new BufferedOutputStream(baos);
+            byte[] response_buffer = new byte[1024];
+            int length = 0;
+            while((length = bis.read(response_buffer)) > 0){
+                bos.write(response_buffer, 0, length);
+            }
+            bos.flush();
+            responseBody = baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                connection.disconnect();
+            }
+        }
+        String text = null;
+        try {
+            text = new String(responseBody, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return text;
+    }
+
+    private String group_get_transactions_by_t_id(int t_id){
+        String serverUrl = "http://10.0.2.2:8000/transaction/get_transactions_by_t_id";
+        URL url = null;
+        BufferedInputStream bis = null;
+        ByteArrayOutputStream baos;
+        BufferedOutputStream bos = null;
+        HttpURLConnection connection = null;
+        byte[] responseBody = null;
+        try {
+            url = new URL(serverUrl);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            OutputStream os = connection.getOutputStream();
+            String requestBody = "t_id="+t_id;
             os.write(requestBody.getBytes("UTF-8"));
             os.flush();
             os.close();

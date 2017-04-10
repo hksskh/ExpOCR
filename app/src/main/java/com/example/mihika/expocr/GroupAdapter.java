@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,8 +151,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             String[] rawList = rawData.split(",");
             item_avatar.setImageResource(R.drawable.ic_list_group);
             item_name.setText(rawList[1]);
-            rawList = rawList[2].split(":");
-            item_balance.setText(rawList[1]);
+            //rawList = rawList[2].split(":");
+            //item_balance.setText(rawList[1]);
+            String test=new String("10");
+            item_balance.setText(test);
             if(Double.parseDouble(item_balance.getText().toString()) < 0){
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.orange));
             }else{
@@ -161,21 +164,48 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
         @Override
         public void onClick(View v) {
-            int clickedPostion = getAdapterPosition();
-            mOnClickListener.onGroupListItemClick(clickedPostion);
+            int clickedPosition = getAdapterPosition();
+            mOnClickListener.onGroupListItemClick(clickedPosition);
         }
     }
 
-    private class GroupsQueryTask extends AsyncTask<String, Void, String> {
+    private class GroupsQueryTask extends AsyncTask<String, Void, Pair> {
 
         @Override
-        protected String doInBackground(String... params) {
-            return retrieve_all_groups();
+        protected Pair doInBackground(String... params) {
+            String groups= retrieve_all_groups();
+            JSONArray groupnamesArray=new JSONArray();
+            JSONArray groupArray = null;
+            int limit=maxItemNumber;
+            try {
+                groupArray = new JSONArray(groups);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            for(int index = 0; index < groupArray.length() && index < limit; index++){
+                JSONObject jsonObj = null;
+                JSONObject nameObj = null;
+                try {
+                    jsonObj =groupArray.getJSONObject(index);
+                    String nameJson=get_group_name(jsonObj.get("g_id").toString());
+                    JSONArray nameArray=new JSONArray(nameJson);
+                    nameObj=nameArray.getJSONObject(0);
+                    groupnamesArray.put(nameObj);
+                    System.out.println(nameJson);
+                    System.out.println(nameObj.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            Pair<JSONObject, JSONArray> grouppair=new Pair( groupArray, groupnamesArray);
+
+            return grouppair;
         }
 
         @Override
-        protected void onPostExecute(String s){
-            fill_groups_list(s);
+        protected void onPostExecute(Pair p){
+            fill_groups_list(p);
+            notifyDataSetChanged();
             mNumberItems = mData.size() > maxItemNumber ? maxItemNumber : mData.size();
             if(isRefreshing){
                 isRefreshing = false;//do not forget
@@ -186,41 +216,37 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
     }
 
-        private void fill_groups_list(String s){
+        private void fill_groups_list(Pair p){
             JSONArray jsonArray = null;
-            try {
-                jsonArray = new JSONArray(s);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            JSONArray nameArray = null;
+            jsonArray = (JSONArray)p.first;
+            nameArray = (JSONArray)p.second;
             int limit = maxItemNumber;
             mData.clear();
             group_name_list.clear();
             for(int index = 0; index < jsonArray.length() && index < limit; index++){
                 JSONObject jsonObj = null;
-                try {
-                    jsonObj = jsonArray.getJSONObject(index);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                JSONObject nameObj = null;
                 StringBuilder builder = new StringBuilder();
                 try {
-                    builder.append(jsonObj.get("group_id")).append(",")
-                            .append(jsonObj.get("group_name")).append(",")
+                    jsonObj=jsonArray.getJSONObject(index);
+                    nameObj=nameArray.getJSONObject(index);
+                    String balance="10";
+                    builder.append(jsonObj.get("g_id")).append(",")
+                            .append(nameObj.getJSONObject("fields").get("G_Name")).append(","+balance);
                             //.append(jsonObj.get("receiver_email")).append(":")
-                            .append(jsonObj.get("balance"));
+                            //.append(jsonObj.get("balance")
                     mData.add(builder.toString());
-                    group_name_list.add(jsonObj.getString("group_name"));
+                    group_name_list.add(nameObj.getJSONObject("fields").get("G_Name").toString());
                     builder.setLength(0);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            notifyDataSetChanged();
         }
 
-        private String retrieve_all_groups(){
-            String serverUrl = "http://10.0.2.2:8000/transaction/get_all_receivers";
+        private String get_group_name(String group_id){
+            String serverUrl = "http://10.0.2.2:8000/group/get_name";
             URL url = null;
             BufferedInputStream bis = null;
             ByteArrayOutputStream baos;
@@ -234,7 +260,66 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 OutputStream os = connection.getOutputStream();
-                String requestBody = "sender_id=" + u_id;
+                String requestBody = "id=" + group_id;
+                os.write(requestBody.getBytes("UTF-8"));
+                os.flush();
+                os.close();
+                InputStream is = connection.getInputStream();
+                bis =  new BufferedInputStream(is);
+                baos = new ByteArrayOutputStream();
+                bos = new BufferedOutputStream(baos);
+                byte[] response_buffer = new byte[1024];
+                int length = 0;
+                while((length = bis.read(response_buffer)) > 0){
+                    bos.write(response_buffer, 0, length);
+                }
+                bos.flush();
+                responseBody = baos.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (bos != null) {
+                        bos.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (bis != null) {
+                        bis.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    connection.disconnect();
+                }
+            }
+            String text = null;
+            try {
+                text = new String(responseBody, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            return text;
+        }
+
+        private String retrieve_all_groups(){
+            String serverUrl = "http://10.0.2.2:8000/group/get_groups_by_member";
+            URL url = null;
+            BufferedInputStream bis = null;
+            ByteArrayOutputStream baos;
+            BufferedOutputStream bos = null;
+            HttpURLConnection connection = null;
+            byte[] responseBody = null;
+            try {
+                url = new URL(serverUrl);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                OutputStream os = connection.getOutputStream();
+                String requestBody = "u_id=" + u_id;
                 os.write(requestBody.getBytes("UTF-8"));
                 os.flush();
                 os.close();

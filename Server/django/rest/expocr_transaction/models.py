@@ -54,6 +54,12 @@ class Transaction(models.Model):
         return result
 
     @staticmethod
+    def get_transaction_by_t_id(t_id):
+        query = Q(T_Id=t_id)
+        result = Transaction.manager.filter(query).order_by('-Date').values('Sender_Id','Receiver_Id','Category', 'Memo', 'Amount', 'Date')
+        return result
+
+    @staticmethod
     def get_entertain_transaction(sender_id):
         query = Q(Category='Entertainment') & Q(Sender_Id=sender_id)
         result = Transaction.manager.filter(query).order_by('Receiver_Id')
