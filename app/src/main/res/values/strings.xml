@@ -68,6 +68,7 @@
 
     <string name="friend_activity">Friend</string>
     <string name="group_activity">Group</string>
+    <string name="title_activity_create_group">CreateGroupActivity</string>
 
     <!-- strings in forgot password -->
     <string name="prompt_vericode">Enter verification code</string>
