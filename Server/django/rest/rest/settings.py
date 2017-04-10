@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ExpOCR',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'UIUCcs428SP17',
         'HOST': 'localhost',
         'PORT': '3306',
     }
