@@ -31,6 +31,10 @@ public class GroupTransaction {
 		GroupTransaction trans4 = new GroupTransaction();
 		GroupTransaction trans5 = new GroupTransaction();
 		GroupTransaction trans6 = new GroupTransaction();
+		GroupTransaction trans7 = new GroupTransaction();
+		GroupTransaction trans8 = new GroupTransaction();
+		GroupTransaction trans9 = new GroupTransaction();
+		GroupTransaction trans10 = new GroupTransaction();
 		trans1.amount = -10;
 		trans1.gid = 1;
 		trans1.uid = 1;
@@ -55,6 +59,22 @@ public class GroupTransaction {
 		trans6.gid = 1;
 		trans6.uid = 6;
 		retval.add(trans6);
+		trans7.amount = 30;
+		trans7.gid = 2;
+		trans7.uid = 7;
+		retval.add(trans7);
+		trans8.amount = -10;
+		trans8.gid = 2;
+		trans8.uid = 8;
+		retval.add(trans8);
+		trans9.amount = -10;
+		trans9.gid = 2;
+		trans9.uid = 9;
+		retval.add(trans9);
+		trans10.amount = -10;
+		trans10.gid = 2;
+		trans10.uid = 10;
+		retval.add(trans10);
 		return retval;
     }
     /*
@@ -121,7 +141,7 @@ public class GroupTransaction {
                 }
                 else{
                     positives.get(posIdx).amount += negatives.get(negIdx).amount;
-                    dues.add(new Pair(negatives.get(negIdx).uid,-negatives.get(posIdx).amount));
+                    dues.add(new Pair(negatives.get(negIdx).uid,-negatives.get(negIdx).amount));
                     negIdx++;
                 }
             }
@@ -148,7 +168,7 @@ public class GroupTransaction {
                     posIdx++;
                 }
                 else{
-                    positives.get(negIdx).amount += negatives.get(posIdx).amount;
+                    positives.get(posIdx).amount += negatives.get(negIdx).amount;
                     negIdx++;
                 }
             }
@@ -188,7 +208,7 @@ public class GroupTransaction {
 
     }
 	public static void main(String[] args){
-		ArrayList<Pair> retval = GroupTransaction.getOwedAmounts(1,1);
+		ArrayList<Pair> retval = GroupTransaction.getOwedAmounts(2,10);
 		System.out.println("ran");
 		for (Pair p : retval){
 			System.out.println(""+p.uid+" "+p.amount);
