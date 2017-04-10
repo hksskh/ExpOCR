@@ -14,9 +14,11 @@ INSERT INTO USERS (U_Name, Email, Password) VALUES
 #CREATE SOME GROUPS
 INSERT INTO GROUPS ( G_Name) VALUES
 ( 'Cool Kids'),
-( 'Cooler Kids'),
-( NULL),
-( NULL);
+( 'Cooler Kids');
+
+INSERT INTO GROUPS VALUES 
+(1, "TestGroup1"),
+(3, "TestGroup2");
 
 #CREATE SOME MEMBERS
 INSERT INTO MEMBERS (G_Id, U_Id) VALUES

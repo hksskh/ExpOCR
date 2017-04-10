@@ -113,6 +113,23 @@ def expocr_transaction_get_between(request):
     return response
 
 @csrf_exempt
+def expocr_transaction_get_by_t_id(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    t_id = params.get('t_id')
+    result = Transaction.get_transaction_by_t_id(t_id)
+    data_list = []
+    for entry in result:
+        data = {'sender_id=': entry['Sender_Id'], 'receiver_id': entry['Receiver_Id'], 'category': entry['Category'], 'memo': entry['Memo'], 'amount': float(entry['Amount']),
+                'date': str(entry['Date'])}
+        data_list.append(data)
+    response = HttpResponse(json.dumps(data_list), content_type="application/json")
+    return response
+
+
+@csrf_exempt
 def expocr_transaction_update_memo(request):
     if request.method == 'GET':
         params = request.GET
