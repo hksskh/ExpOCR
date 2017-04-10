@@ -1,4 +1,4 @@
-package com.example.mikiha.expoocr
+package com.example.mikiha.expoocr;
 //import com.example.mihika.expoocr.util.ServerUtil;
 //import org.json.JSONArray;
 //import org.json.JSONException;
@@ -25,57 +25,57 @@ public class GroupTransaction {
     ///// TODO: 4/9/2017
     public static ArrayList<GroupTransaction> getGroupTransactionsFromServer(int g_id){
         ArrayList<GroupTransaction> retval =  new ArrayList<GroupTransaction>();
-		GroupTransaction trans1 = new GroupTransaction();
-		GroupTransaction trans2 = new GroupTransaction();
-		GroupTransaction trans3 = new GroupTransaction();
-		GroupTransaction trans4 = new GroupTransaction();
-		GroupTransaction trans5 = new GroupTransaction();
-		GroupTransaction trans6 = new GroupTransaction();
-		GroupTransaction trans7 = new GroupTransaction();
-		GroupTransaction trans8 = new GroupTransaction();
-		GroupTransaction trans9 = new GroupTransaction();
-		GroupTransaction trans10 = new GroupTransaction();
-		trans1.amount = -10;
-		trans1.gid = 1;
-		trans1.uid = 1;
-		retval.add(trans1);
-		trans2.amount = -20;
-		trans2.gid = 1;
-		trans2.uid = 2;
-		retval.add(trans2);
-		trans3.amount = -45;
-		trans3.gid = 1;
-		trans3.uid = 3;
-		retval.add(trans3);
-		trans4.amount = 25;
-		trans4.gid = 1;
-		trans4.uid = 4;
-		retval.add(trans4);
-		trans5.amount = 25;
-		trans5.gid = 1;
-		trans5.uid = 5;
-		retval.add(trans5);
-		trans6.amount = 25;
-		trans6.gid = 1;
-		trans6.uid = 6;
-		retval.add(trans6);
-		trans7.amount = 30;
-		trans7.gid = 2;
-		trans7.uid = 7;
-		retval.add(trans7);
-		trans8.amount = -10;
-		trans8.gid = 2;
-		trans8.uid = 8;
-		retval.add(trans8);
-		trans9.amount = -10;
-		trans9.gid = 2;
-		trans9.uid = 9;
-		retval.add(trans9);
-		trans10.amount = -10;
-		trans10.gid = 2;
-		trans10.uid = 10;
-		retval.add(trans10);
-		return retval;
+        GroupTransaction trans1 = new GroupTransaction();
+        GroupTransaction trans2 = new GroupTransaction();
+        GroupTransaction trans3 = new GroupTransaction();
+        GroupTransaction trans4 = new GroupTransaction();
+        GroupTransaction trans5 = new GroupTransaction();
+        GroupTransaction trans6 = new GroupTransaction();
+        GroupTransaction trans7 = new GroupTransaction();
+        GroupTransaction trans8 = new GroupTransaction();
+        GroupTransaction trans9 = new GroupTransaction();
+        GroupTransaction trans10 = new GroupTransaction();
+        trans1.amount = -10;
+        trans1.gid = 1;
+        trans1.uid = 1;
+        retval.add(trans1);
+        trans2.amount = -20;
+        trans2.gid = 1;
+        trans2.uid = 2;
+        retval.add(trans2);
+        trans3.amount = -45;
+        trans3.gid = 1;
+        trans3.uid = 3;
+        retval.add(trans3);
+        trans4.amount = 25;
+        trans4.gid = 1;
+        trans4.uid = 4;
+        retval.add(trans4);
+        trans5.amount = 25;
+        trans5.gid = 1;
+        trans5.uid = 5;
+        retval.add(trans5);
+        trans6.amount = 25;
+        trans6.gid = 1;
+        trans6.uid = 6;
+        retval.add(trans6);
+        trans7.amount = 30;
+        trans7.gid = 2;
+        trans7.uid = 7;
+        retval.add(trans7);
+        trans8.amount = -10;
+        trans8.gid = 2;
+        trans8.uid = 8;
+        retval.add(trans8);
+        trans9.amount = -10;
+        trans9.gid = 2;
+        trans9.uid = 9;
+        retval.add(trans9);
+        trans10.amount = -10;
+        trans10.gid = 2;
+        trans10.uid = 10;
+        retval.add(trans10);
+        return retval;
     }
     /*
     public static ArrayList<Expense> getGroupExpensesFromServer(int g_id){
@@ -154,9 +154,9 @@ public class GroupTransaction {
                     break;
                 }
                 else{
-                   negatives.get(negIdx).amount += positives.get(posIdx).amount;
-                   dues.add(new Pair(positives.get(posIdx).uid,-positives.get(posIdx).amount));
-                   posIdx++;
+                    negatives.get(negIdx).amount += positives.get(posIdx).amount;
+                    dues.add(new Pair(positives.get(posIdx).uid,-positives.get(posIdx).amount));
+                    posIdx++;
                 }
             }
             else{
@@ -180,7 +180,7 @@ public class GroupTransaction {
 
 
     private static ArrayList<Pair> getUserNetBalances(int g_id){
-        ArrayList<GroupTransaction> mDataSource = getGroupTransactionsFromServer(g_id); 
+        ArrayList<GroupTransaction> mDataSource = getGroupTransactionsFromServer(g_id);
         HashMap<Integer, Double> balances= new HashMap<Integer, Double>();
         for(GroupTransaction x : mDataSource) {
             if (balances.containsKey(x.uid))
@@ -207,11 +207,22 @@ public class GroupTransaction {
         }
 
     }
-	public static void main(String[] args){
-		ArrayList<Pair> retval = GroupTransaction.getOwedAmounts(2,10);
-		System.out.println("ran");
-		for (Pair p : retval){
-			System.out.println(""+p.uid+" "+p.amount);
-		}
-	}
+    public static void main(String[] args){
+        System.out.println("running");
+        for (int i = 1; i<=6; i++){
+            ArrayList<Pair> retval = GroupTransaction.getOwedAmounts(1,i);
+            for (Pair p : retval){
+                System.out.println("group 1 uid "+i);
+                System.out.println(p.uid+" "+p.amount);
+            }
+        }
+        for (int i = 7; i<=10; i++){
+            ArrayList<Pair> retval = GroupTransaction.getOwedAmounts(2,i);
+            for (Pair p : retval){
+                System.out.println("group 2 uid "+i);
+                System.out.println(p.uid+" "+p.amount);
+            }
+        }
+
+    }
 }
