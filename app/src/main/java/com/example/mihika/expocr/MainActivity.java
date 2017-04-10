@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
             return true;
         }else if(id == R.id.action_create_group){
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(CreateGroupActivity);
             return true;
         }
 
