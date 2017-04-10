@@ -22,4 +22,23 @@
 
     <include layout="@layout/content_create_group" />
 
+    <EditText
+        android:id="@+id/name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:ems="10"
+        android:inputType="textGroupName"
+        android:text="Enter a group name"
+        tools:layout_editor_absoluteX="123dp"
+        tools:layout_editor_absoluteY="135dp" />
+
+    <Button
+        android:id="@+id/createGroupButton"
+        style="@style/com_facebook_loginview_default_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Group"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="413dp" />
+
 </android.support.design.widget.CoordinatorLayout>
