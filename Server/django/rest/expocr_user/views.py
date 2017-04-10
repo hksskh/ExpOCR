@@ -7,10 +7,13 @@ from django.core.mail import EmailMessage
 from django.views.decorators.csrf import csrf_exempt
 from models import User
 import json
+import random
+import string
 
 # Create your views here.
 
 create_user_key = 'j8Pmnh23f443E2mi'
+
 
 @csrf_exempt
 def expocr_get_all_users(request):
@@ -48,19 +51,40 @@ def expocr_user_get_user_by_id(request):
 
 @csrf_exempt
 def expocr_user_login_by_email(request):
+    try:
+        if request.method == 'GET':
+            params = request.GET
+        elif request.method == 'POST':
+            params = request.POST
+        email = params.get('email')
+        password = params.get("password")
+        result = User.login_by_email(email, password)
+        data = {}
+        if result[0]:
+            for entry in result[1]:
+                data['id'] = int(entry['U_Id'])
+                data['name'] = entry['U_Name']
+                data['email'] = entry['Email']
+        else:
+            data['warning'] = result[1]
+        response = HttpResponse(json.dumps(data), content_type='application/json')
+    except Exception as e:
+        print('%s (%s)' % (e.message, type(e)))
+    return response
+
+
+@csrf_exempt
+def expocr_user_check_vericode(request):
     if request.method == 'GET':
         params = request.GET
     elif request.method == 'POST':
         params = request.POST
     email = params.get('email')
-    password = params.get("password")
-    result = User.login_by_email(email, password)
+    vericode = params.get('vericode')
+    result = User.check_vericode(email, vericode)
     data = {}
     if result[0]:
-        for entry in result[1]:
-            data['id'] = int(entry['U_Id'])
-            data['name'] = entry['U_Name']
-            data['email'] = entry['Email']
+        data['email'] = result[1]
     else:
         data['warning'] = result[1]
     response = HttpResponse(json.dumps(data), content_type='application/json')
@@ -97,7 +121,8 @@ def expocr_user_try_create_user(request):
         username_encrp = signing.dumps(username, create_user_key)
         email_encrp = signing.dumps(email, create_user_key)
         password_encrp = signing.dumps(password, create_user_key)
-        activation = 'http://127.0.0.1:8000/user/create?username=' + username_encrp + '&email=' + email_encrp + '&password=' + password_encrp
+        activation = request.build_absolute_uri('/') \
+                     + 'user/create?username=' + username_encrp + '&email=' + email_encrp + '&password=' + password_encrp
         content = 'Hi, this email has recently be used to sign up in ExpOCR.<br>' \
                   'Please activate your account via link:<br>' \
                   '<a href=' + activation + ' target="_blank">' + activation + '</a>'
@@ -173,4 +198,49 @@ def expocr_user_email_auth_test(request):
     ret = msg.send()
     data = {'email sending status': ret}
     response = HttpResponse(json.dumps(data), content_type='application/json')
+    return response
+
+
+@csrf_exempt
+def expocr_user_send_vericode(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    email = params.get('email')
+    vericode = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
+    result = User.add_vericode(email, vericode)
+
+    data = {}
+
+    if result[1] == 0:
+        data['warning'] = result[0]
+    else:
+        data['email'] = email
+        data['vericode'] = vericode
+        msg = EmailMessage('Your Verification Code from ExpOCR!',
+                           'Hello, \nYour verification code is ' + vericode + '. Please enter it within 5 minutes.',
+                           'ExpOCR428@gmail.com',
+                           [email],
+                           )
+        msg.content_subtype = 'html'
+        ret = msg.send()
+
+        data['email sending status'] = ret
+
+    response = HttpResponse(json.dumps(data), content_type='application/json')
+    return response
+
+
+@csrf_exempt
+def expocr_user_change_password(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    email = params.get('email')
+    password = params.get('password')
+    result = User.change_user_password(email, password)
+    data = {'updated rows': result}
+    response = HttpResponse(json.dumps(data), content_type="application/json")
     return response

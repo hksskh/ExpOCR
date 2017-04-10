@@ -13,18 +13,31 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <!--Todo: implement avatar customizing: user click on, choose avatar from gallery and crop, then update avatar-->
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@drawable/ic_uiuc_seal" />
+    <android.support.v7.widget.CardView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/nav_header_cardview"
+        app:cardCornerRadius="35dp"
+        android:innerRadius="0dp"
+        android:shape="ring"
+        android:thicknessRatio="1.9">
+
+        <ImageView
+            android:id="@+id/nav_header_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:maxWidth="70dp"
+            android:maxHeight="70dp"
+            android:src="@drawable/ic_uiuc_seal" />
+
+    </android.support.v7.widget.CardView>
 
     <TextView
         android:id="@+id/nav_header_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView

@@ -40,7 +40,7 @@
                     android:id="@+id/add_transaction_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter friend's name"
+                    android:hint="Enter friend's email"
                     android:maxLines="1"
                     android:inputType="text"
                     android:visibility="visible"/>

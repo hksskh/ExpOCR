@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@drawable/linearlayout_divider"
+    android:showDividers="middle">
+
+    <Button
+        android:id="@+id/dialog_select_avatar_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="From Gallery"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:background="@color/white"/>
+
+    <Button
+        android:id="@+id/dialog_select_avatar_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="From Camera"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:background="@color/white"/>
+
+</LinearLayout>

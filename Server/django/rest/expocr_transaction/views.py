@@ -4,8 +4,11 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from models import Transaction
+from cvapi import CVAPI
 from expocr_user.models import User
+from PIL import Image
 import json
+import io
 
 # Create your views here.
 
@@ -147,24 +150,24 @@ def expocr_transaction_create(request):
     return response
 
 @csrf_exempt
-def expocr_transaction_create_by_name(request):
+def expocr_transaction_create_by_email(request):
     if request.method == 'GET':
         params = request.GET
     elif request.method == 'POST':
         params = request.POST
     sender_id = params.get('sender_id')
-    receiver_name = params.get('receiver_name')
+    receiver_email = params.get('receiver_email')
     category = params.get('category')
     memo = params.get('memo')
     amount = params.get('amount')
     date = params.get('date')
-    result = User.get_user_by_name(receiver_name)
+    result = User.get_user_by_email(receiver_email)
     if result.count() == 0:
-        data = {'warning': 'Friend name not exists'};
+        data = {'warning': 'Friend email not exists'};
         response = HttpResponse(json.dumps(data), content_type="application/json")
         return response
     for entry in result:
-        receiver_id = int(entry['U_Id'])
+        receiver_id = entry.U_Id
     result = Transaction.create_transaction(sender_id, receiver_id, category, memo, amount, date)
     data = {}
     data['t_id'] = result.T_Id
@@ -190,4 +193,33 @@ def expocr_transaction_delete_between(request):
     data['deleted rows'] = result[0]
     data['deleted details'] = result[1]
     response = HttpResponse(json.dumps(data), content_type="application/json")
+    return response
+
+@csrf_exempt
+def expocr_transaction_ocr_test(request):
+    try:
+        print(request.META['CONTENT_LENGTH'])
+        print(request.method)
+        body = request.body
+        print(len(body))
+
+        image_index = body.index('image=')
+        print(image_index)
+        image_string = body[image_index + len('image='):]
+        print('image_string_length: ')
+        print(len(image_string))
+
+        image_jpg = Image.open(io.BytesIO(image_string))
+        print('image size: ')
+        print(image_jpg.size)
+        image_jpg.show()
+
+        result = CVAPI.send_image_on_disk(image_string)
+        print(result)
+
+
+        data = {'image_string_length': len(image_string)}
+        response = HttpResponse(json.dumps(data), content_type="application/json")
+    except Exception as e:
+        print('%s (%s)' % (e.message, type(e)))
     return response

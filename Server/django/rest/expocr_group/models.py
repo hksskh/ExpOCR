@@ -8,14 +8,19 @@ from django.db.models import Q
 # Create your models here.
 
 class Group(models.Model):
-    G_Id = models.AutoField(primary_key=True, unique=True)
-    G_Name = models.CharField(max_length=255)
+    G_Id = models.AutoField(primary_key=True, null=False, unique=True)
+    G_Name = models.CharField(max_length=255, null=False)
 
     manager = models.Manager()
 
     class Meta:
-        db_table = 'groups'
+        db_table = 'GROUPS'
         ordering = ['G_Id']
+
+    @staticmethod
+    def get_all_groups():
+        result = Group.manager.all()
+        return result
 
     @staticmethod
     def create_group(name):
@@ -42,13 +47,20 @@ class Group(models.Model):
 
 
 class Member(models.Model):
-    G_Id = models.IntegerField()
-    U_Id = models.IntegerField()
+    GU_Id = models.AutoField(primary_key=True, null=False, unique=True)
+    G_Id = models.IntegerField(null=False)
+    U_Id = models.IntegerField(null=False)
 
     manager = models.Manager()
 
     class Meta:
-        db_table = 'members'
+        db_table = 'MEMBERS'
+        ordering = ['GU_Id']
+
+    @staticmethod
+    def get_all_members():
+        result = Member.manager.all()
+        return result
 
     @staticmethod
     def add_member(g_id, u_id):
@@ -84,15 +96,20 @@ class Member(models.Model):
 
 
 class Group_Transaction(models.Model):
-    GT_Id = models.AutoField(primary_key=True, unique=True)
-    G_Id = models.IntegerField()
-    T_Id = models.IntegerField()
+    GT_Id = models.AutoField(primary_key=True, null=False, unique=True)
+    G_Id = models.IntegerField(null=False)
+    T_Id = models.IntegerField(null=False)
 
     manager = models.Manager()
 
     class Meta:
-        db_table = 'group_transactions'
+        db_table = 'GROUP_TRANSACTIONS'
         ordering = ['GT_Id']
+
+    @staticmethod
+    def get_all_group_transactions():
+        result = Group_Transaction.manager.all()
+        return result
 
     @staticmethod
     def add_transaction(g_id, t_id):

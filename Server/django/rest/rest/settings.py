@@ -26,7 +26,9 @@ DEBUG = False
 
 # host ip/domain names that this django site can serve(the ip specified when typing runserver command.
 # i.e. the server ip for this django project)
-ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1']
+ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1', 'cs428-expocr2200.cloudapp.net']
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
 # Application definition
 
@@ -80,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ExpOCR',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': 'UIUCcs428SP17',
         'HOST': 'localhost',
         'PORT': '3306',
     }

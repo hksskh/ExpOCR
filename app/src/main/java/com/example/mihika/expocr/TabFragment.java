@@ -173,7 +173,7 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                 mList.setLayoutManager(layoutManager);
                 mList.setHasFixedSize(true);
 
-                mFriendAdapter = new FriendAdapter(NUM_LIST_ITEMS, ((MainActivity)mListener).getU_id(), this);
+                mFriendAdapter = new FriendAdapter(NUM_LIST_ITEMS, this);
 
                 mList.setAdapter(mFriendAdapter);
                 break;
@@ -198,7 +198,7 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                 mList.setLayoutManager(layoutManager);
                 mList.setHasFixedSize(true);
 
-                mExpenseAdapter = new ExpenseTabAdapter(NUM_LIST_ITEMS, ((MainActivity)mListener).getU_id(), this);
+                mExpenseAdapter = new ExpenseTabAdapter(NUM_LIST_ITEMS, this);
 
                 mList.setAdapter(mExpenseAdapter);
                 break;
@@ -240,7 +240,6 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         rawList = rawList[2].split(":");
         intent.putExtra("receiver_email", rawList[0]);
         intent.putExtra("balance", rawList[1]);
-        intent.putExtra("u_id", mFriendAdapter.getU_id());
         startActivity(intent);
     }
 

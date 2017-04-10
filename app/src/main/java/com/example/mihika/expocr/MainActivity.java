@@ -1,17 +1,17 @@
 package com.example.mihika.expocr;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -23,24 +23,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
+
+import static android.os.Environment.getExternalStorageDirectory;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TabFragment.OnFragmentInteractionListener {
 
-    private int u_id;
+    private final int AVATAR_REQUEST_FROM_GALLERY = 1;
+    private final int AVATAR_REQUEST_FROM_CAMERA = 2;
+    private final int CROP_PHOTO = 3;
+
+    private static int u_id;
     private String u_name;
     private String u_email;
+    private Uri tempFileUri;
+    private Uri avatarUri;
+    private Uri avatarUri_temp;
 
     private TabFragmentAdapter tabAdapter;
     private ViewPager tabPager;
     private FloatingActionButton myFAB;
+    private ImageView nav_header_avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +74,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddTransactionActivity.class);
-                intent.putExtra("u_id", u_id);
                 startActivity(intent);
             }
         });
@@ -80,6 +91,24 @@ public class MainActivity extends AppCompatActivity
         nav_header_name.setText(u_name);
         TextView nav_header_email = (TextView) nav_header_view.findViewById(R.id.nav_header_email);
         nav_header_email.setText(u_email);
+        nav_header_avatar = (ImageView) nav_header_view.findViewById(R.id.nav_header_avatar);
+        File tempFile = new File(getExternalStorageDirectory(), BuildConfig.APPLICATION_ID);
+        tempFileUri = Uri.fromFile(tempFile);
+        File avatarDir = new File(getExternalCacheDir(), "avatar");
+        if(!avatarDir.exists()){
+            avatarDir.mkdirs();
+        }
+        File avatarFile = new File(avatarDir, "avatar.jpg");
+        System.out.println(avatarDir.getAbsolutePath());
+        avatarUri_temp = Uri.fromFile(avatarFile);
+        System.out.println(avatarUri_temp);
+        nav_header_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAvatarDialog();
+            }
+        });
+        initAvatar(nav_header_avatar);
 
         tabAdapter = new TabFragmentAdapter(getSupportFragmentManager());
         tabPager = (ViewPager) findViewById(R.id.tabPager);
@@ -106,6 +135,34 @@ public class MainActivity extends AppCompatActivity
         setIntent(intent);
         if(intent.hasExtra("addTransaction")){
             tabAdapter.refreshTabs();
+        } else if(intent.hasExtra("u_id")){//crucial
+            u_id = intent.getIntExtra("u_id", 1);
+            u_name = intent.getStringExtra("u_name");
+            u_email = intent.getStringExtra("u_email");
+            System.out.println("u_id: " + u_id);
+            System.out.println("u_name: " + u_name);
+            System.out.println("u_email: " + u_email);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        switch(requestCode){
+            case AVATAR_REQUEST_FROM_GALLERY:
+                if(resultCode == RESULT_OK){
+                    cropPhoto(data.getData());
+                }
+                break;
+            case CROP_PHOTO:
+                if(resultCode == RESULT_OK){
+                    nav_header_avatar.setImageBitmap(null); //crucial
+                    try {
+                        nav_header_avatar.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), avatarUri_temp));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
         }
     }
 
@@ -170,7 +227,8 @@ public class MainActivity extends AppCompatActivity
             //Todo: bundle data to be transferred
             startActivity(intent);
         } else if (id == R.id.nav_summary) {
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, Summary.class);
+            startActivity(intent);
         } else if (id == R.id.nav_trend) {
             Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_settings) {
@@ -196,8 +254,52 @@ public class MainActivity extends AppCompatActivity
         return builder.toString();
     }
 
-    public int getU_id(){
-        return this.u_id;
+    public static int getU_id(){
+        return u_id;
+    }
+
+    private void initAvatar(ImageView avatarView){
+
+    }
+
+    private void showAvatarDialog(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        final AlertDialog dialog = dialogBuilder.create();
+        View view = View.inflate(this, R.layout.dialog_select_avatar, null);
+        Button from_gallery = (Button) view.findViewById(R.id.dialog_select_avatar_gallery);
+        Button from_camera = (Button) view.findViewById(R.id.dialog_select_avatar_camera);
+        from_gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, null);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent, AVATAR_REQUEST_FROM_GALLERY);
+                dialog.dismiss();
+            }
+        });
+        from_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        dialog.setView(view);
+        dialog.show();
+    }
+
+    private void cropPhoto(Uri uri){
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        //intent.putExtra("outputX", 200);
+        //intent.putExtra("outputY", 200);
+        //intent.putExtra("scale", true);
+        intent.putExtra("return-data", false);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, avatarUri_temp);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        startActivityForResult(intent, CROP_PHOTO);
     }
 
 }

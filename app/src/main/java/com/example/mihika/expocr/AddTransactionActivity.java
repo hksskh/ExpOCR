@@ -38,6 +38,8 @@ import java.util.Vector;
 
 import android.widget.Button;
 
+import com.example.mihika.expocr.util.ServerUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,14 +47,13 @@ import static android.view.View.VISIBLE;
 
 public class AddTransactionActivity extends AppCompatActivity {
 
-    private int u_id;
-    private final int FRIEND_NAME_NOT_EXIST = 1;
+    private final int FRIEND_EMAIL_NOT_EXIST = 1;
 
     private Spinner transactionKindSpinner;
     private MultiSelectionSpinner userSpinner;
     private Spinner categorySpinner;
     private Spinner incomeOrExpenseSpinner;
-    private AutoCompleteTextView name_text;
+    private AutoCompleteTextView email_text;
     private AutoCompleteTextView amount_text;
     private AutoCompleteTextView memo_text;
     private Handler handler;
@@ -72,7 +73,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_transaction);
 
         Intent inIntent = getIntent();
-        u_id = inIntent.getIntExtra("u_id", 1);
         friend_autos.addAll(FriendAdapter.get_friend_name_list());
 
         transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
@@ -96,9 +96,9 @@ public class AddTransactionActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 switch(msg.what){
-                    case FRIEND_NAME_NOT_EXIST:
+                    case FRIEND_EMAIL_NOT_EXIST:
                         Bundle bundle = msg.getData();
-                        name_text.setError(bundle.getString("warning"));
+                        email_text.setError(bundle.getString("warning"));
                         break;
                 }
             }
@@ -113,10 +113,10 @@ public class AddTransactionActivity extends AppCompatActivity {
                 Date date = new Date();
                 String datetime = dateFormat.format(date);
 
-                String url = "http://10.0.2.2:8000/transaction/create_by_name";
+                String url = "http://" + ServerUtil.getServerAddress() + "transaction/create_by_email";
                 StringBuilder requestString = new StringBuilder();
-                requestString.append("sender_id=").append(u_id)
-                        .append("&receiver_name=").append(name_text.getText())
+                requestString.append("sender_id=").append(MainActivity.getU_id())
+                        .append("&receiver_email=").append(email_text.getText())
                         .append("&category=").append(categorySpinner.getSelectedItem().toString())
                         .append("&memo=").append(memo_text.getText())
                         .append("&amount=");
@@ -126,46 +126,27 @@ public class AddTransactionActivity extends AppCompatActivity {
                 requestString.append(Math.abs(Double.parseDouble(amount_text.getText().toString())))
                         .append("&date=").append(datetime);
                 Log.d(TAG, requestString.toString());
+                String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
+
+                Log.d(TAG, "From server:" + response);
                 try {
-                    URL wsurl = new URL(url);
-                    HttpURLConnection conn = (HttpURLConnection) wsurl.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    conn.setRequestMethod("POST");
-                    OutputStream os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(requestString.toString().getBytes("UTF-8"));
-                    os.close();
-                    InputStream is = new BufferedInputStream(conn.getInputStream());
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    String response = "";
-                    while ((length = is.read(buffer)) != -1)
-                    {
-                        String temp = new String(buffer, 0, length, "UTF-8");
-                        response += temp;
-                        System.out.println(temp);
-                    }
-                    is.close();
-                    conn.disconnect();
-                    Log.d(TAG, "From server:" + response);
                     JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.has("warning")){
+                    if (jsonObject.has("warning")) {
                         Bundle bundle = new Bundle();
                         bundle.putString("warning", jsonObject.getString("warning"));
                         Message msg = new Message();
-                        msg.what = FRIEND_NAME_NOT_EXIST;
+                        msg.what = FRIEND_EMAIL_NOT_EXIST;
                         msg.setData(bundle);
                         handler.sendMessage(msg);
-                    }else{
+                    } else {
                         Intent gotoMain = new Intent(AddTransactionActivity.this, MainActivity.class);
                         gotoMain.putExtra("addTransaction", true);
                         startActivity(gotoMain);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } catch (JSONException jsex){
+                    jsex.printStackTrace();
                 }
+
             }
         }).start();
     }
@@ -174,9 +155,9 @@ public class AddTransactionActivity extends AppCompatActivity {
         //adapters for AutoCompleteTextViews
         ArrayAdapter<String> friend_adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, friend_autos);
-        name_text = (AutoCompleteTextView)
+        email_text = (AutoCompleteTextView)
                 findViewById(R.id.add_transaction_name);
-        name_text.setAdapter(friend_adapter);
+        email_text.setAdapter(friend_adapter);
         ArrayAdapter<String> amount_adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, amount_autos);
         amount_text = (AutoCompleteTextView)
@@ -221,11 +202,11 @@ public class AddTransactionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).toString().equals("For group")) {
                     userSpinner.setVisibility(View.VISIBLE);
-                    name_text.setVisibility(View.GONE);
+                    email_text.setVisibility(View.GONE);
                 }
                 else {
                     userSpinner.setVisibility(View.INVISIBLE);
-                    name_text.setVisibility(View.VISIBLE);
+                    email_text.setVisibility(View.VISIBLE);
                 }
             }
 

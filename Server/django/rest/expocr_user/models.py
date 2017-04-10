@@ -8,15 +8,16 @@ from apps import ExpocrUserConfig
 # Create your models here.
 
 class User(models.Model):
-    U_Id = models.AutoField(primary_key=True, unique=True)
-    U_Name = models.CharField(max_length=255)
-    Email = models.EmailField(max_length=255, unique=True)
-    Password = models.CharField(max_length=255)
+    U_Id = models.AutoField(primary_key=True, null=False, unique=True)
+    U_Name = models.CharField(max_length=255, null=False)
+    Email = models.EmailField(max_length=255, null=False, unique=True)
+    Password = models.CharField(max_length=255, null=False)
+    Vericode = models.CharField(max_length=255)
 
     manager = models.Manager()
 
     class Meta:
-        db_table = 'users'
+        db_table = 'USERS'
         ordering = ['U_Id']
 
     @staticmethod
@@ -30,10 +31,6 @@ class User(models.Model):
         result = User.manager.filter(query)
         if result.count() > 0:
             return 'Email Exists', result.count()
-        query = Q(U_Name__exact=username)
-        result = User.manager.filter(query)
-        if result.count() > 0:
-            return 'Username Exists', result.count()
         msg = 'Please check activation mail in ' + email
         return msg, 0
 
@@ -43,10 +40,6 @@ class User(models.Model):
         result = User.manager.filter(query)
         if result.count() > 0:
             return 'Email Exists', result.count()
-        query = Q(U_Name__exact=username)
-        result = User.manager.filter(query)
-        if result.count() > 0:
-            return 'Username Exists', result.count()
         user = User.manager.create(U_Name=username, Email=email, Password=password)
         return user, 0
 
@@ -55,12 +48,6 @@ class User(models.Model):
         query = Q(U_Id=id)
         user = User.manager.filter(query)
         return user
-
-    @staticmethod
-    def get_user_by_name(name):
-        query = Q(U_Name__exact=name)
-        result = User.manager.filter(query).values('U_Id')
-        return result
 
     @staticmethod
     def get_user_by_email(email):
@@ -86,6 +73,7 @@ class User(models.Model):
             return False, 'Password incorrect'
         return True, result.values('U_Id', 'U_Name', 'Email')
 
+
     @staticmethod
     def count_edu_user():
         return User.manager.filter(Email__regex=r'^.+@.+\.edu').count()
@@ -100,4 +88,32 @@ class User(models.Model):
     def delete_user(username, email, password):
         query = Q(U_Id__gt=12) & Q(U_Name__exact=username) & Q(Email__exact=email) & Q(Password__exact=password)
         result = User.manager.filter(query).delete()
+        return result
+
+    @staticmethod
+    def add_vericode(email, vericode):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() == 0:
+            return 'Email Does Not Exist', 0
+        user = User.manager.filter(query).update(Vericode=vericode)
+        return user, 1
+
+    @staticmethod
+    def check_vericode(email, vericode):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() == 0:
+            return False, 'Email not exists'
+        query = Q(Vericode__exact=vericode)
+        result = result.filter(query)
+        if result.count() == 0:
+            return False, 'Vericode incorrect'
+        return True, email
+
+    @staticmethod
+    def change_user_password(email, password):
+        query = Q(Email__exact=email)
+        d = {"Password": password, "Vericode": ""}
+        result = User.manager.filter(query).update(**d)
         return result

@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.mihika.expocr.util.ServerUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +33,6 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
     private ListView mListView;
     private int receiver_id;
-    private int u_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,6 @@ public class IndividualFriendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_individual_friend);
 
         Intent inIntent = getIntent();
-        u_id = inIntent.getIntExtra("u_id", 1);
         receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
         ((TextView)findViewById(R.id.friend_receiver_name)).setText(inIntent.getStringExtra("receiver_name"));
         ((TextView)findViewById(R.id.friend_receiver_email)).setText(inIntent.getStringExtra("receiver_email"));
@@ -109,61 +109,11 @@ public class IndividualFriendActivity extends AppCompatActivity {
     }
 
     private String friend_get_transaction_between(){
-        String serverUrl = "http://10.0.2.2:8000/transaction/get_between";
-        URL url = null;
-        BufferedInputStream bis = null;
-        ByteArrayOutputStream baos;
-        BufferedOutputStream bos = null;
-        HttpURLConnection connection = null;
-        byte[] responseBody = null;
-        try {
-            url = new URL(serverUrl);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            OutputStream os = connection.getOutputStream();
-            String requestBody = "sender_id=" + u_id + "&receiver_id=" + receiver_id;
-            os.write(requestBody.getBytes("UTF-8"));
-            os.flush();
-            os.close();
-            InputStream is = connection.getInputStream();
-            bis =  new BufferedInputStream(is);
-            baos = new ByteArrayOutputStream();
-            bos = new BufferedOutputStream(baos);
-            byte[] response_buffer = new byte[1024];
-            int length = 0;
-            while((length = bis.read(response_buffer)) > 0){
-                bos.write(response_buffer, 0, length);
-            }
-            bos.flush();
-            responseBody = baos.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                connection.disconnect();
-            }
-        }
-        String text = null;
-        try {
-            text = new String(responseBody, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_between";
+        String requestBody = "sender_id=" + MainActivity.getU_id() + "&receiver_id=" + receiver_id;
+
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+
         return text;
     }
 }

@@ -11,6 +11,7 @@
     <string name="action_forgot_password">Forgot password?</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_incorrect_email">This email address is incorrect</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
@@ -68,5 +69,11 @@
     <string name="friend_activity">Friend</string>
     <string name="group_activity">Group</string>
     <string name="title_activity_create_group">CreateGroupActivity</string>
+
+    <!-- strings in forgot password -->
+    <string name="prompt_vericode">Enter verification code</string>
+    <string name="action_request_vericode">Request Verification Code</string>
+    <string name="action_change_password">Change Password</string>
+
 
 </resources>
