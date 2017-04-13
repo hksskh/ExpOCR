@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import com.example.mihika.expocr.util.LoadingDialog;
 import com.example.mihika.expocr.util.ServerUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -152,10 +153,18 @@ public class PhotoCaptureActivity extends AppCompatActivity {
                 Message msg = new Message();
                 msg.what = FINISH_LOADING;
                 handler.sendMessage(msg);
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    Log.d(TAG, "response: " + jsonObject);
+                    JSONObject jsonObject= new JSONObject(response);
+                    //Log.d(TAG, "response: " + jsonObject);
+                    if(jsonObject.has("warning")){
+                        System.out.println("warning: " + jsonObject.get("warning"));
+                    }else{
+                        JSONArray jsonArray = jsonObject.getJSONArray("receipt_sketch");
+                        Intent intent = new Intent(PhotoCaptureActivity.this, RecognizeReceiptActivity.class);
+                        intent.putExtra("receipt_sketch", jsonArray.toString());
+                        startActivity(intent);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
