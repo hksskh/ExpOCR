@@ -45,6 +45,7 @@
     <string name="prompt_amount">Enter amount of transaction</string>
     <string name="prompt_memo">Enter memo for this transaction</string>
     <string name="prompt_fab">Choose kind of transaction</string>
+    <string name="prompt_user">Please select users</string>
 
 
     <string-array name="transaction_options">
@@ -58,8 +59,10 @@
     </string-array>
 
     <string-array name="transaction_category">
-        <item>Catergory 1</item>
-        <item>Catergory 2</item>
+        <item>Clothing</item>
+        <item>Food</item>
+        <item>Housing</item>
+        <item>Salary</item>
     </string-array>
 
 
