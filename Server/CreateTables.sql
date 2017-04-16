@@ -40,13 +40,19 @@ DROP TABLE IF EXISTS `GROUP_TRANSACTIONS`;
 CREATE TABLE `GROUP_TRANSACTIONS` (
   `GT_Id` int(11) NOT NULL AUTO_INCREMENT,
   `G_Id` int(11) NOT NULL,
-  `T_Id` int(11) NOT NULL,
+  `U_Id` int(11) NOT NULL,
+  `Category` varchar(255) NOT NULL,
+  `Memo` varchar(255) NOT NULL,
+  `Amount` decimal(15,2) NOT NULL,
+  `Date` datetime NOT NULL,
+
+
   PRIMARY KEY (`GT_Id`),
   UNIQUE KEY `GT_Id_UNIQUE` (`GT_Id`),
   KEY `G_Id` (`G_Id`),
-  KEY `T_Id` (`T_Id`),
+  KEY `U_Id` (`U_Id`),
   CONSTRAINT `group_transactions_ibfk_1` FOREIGN KEY (`G_Id`) REFERENCES `GROUPS` (`G_Id`),
-  CONSTRAINT `group_transactions_ibfk_2` FOREIGN KEY (`T_Id`) REFERENCES `TRANSACTIONS` (`T_Id`)
+  CONSTRAINT `group_transactions_ibfk_2` FOREIGN KEY (`U_Id`) REFERENCES `USERS` (`U_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
