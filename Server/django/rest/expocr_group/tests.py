@@ -59,9 +59,13 @@ class GroupTestCase(TestCase):
 		self.assertEqual(test.count(), 1)
 
 	def test_group_add_transaction(self):
-		test = Group_Transaction.add_transaction(g_id="1", t_id="1")
+		test = Group_Transaction.add_transaction(g_id="1", u_id="1", category='food', memo='something', amount='100', date='1000-01-01T00:20:00Z')
 		self.assertEqual(test[0].G_Id, '1')
-		self.assertEqual(test[0].T_Id, '1')
+		self.assertEqual(test[0].U_Id, '1')
+		self.assertEqual(test[0].Category, 'food')
+		self.assertEqual(test[0].Memo, 'something')
+		self.assertEqual(test[0].Amount, '100')
+		self.assertEqual(test[0].Date, '1000-01-01T00:20:00Z')
 		self.assertEqual(test[1], 0)
 
 	def test_group_get_transactions(self):

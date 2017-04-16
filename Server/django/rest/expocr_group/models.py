@@ -98,7 +98,11 @@ class Member(models.Model):
 class Group_Transaction(models.Model):
     GT_Id = models.AutoField(primary_key=True, null=False, unique=True)
     G_Id = models.IntegerField(null=False)
-    T_Id = models.IntegerField(null=False)
+    U_Id = models.IntegerField(null=False)
+    Amount = models.DecimalField(max_digits=17, decimal_places=2, null=False)
+    Memo = models.CharField(max_length=255, null=False)
+    Date = models.DateTimeField(null=False)
+    Category = models.CharField(max_length=255, null=False)
 
     manager = models.Manager()
 
@@ -112,29 +116,29 @@ class Group_Transaction(models.Model):
         return result
 
     @staticmethod
-    def add_transaction(g_id, t_id):
-        query = Q(G_Id=g_id) & Q(T_Id=t_id)
+    def add_transaction(g_id, u_id, category, memo, amount, date):
+        query = Q(GT_Id=gt_id)
         result = Group_Transaction.manager.filter(query)
         created = result.count()
         if created == 0:
-            result = Group_Transaction.manager.create(G_Id=g_id, T_Id=t_id)
+            result = Group_Transaction.manager.create(G_Id=g_id, U_Id=u_id, Amount=amount, Memo=memo, Date=date, Category=category)
 
         return result, created
 
     @staticmethod
     def get_transactions(g_id):
         query = Q(G_Id=g_id)
-        result = Group_Transaction.manager.filter(query).order_by('T_Id').values('T_Id')
+        result = Group_Transaction.manager.filter(query).order_by('GT_Id').values('GT_Id')
         return result
 
     @staticmethod
-    def get_group(t_id):
-        query = Q(T_Id=t_id)
+    def get_group(gt_id):
+        query = Q(GT_Id=gt_id)
         result = Group_Transaction.manager.filter(query).order_by('G_Id').values('G_Id')
         return result
 
     @staticmethod
-    def delete_transaction(g_id, t_id):
-        query = Q(G_Id=g_id) & Q(T_Id=t_id)
+    def delete_transaction(g_id, gt_id):
+        query = Q(G_Id=g_id) & Q(GT_Id=gt_id)
         result = Group_Transaction.manager.filter(query).delete()
         return result
