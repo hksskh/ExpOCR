@@ -16,6 +16,7 @@
         android:id="@+id/action_create_group"
         android:orderInCategory="100"
         android:title="@string/action_create_group"
+        android:onClick=""
         app:showAsAction="never" />
 
 </menu>
