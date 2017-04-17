@@ -13,8 +13,8 @@ INSERT INTO USERS (U_Name, Email, Password) VALUES
 
 #CREATE SOME GROUPS
 INSERT INTO GROUPS (G_Name) VALUES
-('Cool Kids'),
-('Cooler Kids');
+( 'Cool Kids'),
+( 'Cooler Kids');
 
 INSERT INTO GROUPS VALUES
 (1, "TestGroup1"),
@@ -45,13 +45,13 @@ INSERT INTO TRANSACTIONS(Sender_Id, Receiver_Id, Category, Memo, Amount, Date) V
 (4, 5, 'Misc', 'Nothin here but us chickens', 0.01, '2000-11-11 00:00:00');
 
 #CREATE SOME GROUP TRANSACTIONS
-INSERT INTO GROUP_TRANSACTIONS (T_Id, G_Id, U_Id, Category, Memo, Amount, Date) VALUES
-(1, 1, 1, 'Salary', 'Payday', 500.00, '2017-04-01 06:02:10'),
-(2, 1, 5, 'Salary', 'Payday', 465.00, '2017-04-02 12:20:00'),
-(3, 1, 6, 'Food', 'Taco Bell', -10.00, '2017-04-03 05:30:00'),
-(4, 1, 7, 'Food', 'Dos Reales', -30.00, '2017-04-03 07:20:00'),
-(5, 1, 8, 'Entertainment', 'Get Out', -12.00, '2017-04-04 01:20:00'),
-(6, 2, 3, 'Food', 'Subway', -5.00, '2017-04-04 08:00:01'),
-(7, 2, 3, 'Rent', 'August Rent', -275.00, '2017-04-04 12:06:00'),
-(8, 1, 1, 'Entertainment', 'Lil Wayne Concert', -60.00, '2017-04-05 04:00:00'),
-(9, 4, 5, 'Misc', 'Not really sure', 0.01, '2017-04-11 01:05:40');
+INSERT INTO GROUP_TRANSACTIONS(G_Id, U_Id, Category, Memo, Amount, Date) VALUES
+(1, 1, 'Salary', 'Payday', 500.00, '2017-04-01 06:02:10'),
+(1, 5, 'Salary', 'Payday', 465.00, '2017-04-02 12:20:00'),
+(1, 6, 'Food', 'Taco Bell', -10.00, '2017-04-03 05:30:00'),
+(1, 7, 'Food', 'Dos Reales', -30.00, '2017-04-03 07:20:00'),
+(1, 8, 'Entertainment', 'Get Out', -12.00, '2017-04-04 01:20:00'),
+(2, 3, 'Food', 'Subway', -5.00, '2017-04-04 08:00:01'),
+(2, 3, 'Rent', 'August Rent', -275.00, '2017-04-04 12:06:00'),
+(1, 1, 'Entertainment', 'Lil Wayne Concert', -60.00, '2017-04-05 04:00:00'),
+(4, 5, 'Misc', 'Not really sure', 0.01, '2017-04-11 01:05:40');
