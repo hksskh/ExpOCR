@@ -59,7 +59,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.expenses_list_view);
         registerForContextMenu(mListView);
-        final ArrayList<Expense> expenseList = new ArrayList<>();//Expense.getRecipesFromFile("recipes.json", this);
+        final ArrayList<Expense> expenseList = new ArrayList<>();
 
         ExpenseAdapter adapter = new ExpenseAdapter(this, expenseList);
 
@@ -128,7 +128,8 @@ public class IndividualFriendActivity extends AppCompatActivity {
         protected void onPostExecute(String s){
             data.remove(currentPosition);
             ((ExpenseAdapter)mListView.getAdapter()).notifyDataSetChanged();
-            // TODO: update net balance
+            double netBalance = ((ExpenseAdapter)mListView.getAdapter()).getNetBalance();
+            ((TextView)findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: " + netBalance);
         }
     }
 
