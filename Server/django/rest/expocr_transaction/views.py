@@ -111,8 +111,13 @@ def expocr_transaction_get_between(request):
     sender_id = params.get('sender_id')
     receiver_id = params.get('receiver_id')
     result = Transaction.get_transaction_between(sender_id, receiver_id)
+    result2 = Transaction.get_transaction_between(receiver_id, sender_id)
     data_list = []
     for entry in result:
+        data = {'category': entry['Category'], 'memo': entry['Memo'], 'amount': float(entry['Amount']),
+                'date': str(entry['Date'])}
+        data_list.append(data)
+    for entry in result2:
         data = {'category': entry['Category'], 'memo': entry['Memo'], 'amount': float(entry['Amount']),
                 'date': str(entry['Date'])}
         data_list.append(data)
