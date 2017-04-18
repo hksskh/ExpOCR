@@ -87,5 +87,7 @@
         <item>Other</item>
     </string-array>
 
+    <!-- delete transaction menu -->
+    <string name="menu_delete">Delete Transaction</string>
 
 </resources>
