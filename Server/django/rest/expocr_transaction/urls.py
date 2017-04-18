@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^get_between', views.expocr_transaction_get_between),
     url(r'^get_transactions_by_t_id', views.expocr_transaction_get_by_t_id),
     url(r'^ocr_test', views.expocr_transaction_ocr_test),
+    url(r'^delete_by_id', views.expocr_transaction_delete_by_id),
 ]
