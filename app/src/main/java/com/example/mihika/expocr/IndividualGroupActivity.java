@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,7 +36,9 @@ public class IndividualGroupActivity extends AppCompatActivity {
 
     private ListView mListView;
     private int receiver_id;
-    private int u_id;
+    private int g_id;
+    private String g_name;
+    private Button mAddTransactionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +46,23 @@ public class IndividualGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_individual_group);
 
         Intent inIntent = getIntent();
-        u_id = inIntent.getIntExtra("u_id", 1);
+        g_id = inIntent.getIntExtra("group_id", 1);
+        g_name = inIntent.getStringExtra("group_name");
         //receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
         ((TextView)findViewById(R.id.group_name)).setText(inIntent.getStringExtra("group_name"));
 
         ((TextView)findViewById(R.id.net_balance)).setText("Net Balance: " + inIntent.getStringExtra("balance"));
+
+        mAddTransactionButton = (Button) findViewById(R.id.add_group_transaction);
+        mAddTransactionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToAddGroupTransaction = new Intent(IndividualGroupActivity.this, AddGroupTransactionActivity.class);
+                goToAddGroupTransaction.putExtra("g_id", g_id);
+                goToAddGroupTransaction.putExtra("g_name", g_name);
+                startActivity(goToAddGroupTransaction);
+            }
+        });
 
         new IndividualGroupActivity.TransactionBetweenQueryTask().execute();
 
