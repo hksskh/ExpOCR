@@ -266,6 +266,11 @@ public class Summary extends AppCompatActivity {
         for (String key : amounts.keySet()) {
             percents.put(key, 100 * (BigDecimal.valueOf(amounts.get(key) / totalAmount).setScale(4, RoundingMode.HALF_UP).doubleValue()));
         }
+        if (percents.size() == 0) {
+            Map<String, Double> ret = new HashMap<>();
+            ret.put("Nothing", 100.0);
+            return ret;
+        }
         return percents;
     }
 }
