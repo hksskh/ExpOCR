@@ -48,7 +48,9 @@ public class RecognizeReceiptActivity extends AppCompatActivity implements Recei
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "To be implemented...", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(RecognizeReceiptActivity.this, AddTransactionActivity.class);
+                intent.putExtra("receipt_list", mAdapter.getActualData().toString());
+                startActivity(intent);
             }
         });
 

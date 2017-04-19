@@ -89,5 +89,7 @@
 
     <!-- delete transaction menu -->
     <string name="menu_delete">Delete Transaction</string>
+    <string name="title_addtransactionreceiptitem_list">Friend List</string>
+    <string name="title_addtransactionreceiptitem_detail">Receipt</string>
 
 </resources>

@@ -37,9 +37,11 @@ import java.util.Locale;
 import java.util.Vector;
 
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.mihika.expocr.util.ServerUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,7 +61,9 @@ public class AddTransactionActivity extends AppCompatActivity {
     private Handler handler;
     private final String TAG = "AddTransactionActivity";
 
-    private final Vector friend_autos = new Vector();
+    private JSONArray receipt_list = null;
+    private final List<String> friend_autos = new ArrayList<>();
+    private List<String> group_autos = new ArrayList<>();
     private static final String[] amount_autos = new String[]{
             "1", "10", "100", "1000"
     };
@@ -73,6 +77,14 @@ public class AddTransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_transaction);
 
         Intent inIntent = getIntent();
+        if (inIntent.hasExtra("receipt_list")) {
+            String receipt_list_string = inIntent.getStringExtra("receipt_list");
+            try {
+                receipt_list = new JSONArray(receipt_list_string);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         friend_autos.addAll(FriendAdapter.get_friend_name_list());
 
         transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
@@ -91,6 +103,29 @@ public class AddTransactionActivity extends AppCompatActivity {
             }
         });
 
+        Button add_transaction_from_receipt_btn = (Button) findViewById(R.id.add_transaction_from_receipt);
+        add_transaction_from_receipt_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (receipt_list == null || receipt_list.length() == 0) {
+                    Toast.makeText(AddTransactionActivity.this, "Empty receipt!", Toast.LENGTH_LONG).show();
+                } else {
+                    if (email_text.getText() == null || email_text.getText().length() == 0) {
+                        email_text.setError("Empty Email!");
+                        return;
+                    }
+                    Intent intent = new Intent(AddTransactionActivity.this, AddTransactionReceiptItemListActivity.class);
+                    intent.putExtra("receipt_list", receipt_list.toString());
+                    if (transactionKindSpinner.getSelectedItem().equals("For Individual")) {
+                        intent.putExtra("friend_list", new String[]{email_text.getText().toString()});
+                    } else {
+                        intent.putExtra("friend_list", group_autos.toArray(new String[group_autos.size()]));
+                    }
+                    startActivity(intent);
+                }
+            }
+        });
+
         handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -103,6 +138,16 @@ public class AddTransactionActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+
+        if (intent.hasExtra("amount")) {
+            amount_text.setText(String.valueOf(intent.getDoubleExtra("amount", 0.0)));
+        }
     }
 
     public void sendData() {
@@ -189,6 +234,12 @@ public class AddTransactionActivity extends AppCompatActivity {
         //List<String> list = getCatergoriesFromServer();
         ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list2);
         categorySpinner.setAdapter(dataAdapter2);
+
+        List<String> list3 = new ArrayList<>();
+        list3.add("For Individual");
+        list3.add("For Group");
+        ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list3);
+        transactionKindSpinner.setAdapter(dataAdapter3);
     }
 
     protected String getUsersFromServer() {

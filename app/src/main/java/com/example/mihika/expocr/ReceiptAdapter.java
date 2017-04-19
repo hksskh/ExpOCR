@@ -94,6 +94,25 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
         return mData;
     }
 
+    public JSONArray getActualData(){
+        JSONArray actualData = new JSONArray();
+
+        try {
+            for (JSONObject dataObj: mData) {
+                if (dataObj.has("price") && dataObj.getDouble("price") > 0) {
+                    JSONObject actualDataObj = new JSONObject();
+                    actualDataObj.put("text", dataObj.getString("text"));
+                    actualDataObj.put("price", dataObj.getDouble("price"));
+                    actualData.put(actualDataObj);
+                }
+            }
+        } catch (JSONException jsex) {
+            jsex.printStackTrace();
+        }
+
+        return actualData;
+    }
+
     public void syncReceiptList(){
         new ReceiptQueryTask().execute();
     }
