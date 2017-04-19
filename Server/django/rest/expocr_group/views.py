@@ -156,13 +156,22 @@ def expocr_group_add_transaction(request):
         params = request.GET
     elif request.method == 'POST':
         params = request.POST
-    g_id = params.get('g_id')
-    t_id = params.get('t_id')
-    result = Group_Transaction.add_transaction(g_id, t_id)
+
+    u_id = params.get('receiver_id')
+    g_id = params.get('group_id')
+    category = params.get('category')
+    memo = params.get('memo')
+    amount = float(params.get('amount'))
+    date = params.get('date')
+    result = Group_Transaction.add_transaction(g_id, u_id, category, memo, amount, date)
     if result[1] == 0:
         data = {}
         data['g_id'] = result[0].G_Id
-        data['t_id'] = result[0].T_Id
+        data['u_id'] = result[0].U_Id
+        data['category'] = result[0].Category
+        data['memo'] = result[0].Memo
+        data['amount'] = result[0].Amount
+        data['date'] = result[0].Date
         data = json.dumps(data)
     else:
         data = serializers.serialize('json', result[0])

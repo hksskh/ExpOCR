@@ -113,7 +113,7 @@ def expocr_transaction_get_between(request):
     result = Transaction.get_transaction_between(sender_id, receiver_id)
     data_list = []
     for entry in result:
-        data = {'category': entry['Category'], 'memo': entry['Memo'], 'amount': float(entry['Amount']),
+        data = {'id': entry['T_Id'], 'category': entry['Category'], 'memo': entry['Memo'], 'amount': float(entry['Amount']),
                 'date': str(entry['Date'])}
         data_list.append(data)
     response = HttpResponse(json.dumps(data_list), content_type="application/json")
@@ -220,6 +220,20 @@ def expocr_transaction_delete_between(request):
     receiver_id = params.get('receiver_id')
     data = {}
     result = Transaction.delete_transaction_between(sender_id, receiver_id)
+    data['deleted rows'] = result[0]
+    data['deleted details'] = result[1]
+    response = HttpResponse(json.dumps(data), content_type="application/json")
+    return response
+
+@csrf_exempt
+def expocr_transaction_delete_by_id(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    t_id = params.get('tid')
+    data = {}
+    result = Transaction.delete_transaction_by_id(t_id)
     data['deleted rows'] = result[0]
     data['deleted details'] = result[1]
     response = HttpResponse(json.dumps(data), content_type="application/json")

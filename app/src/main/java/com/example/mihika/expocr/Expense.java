@@ -43,11 +43,22 @@ import java.util.Locale;
 
 public class Expense {
 
-    public String expense;
-    public Double balance;
-    public Calendar date;
+    private Double balance;
+    private Calendar date;
+    private int id;
+    private String expense;
 
     public Expense(){
+
+    }
+
+    public Expense(int id, String expense, double balance, String date) throws ParseException {
+        this.id = id;
+        this.expense = expense;
+        this.balance = balance;
+        this.date = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        this.date.setTime(sdf.parse(date));
 
     }
 
@@ -58,6 +69,22 @@ public class Expense {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         this.date.setTime(sdf.parse(date));
 
+    }
+
+    public String getExpense() {
+        return expense;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public static ArrayList<Expense> getRecipesFromFile(String filename, Context context){

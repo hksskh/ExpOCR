@@ -5,7 +5,12 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -36,6 +41,8 @@ public class IndividualFriendActivity extends AppCompatActivity {
     private ListView mListView;
     private int receiver_id;
     private Button mSettleUpButton;
+    List<Expense> data;
+    private int currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,8 @@ public class IndividualFriendActivity extends AppCompatActivity {
         new TransactionBetweenQueryTask().execute();
 
         mListView = (ListView) findViewById(R.id.expenses_list_view);
-        final ArrayList<Expense> expenseList = new ArrayList<>();//Expense.getRecipesFromFile("recipes.json", this);
+        registerForContextMenu(mListView);
+        final ArrayList<Expense> expenseList = new ArrayList<>();
 
         ExpenseAdapter adapter = new ExpenseAdapter(this, expenseList);
 
@@ -80,7 +88,52 @@ public class IndividualFriendActivity extends AppCompatActivity {
                 startActivity(goToRecordPayment);
             }
         });
+
+
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.expenses_list_view) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch(item.getItemId()) {
+            case R.id.delete:
+                Expense clickedExpense = data.get(info.position);
+                currentPosition = info.position;
+                int transactionId = clickedExpense.getId();
+                new DeleteTransactionQueryTask().execute(String.valueOf(transactionId));
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    class DeleteTransactionQueryTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            int transactionId = Integer.parseInt(params[0]);
+            return delete_transaction(transactionId);
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            data.remove(currentPosition);
+            ((ExpenseAdapter)mListView.getAdapter()).notifyDataSetChanged();
+            double netBalance = ((ExpenseAdapter)mListView.getAdapter()).getNetBalance();
+            ((TextView)findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: " + netBalance);
+        }
+    }
+
+
 
     class TransactionBetweenQueryTask extends AsyncTask<String, Void, String> {
 
@@ -97,7 +150,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            List<Expense> data = ((ExpenseAdapter)mListView.getAdapter()).getData();
+            data = ((ExpenseAdapter)mListView.getAdapter()).getData();
             //int limit = data.size();
             data.clear();
             for(int index = 0; index < jsonArray.length(); index++){ //&& index < limit; index++){
@@ -109,7 +162,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
                 }
                 Expense expense = null;
                 try {
-                    expense = new Expense(jsonObj.getString("category") + ":" + jsonObj.getString("memo"),
+                    expense = new Expense(jsonObj.getInt("id"), jsonObj.getString("category") + ": " + jsonObj.getString("memo"),
                             Double.parseDouble(jsonObj.getString("amount")), jsonObj.getString("date"));
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -127,7 +180,14 @@ public class IndividualFriendActivity extends AppCompatActivity {
         String requestBody = "sender_id=" + MainActivity.getU_id() + "&receiver_id=" + receiver_id;
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+        return text;
+    }
 
+    private String delete_transaction(int transactionId) {
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/delete_by_id";
+        String requestBody = "tid=" + String.valueOf(transactionId);
+
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         return text;
     }
 }
