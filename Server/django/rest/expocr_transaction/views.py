@@ -74,7 +74,7 @@ def expocr_transaction_get_by_sender_id(request):
     response = HttpResponse(json.dumps(data_list), content_type="application/json")
     return response
 @csrf_exempt
-def expocrtransaction_sum_all_transactions_by_user(request):
+def expocr_transaction_sum_all_transactions_by_user(request):
 	if request.method == 'GET':
         params = request.GET
     elif request.method == 'POST':
