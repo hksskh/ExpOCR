@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Log.d("MainActivity", "Add button clicked");
-                Intent transaciton = new Intent(MainActivity.this, AddTransactionActivity.class);
-                startActivity(transaciton);
+                Intent transaction = new Intent(MainActivity.this, AddTransactionActivity.class);
+                startActivity(transaction);
             }
         });
     }
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity
                 if(resultCode == RESULT_OK){
                     nav_header_avatar.setImageURI(null); //crucial
                     nav_header_avatar.setImageURI(avatarUri);
-                    syncAvatar();
+                    //syncAvatar();
                 }
                 break;
         }
@@ -249,17 +249,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initAvatar(ImageView avatarView, boolean isLocal){
-        if(!isLocal){
-            avatarView.setImageURI(null);
-            avatarView.setImageResource(R.drawable.ic_uiuc_seal);
-        }else{
+        if(isLocal){
             avatarView.setImageURI(null);
             avatarView.setImageURI(avatarUri);
-            syncAvatar();
+            upSyncAvatar();
+        }else{
+            downSyncAvatar();
         }
     }
 
-    private void syncAvatar(){
+    private void downSyncAvatar(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }).start();
+    }
+
+    private void upSyncAvatar(){
         new Thread(new Runnable() {
             @Override
             //Todo: send local avatar to server (in new Thread)
