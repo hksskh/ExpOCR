@@ -103,6 +103,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mihika.expocr.AddTransactionReceiptItemListActivity" />
         </activity>
+        <activity
+            android:name=".CreateGroupActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <!--<activity-->
+            <!--android:name=".AddGroupMembersActivity"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:launchMode="singleTask"-->
+            <!--android:windowSoftInputMode="stateVisible|adjustResize" />-->
     </application>
 
 </manifest>

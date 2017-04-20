@@ -16,9 +16,9 @@
             android:icon="@drawable/ic_menu_account"
             android:title="Account" />-->
         <item
-            android:id="@+id/nav_plan"
+            android:id="@+id/nav_create_group"
             android:icon="@drawable/ic_menu_plan"
-            android:title="Plans" />
+            android:title="Create New Group" />
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"

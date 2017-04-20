@@ -213,8 +213,9 @@ public class MainActivity extends AppCompatActivity
         if(id == R.id.nav_home){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_plan) {
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_create_group) {
+            Intent intent = new Intent(this, CreateGroupActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_camera) {
             Intent intent = new Intent(MainActivity.this, PhotoCaptureActivity.class);
             startActivity(intent);
