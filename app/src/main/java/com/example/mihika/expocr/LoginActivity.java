@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        //Todo: Connect Facebook login to Systen Login
+        //Todo: Connect Facebook login to System Login
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -147,6 +147,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    loading_dialog = LoadingDialog.showDialog(LoginActivity.this, "Try to Login...");
                     attemptLogin();
                     return true;
                 }

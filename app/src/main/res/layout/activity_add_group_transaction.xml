@@ -10,15 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.mihika.expocr.SignupActivity"
     android:weightSum="1"
-    android:background="#80000000"
-    android:backgroundTint="@color/com_facebook_button_login_silver_background_color"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
     <!-- Signup progress -->
 
     <ScrollView
-        android:id="@+id/transaction_form"
+        android:id="@+id/group_transaction_form"
         android:layout_width="match_parent"
         android:layout_marginTop="75dp"
         android:layout_height="329dp"
@@ -32,27 +30,20 @@
             android:orientation="vertical"
             android:weightSum="1">
 
-            <android.support.design.widget.TextInputLayout
+            <com.example.mihika.expocr.MultiSelectionSpinner
+                android:id="@+id/group_transaction_user_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/add_transaction_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter friend's email"
-                    android:maxLines="1"
-                    android:inputType="text"
-                    android:visibility="visible"/>
-
-            </android.support.design.widget.TextInputLayout>
+                android:layout_height="match_parent"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textSize="40sp" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/add_transaction_amount"
+                    android:id="@+id/add_group_transaction_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_amount"
@@ -68,7 +59,7 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/add_transaction_memo"
+                    android:id="@+id/add_group_transaction_memo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -79,20 +70,9 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <Spinner
-                android:id="@+id/income_or_expense_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:entries="@array/income_or_expense"
-                android:prompt="@string/prompt_fab"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:textSize="40sp"
-                android:theme="@style/AlertDialog.AppCompat.Light"
-                android:translationX="-5dp" />
 
             <Spinner
-                android:id="@+id/transaction_category_spinner"
+                android:id="@+id/group_transaction_category_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:entries="@array/transaction_category"
@@ -100,46 +80,15 @@
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:textSize="40sp"
-                android:theme="@style/AlertDialog.AppCompat.Light"
-                android:translationX="-5dp" />
+                android:theme="@style/AlertDialog.AppCompat.Light" />
 
-            <Spinner
-                android:id="@+id/transaction_kind_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:entries="@array/transaction_options"
-                android:prompt="@string/prompt_fab"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:textSize="40sp"
-                android:theme="@style/AlertDialog.AppCompat.Light"
-                android:translationX="-5dp" />
-
-            <com.example.mihika.expocr.MultiSelectionSpinner
-                android:id="@+id/user_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:textSize="40sp"
-                android:visibility="invisible"/>
-
-            <Button
-                android:id="@+id/add_transaction_from_receipt"
-                style="?android:textAppearanceSmall"
-                android:drawableStart="@drawable/ic_menu_camera"
-                android:drawableLeft="@drawable/ic_menu_camera"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="From Receipt"
-                android:textStyle="bold"/>
 
         </LinearLayout>
 
     </ScrollView>
 
     <Button
-        android:id="@+id/add_transaction_button"
+        android:id="@+id/add_group_transaction_button"
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

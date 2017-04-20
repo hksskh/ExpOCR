@@ -5,8 +5,12 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.mihika.expocr.util.ServerUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +36,9 @@ public class IndividualGroupActivity extends AppCompatActivity {
 
     private ListView mListView;
     private int receiver_id;
-    private int u_id;
+    private int g_id;
+    private String g_name;
+    private Button mAddTransactionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,23 +46,34 @@ public class IndividualGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_individual_group);
 
         Intent inIntent = getIntent();
-        u_id = inIntent.getIntExtra("u_id", 1);
+        g_id = inIntent.getIntExtra("group_id", 1);
+        g_name = inIntent.getStringExtra("group_name");
         //receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
         ((TextView)findViewById(R.id.group_name)).setText(inIntent.getStringExtra("group_name"));
 
         ((TextView)findViewById(R.id.net_balance)).setText("Net Balance: " + inIntent.getStringExtra("balance"));
 
+        mAddTransactionButton = (Button) findViewById(R.id.add_group_transaction);
+        mAddTransactionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToAddGroupTransaction = new Intent(IndividualGroupActivity.this, AddGroupTransactionActivity.class);
+                goToAddGroupTransaction.putExtra("g_id", g_id);
+                goToAddGroupTransaction.putExtra("g_name", g_name);
+                startActivity(goToAddGroupTransaction);
+            }
+        });
+
         new IndividualGroupActivity.TransactionBetweenQueryTask().execute();
 
         mListView = (ListView) findViewById(R.id.expenses_list_view);
 
-        //TODO why is recipes.json used?
-        final ArrayList<Expense> expenseList = Expense.getRecipesFromFile("recipes.json", this);
+        final ArrayList<Expense> expenseList = new ArrayList<>();//Expense.getRecipesFromFile("recipes.json", this);
         ExpenseAdapter adapter = new ExpenseAdapter(this, expenseList);
 
-        TextView netBalanceText = (TextView)findViewById(R.id.net_balance);
+        /*TextView netBalanceText = (TextView)findViewById(R.id.net_balance);
 
-        /*if(adapter.getNetBalance() > 0){
+        if(adapter.getNetBalance() > 0){
             netBalanceText.append(Double.toString(adapter.getNetBalance()));
             netBalanceText.setTextColor(getResources().getColor(R.color.moneyGreen));
         }
@@ -111,9 +128,9 @@ public class IndividualGroupActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             List<Expense> data = ((ExpenseAdapter)mListView.getAdapter()).getData();
-            int limit = data.size();
+            //int limit = data.size();
             data.clear();
-            for(int index = 0; index < jsonArray.length() && index < limit; index++){
+            for(int index = 0; index < jsonArray.length(); index++){ //&& index < limit; index++){
                 JSONObject jsonObj = null;
                 try {
                     jsonObj=jsonArray.getJSONObject(index);
@@ -137,120 +154,18 @@ public class IndividualGroupActivity extends AppCompatActivity {
     }
 
     private String group_get_transaction_list_for(String g_id){
-        String serverUrl = "http://10.0.2.2:8000/group/get_transactions";
-        URL url = null;
-        BufferedInputStream bis = null;
-        ByteArrayOutputStream baos;
-        BufferedOutputStream bos = null;
-        HttpURLConnection connection = null;
-        byte[] responseBody = null;
-        try {
-            url = new URL(serverUrl);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            OutputStream os = connection.getOutputStream();
-            String requestBody = "g_id="+g_id;
-            os.write(requestBody.getBytes("UTF-8"));
-            os.flush();
-            os.close();
-            InputStream is = connection.getInputStream();
-            bis =  new BufferedInputStream(is);
-            baos = new ByteArrayOutputStream();
-            bos = new BufferedOutputStream(baos);
-            byte[] response_buffer = new byte[1024];
-            int length = 0;
-            while((length = bis.read(response_buffer)) > 0){
-                bos.write(response_buffer, 0, length);
-            }
-            bos.flush();
-            responseBody = baos.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                connection.disconnect();
-            }
-        }
-        String text = null;
-        try {
-            text = new String(responseBody, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_transactions";
+        String requestBody = "g_id="+g_id;
+
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         return text;
     }
 
     private String group_get_transactions_by_t_id(int t_id){
-        String serverUrl = "http://10.0.2.2:8000/transaction/get_transactions_by_t_id";
-        URL url = null;
-        BufferedInputStream bis = null;
-        ByteArrayOutputStream baos;
-        BufferedOutputStream bos = null;
-        HttpURLConnection connection = null;
-        byte[] responseBody = null;
-        try {
-            url = new URL(serverUrl);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            OutputStream os = connection.getOutputStream();
-            String requestBody = "t_id="+t_id;
-            os.write(requestBody.getBytes("UTF-8"));
-            os.flush();
-            os.close();
-            InputStream is = connection.getInputStream();
-            bis =  new BufferedInputStream(is);
-            baos = new ByteArrayOutputStream();
-            bos = new BufferedOutputStream(baos);
-            byte[] response_buffer = new byte[1024];
-            int length = 0;
-            while((length = bis.read(response_buffer)) > 0){
-                bos.write(response_buffer, 0, length);
-            }
-            bos.flush();
-            responseBody = baos.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                connection.disconnect();
-            }
-        }
-        String text = null;
-        try {
-            text = new String(responseBody, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_transactions_by_t_id";
+        String requestBody = "t_id="+t_id;
+
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         return text;
     }
 }

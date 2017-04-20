@@ -28,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mihika.expocr.util.ImageUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -47,7 +49,8 @@ public class MainActivity extends AppCompatActivity
     private String u_email;
     private Uri tempFileUri;
     private Uri avatarUri;
-    private Uri avatarUri_temp;
+    private File cameraDir;
+    private Uri cameraFileUri;
 
     private TabFragmentAdapter tabAdapter;
     private ViewPager tabPager;
@@ -69,15 +72,6 @@ public class MainActivity extends AppCompatActivity
         System.out.println("u_name: " + u_name);
         System.out.println("u_email: " + u_email);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddTransactionActivity.class);
-                startActivity(intent);
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -94,21 +88,21 @@ public class MainActivity extends AppCompatActivity
         nav_header_avatar = (ImageView) nav_header_view.findViewById(R.id.nav_header_avatar);
         File tempFile = new File(getExternalStorageDirectory(), BuildConfig.APPLICATION_ID);
         tempFileUri = Uri.fromFile(tempFile);
+        cameraDir = new File(getExternalStorageDirectory(), "DCIM");
         File avatarDir = new File(getExternalCacheDir(), "avatar");
+        avatarDir = new File(avatarDir, String.valueOf(u_id));
         if(!avatarDir.exists()){
             avatarDir.mkdirs();
         }
         File avatarFile = new File(avatarDir, "avatar.jpg");
-        System.out.println(avatarDir.getAbsolutePath());
-        avatarUri_temp = Uri.fromFile(avatarFile);
-        System.out.println(avatarUri_temp);
+        avatarUri = Uri.fromFile(avatarFile);
         nav_header_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAvatarDialog();
             }
         });
-        initAvatar(nav_header_avatar);
+        initAvatar(nav_header_avatar, avatarFile.exists());
 
         tabAdapter = new TabFragmentAdapter(getSupportFragmentManager());
         tabPager = (ViewPager) findViewById(R.id.tabPager);
@@ -123,8 +117,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Log.d("MainActivity", "Add button clicked");
-                Intent transaciton = new Intent(MainActivity.this, AddTransactionActivity.class);
-                startActivity(transaciton);
+                Intent transaction = new Intent(MainActivity.this, AddTransactionActivity.class);
+                startActivity(transaction);
             }
         });
     }
@@ -153,14 +147,16 @@ public class MainActivity extends AppCompatActivity
                     cropPhoto(data.getData());
                 }
                 break;
+            case AVATAR_REQUEST_FROM_CAMERA:
+                if(resultCode == RESULT_OK){
+                    cropPhoto(cameraFileUri);
+                }
+                break;
             case CROP_PHOTO:
                 if(resultCode == RESULT_OK){
-                    nav_header_avatar.setImageBitmap(null); //crucial
-                    try {
-                        nav_header_avatar.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), avatarUri_temp));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    nav_header_avatar.setImageURI(null); //crucial
+                    nav_header_avatar.setImageURI(avatarUri);
+                    //syncAvatar();
                 }
                 break;
         }
@@ -217,20 +213,14 @@ public class MainActivity extends AppCompatActivity
         if(id == R.id.nav_home){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        }
-        else if(id == R.id.nav_account){
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_plan) {
             Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_camera) {
             Intent intent = new Intent(MainActivity.this, PhotoCaptureActivity.class);
-            //Todo: bundle data to be transferred
             startActivity(intent);
         } else if (id == R.id.nav_summary) {
             Intent intent = new Intent(MainActivity.this, Summary.class);
             startActivity(intent);
-        } else if (id == R.id.nav_trend) {
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_settings) {
             Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_contact) {
@@ -258,8 +248,42 @@ public class MainActivity extends AppCompatActivity
         return u_id;
     }
 
-    private void initAvatar(ImageView avatarView){
+    private void initAvatar(ImageView avatarView, boolean isLocal){
+        if(isLocal){
+            avatarView.setImageURI(null);
+            avatarView.setImageURI(avatarUri);
+            upSyncAvatar();
+        }else{
+            downSyncAvatar();
+        }
+    }
 
+    private void downSyncAvatar(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }).start();
+    }
+
+    private void upSyncAvatar(){
+        new Thread(new Runnable() {
+            @Override
+            //Todo: send local avatar to server (in new Thread)
+            public void run() {
+                Bitmap bitmap = null;
+                String image_string;
+                byte[] image_byte;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(MainActivity.this.getContentResolver(), avatarUri);
+                    image_byte = ImageUtil.getBytesFromBitmap(bitmap);
+                    image_string = new String(image_byte, "ISO-8859-1");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void showAvatarDialog(){
@@ -280,7 +304,11 @@ public class MainActivity extends AppCompatActivity
         from_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                cameraFileUri = Uri.fromFile(new File(cameraDir, System.currentTimeMillis() + ".jpg"));
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri);
+                startActivityForResult(intent, AVATAR_REQUEST_FROM_CAMERA);
+                dialog.dismiss();
             }
         });
         dialog.setView(view);
@@ -297,7 +325,7 @@ public class MainActivity extends AppCompatActivity
         //intent.putExtra("outputY", 200);
         //intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, avatarUri_temp);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, avatarUri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         startActivityForResult(intent, CROP_PHOTO);
     }

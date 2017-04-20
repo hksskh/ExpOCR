@@ -11,10 +11,10 @@
 
     <group android:id="@+id/nav_group_account"
         android:checkableBehavior="none">
-        <item
+        <!--<item
             android:id="@+id/nav_account"
             android:icon="@drawable/ic_menu_account"
-            android:title="Account" />
+            android:title="Account" />-->
         <item
             android:id="@+id/nav_plan"
             android:icon="@drawable/ic_menu_plan"
@@ -27,10 +27,10 @@
             android:id="@+id/nav_summary"
             android:icon="@drawable/ic_menu_summary"
             android:title="Summary" />
-        <item
+        <!--<item
             android:id="@+id/nav_trend"
             android:icon="@drawable/ic_menu_trend"
-            android:title="Trends" />
+            android:title="Trends" />-->
     </group>
 
     <group android:id="@+id/nav_group_help"

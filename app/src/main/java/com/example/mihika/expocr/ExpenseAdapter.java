@@ -61,19 +61,19 @@ public class ExpenseAdapter extends BaseAdapter {
         Expense expense = (Expense) getItem(position);
         DecimalFormat df = new DecimalFormat("#.00");
 
-        expenseTextView.setText(expense.expense);
-        if(expense.balance < 0) {
-            double balance = expense.balance *= (-1);
+        expenseTextView.setText(expense.getExpense());
+        if(expense.getBalance() < 0) {
+            double balance = expense.getBalance() * (-1);
             balanceTextView.setText("- $".concat(df.format(balance)));
             balanceTextView.setTextColor(mContext.getResources().getColor(R.color.negativeRed));
         }
         else {
-            balanceTextView.setText("$".concat(df.format(expense.balance)));
+            balanceTextView.setText("$".concat(df.format(expense.getBalance())));
             balanceTextView.setTextColor(mContext.getResources().getColor(R.color.moneyGreen));
         }
-        dayTextView.setText(Integer.toString(expense.date.get(Calendar.DAY_OF_MONTH)));
-        monthTextView.setText(expense.date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
-        yearTextView.setText(Integer.toString(expense.date.get(Calendar.YEAR)));
+        dayTextView.setText(Integer.toString(expense.getDate().get(Calendar.DAY_OF_MONTH)));
+        monthTextView.setText(expense.getDate().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
+        yearTextView.setText(Integer.toString(expense.getDate().get(Calendar.YEAR)));
 
         return rowView;
     }
@@ -85,7 +85,7 @@ public class ExpenseAdapter extends BaseAdapter {
     public double getNetBalance() {
         double netBalance = 0.0;
         for(Expense x : mDataSource) {
-            netBalance += x.balance;
+            netBalance += x.getBalance();
         }
         return netBalance;
     }

@@ -264,7 +264,12 @@ public class Summary extends AppCompatActivity {
         }
         Map<String, Double> percents = new HashMap<>();
         for (String key : amounts.keySet()) {
-            percents.put(key, BigDecimal.valueOf(amounts.get(key) / totalAmount).setScale(2, RoundingMode.HALF_UP).doubleValue());
+            percents.put(key, 100 * (BigDecimal.valueOf(amounts.get(key) / totalAmount).setScale(4, RoundingMode.HALF_UP).doubleValue()));
+        }
+        if (percents.size() == 0) {
+            Map<String, Double> ret = new HashMap<>();
+            ret.put("Nothing", 100.0);
+            return ret;
         }
         return percents;
     }

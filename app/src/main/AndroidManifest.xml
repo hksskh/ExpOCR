@@ -64,19 +64,45 @@
         <activity
             android:name=".IndividualFriendActivity"
             android:label="@string/friend_activity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".IndividualGroupActivity"
             android:label="@string/group_activity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ForgotPasswordActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".ChangePasswordActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".Summary"></activity>
-        <activity android:name=".RecordPaymentActivity" />
+        <activity
+            android:name=".Summary"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".RecordPaymentActivity"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".RecognizeReceiptActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".AddTransactionReceiptItemListActivity"
+            android:label="@string/title_addtransactionreceiptitem_list"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask"></activity>
+        <activity
+            android:name=".AddTransactionReceiptItemDetailActivity"
+            android:label="@string/title_addtransactionreceiptitem_detail"
+            android:parentActivityName=".AddTransactionReceiptItemListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mihika.expocr.AddTransactionReceiptItemListActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -180,14 +180,14 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
             case "GROUPS":
                 baseView = inflater.inflate(R.layout.fragment_tab, container, false);
 
-                /*mList = (RecyclerView) baseView.findViewById(R.id.rv_friends);
+                mList = (RecyclerView) baseView.findViewById(R.id.rv_friends);
                 layoutManager = new LinearLayoutManager(this.getContext());
                 mList.setLayoutManager(layoutManager);
                 mList.setHasFixedSize(true);
 
                 mGroupAdapter = new GroupAdapter(NUM_LIST_ITEMS, ((MainActivity)mListener).getU_id(), this);
 
-                mList.setAdapter(mGroupAdapter);*/
+                mList.setAdapter(mGroupAdapter);
                 break;
 
             case "EXPENSES":
