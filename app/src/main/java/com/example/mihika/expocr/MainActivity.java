@@ -334,7 +334,7 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(intent, CROP_PHOTO);
     }
 
-  
+
 }
 
 class TabFragmentAdapter extends FragmentPagerAdapter {
