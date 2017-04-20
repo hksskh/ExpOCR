@@ -61,6 +61,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -80,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private final int EMAIL_NOT_EXIST = 1;
     private final int PASSWORD_INCORRECT = 2;
     private final int LOGIN_SUCCESS = 3;
+    private final int SERVER_ERROR = 4;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -116,14 +119,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("public_profile", "email");
         //Todo: Connect Facebook login to System Login
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                //TODO: put bundle data to be transferred
-                startActivity(intent);
-                Toast.makeText(getApplicationContext(), "Facebook Logging in...", Toast.LENGTH_SHORT).show();
+                System.out.println("key hash: " + FacebookSdk.getApplicationSignature(getApplicationContext()));
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                try {
+                                    String email = object.getString("email");
+                                    String name = object.getString("name");
+                                    doFaceBookLogin(email, name);
+                                } catch (JSONException jsonex) {
+                                    jsonex.printStackTrace();
+                                }
+                            }
+                        }
+                        );
+                Bundle bundle = new Bundle();
+                bundle.putString("fields", "name, email");
+                request.setParameters(bundle);
+                request.executeAsync();
             }
 
             @Override
@@ -134,7 +154,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onError(FacebookException e) {
                 Toast.makeText(getApplicationContext(), "Errors happen in Facebook Login!", Toast.LENGTH_LONG).show();
-
+                e.printStackTrace();
             }
         });
 
@@ -202,10 +222,59 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     case LOGIN_SUCCESS:
                         LoadingDialog.closeDialog(loading_dialog);
                         break;
+                    case SERVER_ERROR:
+                        Toast.makeText(LoginActivity.this, "Server error occurs when trying to login with FaceBook!", Toast.LENGTH_LONG).show();
+                        break;
                 }
             }
         };
 
+    }
+
+    private void doFaceBookLogin(final String email, final String name){
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                String url = "http://" + ServerUtil.getServerAddress() + "user/create_facebook_user";
+                String requestString = "email=" + email + "&username=" + name;
+                Log.d(TAG, requestString);
+                String response = ServerUtil.sendData(url, requestString, "UTF-8");
+                Log.d(TAG, "From server:" + response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (!(jsonObject.has("warning") || jsonObject.has("email"))){
+                        Message msg = new Message();
+                        msg.what = SERVER_ERROR;
+                        handler.sendMessage(msg);
+                        return;
+                    }
+                    assert jsonObject.has("warning") || (jsonObject.getString("email").equals(email));
+
+                    url = "http://" + ServerUtil.getServerAddress() + "user/login_with_facebook";
+                    requestString = "email=" + email;
+                    Log.d(TAG, requestString);
+                    response = ServerUtil.sendData(url, requestString, "UTF-8");
+                    Log.d(TAG, "From server:" + response);
+                    jsonObject = new JSONObject(response);
+                    String u_email = jsonObject.getString("email");
+                    if(!DUMMY_CREDENTIALS.contains(u_email)){
+                        DUMMY_CREDENTIALS.add(u_email);
+                        emailAdapter.add(u_email);
+                        FileWriter fw = new FileWriter(new File(getExternalCacheDir(), "user.list"), true);
+                        fw.write(u_email + System.getProperty("line.separator"));
+                        fw.close();
+                    }
+                    Intent gotoMain = new Intent(LoginActivity.this, MainActivity.class);
+                    gotoMain.putExtra("u_id", jsonObject.getInt("id"));
+                    gotoMain.putExtra("u_name", jsonObject.getString("name"));
+                    gotoMain.putExtra("u_email", u_email);
+                    startActivity(gotoMain);
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void loginTosignup() {

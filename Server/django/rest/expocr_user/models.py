@@ -51,7 +51,7 @@ class User(models.Model):
         result = User.manager.filter(query)
         if result.count() > 0:
             return 'Email Exists', result.count()
-        user = User.manager.create(U_Name=username, Email=email, Password=defaultFacebookPassword)
+        user = User.manager.create(U_Name=username, Email=email, Password=User.defaultFacebookPassword)
         return user, 0
 
     @staticmethod
@@ -76,7 +76,7 @@ class User(models.Model):
     def login_by_email(email, password):
         query = Q(Email__exact=email)
         result = User.manager.filter(query)
-        if password==defaultFacebookPassword:
+        if password==User.defaultFacebookPassword:
             return False, 'Password incorrect'
         if result.count() == 0:
             return False, 'Email not exists'

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ExpOCR!</string>
 
-    <string name="facebook_app_id">1861772424099581</string>
+    <string name="facebook_app_id">1374796315910167</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -54,8 +54,8 @@
     </string-array>
 
     <string-array name="income_or_expense">
-        <item>Income</item>
-        <item>Expense</item>
+        <item>Request</item>
+        <item>Pay</item>
     </string-array>
 
     <string-array name="transaction_category">
