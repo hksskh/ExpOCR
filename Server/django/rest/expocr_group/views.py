@@ -189,7 +189,10 @@ def expocr_group_get_transactions(request):
     data_list = []
     for entry in result:
         data = {}
-        data['t_id'] = int(entry['T_Id'])
+        data['amount'] = float(entry['Amount'])
+        data['category'] = int(entry['Category'])
+        data['memo'] = str(entry['Memo'])
+        data['date'] = str(entry['Date'])
         data_list.append(data)
     response = HttpResponse(json.dumps(data_list), content_type='application/json')
     return response
@@ -224,4 +227,6 @@ def expocr_group_delete_transaction(request):
     data['deleted details'] = result[1]
     response = HttpResponse(json.dumps(data), content_type='application/json')
     return response
+
+
 

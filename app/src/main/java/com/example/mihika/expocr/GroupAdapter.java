@@ -155,8 +155,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             item_name.setText(rawList[1]);
             //rawList = rawList[2].split(":");
             //item_balance.setText(rawList[1]);
-            String test=new String("10");
-            item_balance.setText(test);
+            //String test=new String("10");
+            item_balance.setText(rawList[2]);
             if(Double.parseDouble(item_balance.getText().toString()) < 0){
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.orange));
             }else{
@@ -233,11 +233,14 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                 try {
                     jsonObj=jsonArray.getJSONObject(index);
                     nameObj=nameArray.getJSONObject(index);
-                    String balance="10";
+                    JSONArray transactionArray = new JSONArray(get_group_transactions(jsonObj.getInt("g_id")));
+                    int balance=0;
+                    for (int j = 0; j < transactionArray.length(); j++) {
+                        balance += transactionArray.getJSONObject(j).getDouble("Amount");
+                    }
                     builder.append(jsonObj.get("g_id")).append(",")
-                            .append(nameObj.getJSONObject("fields").get("G_Name")).append(","+balance);
-                            //.append(jsonObj.get("receiver_email")).append(":")
-                            //.append(jsonObj.get("balance")
+                            .append(nameObj.getJSONObject("fields").get("G_Name")).append(","+balance)
+                            .append(jsonObj.get(Double.toString(balance)));
                     mData.add(builder.toString());
                     group_name_list.add(nameObj.getJSONObject("fields").get("G_Name").toString());
                     builder.setLength(0);
@@ -263,5 +266,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             return text;
         }
 
+        private String get_group_transactions(int g_id) {
+            String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_transactions";
+            String requestBody = "g_id=" + g_id;
 
+            String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+            return text;
+        }
 }
