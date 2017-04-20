@@ -124,6 +124,16 @@
                 android:textSize="40sp"
                 android:visibility="invisible"/>
 
+            <Button
+                android:id="@+id/add_transaction_from_receipt"
+                style="?android:textAppearanceSmall"
+                android:drawableStart="@drawable/ic_menu_camera"
+                android:drawableLeft="@drawable/ic_menu_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="From Receipt"
+                android:textStyle="bold"/>
+
         </LinearLayout>
 
     </ScrollView>

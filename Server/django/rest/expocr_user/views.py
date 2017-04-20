@@ -256,3 +256,41 @@ def expocr_user_get_two_users_by_id(request):
     data = serializers.serialize('json', User.get_two_users_by_id(id1, id2), fields=('U_Id', 'U_Name', 'Email'))
     response = HttpResponse(data, content_type="application/json")
     return response
+
+@csrf_exempt
+def expocr_login_with_facebook(request):
+    try:
+        if request.method == 'GET':
+            params = request.GET
+        elif request.method == 'POST':
+            params = request.POST
+        email = params.get('email')
+        result = User.login_with_facebook(email)
+        data = {}
+        if result[0]:
+            for entry in result[1]:
+                data['id'] = int(entry['U_Id'])
+                data['name'] = entry['U_Name']
+                data['email'] = entry['Email']
+        else:
+            data['warning'] = result[1]
+        response = HttpResponse(json.dumps(data), content_type='application/json')
+    except Exception as e:
+        print('%s (%s)' % (e.message, type(e)))
+    return response
+
+@csrf_exempt
+def expocr_create_facebook_user(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    username = params.get('username')
+    email = params.get('email')
+    user = User.create_facebook_user(username, email)
+    if user[1] == 0:
+        data = {'u_id': user[0].U_Id, 'u_name': user[0].U_Name, 'email': user[0].Email}
+    else:
+        data = {'warning': user[0]}
+    response = HttpResponse(json.dumps(data), content_type="application/json")
+    return response

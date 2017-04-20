@@ -14,6 +14,8 @@ class User(models.Model):
     Password = models.CharField(max_length=255, null=False)
     Vericode = models.CharField(max_length=255)
 
+    defaultFacebookPassword="0"
+
     manager = models.Manager()
 
     class Meta:
@@ -44,6 +46,15 @@ class User(models.Model):
         return user, 0
 
     @staticmethod
+    def create_facebook_user(username, email):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() > 0:
+            return 'Email Exists', result.count()
+        user = User.manager.create(U_Name=username, Email=email, Password=defaultFacebookPassword)
+        return user, 0
+
+    @staticmethod
     def get_user_by_id(id):
         query = Q(U_Id=id)
         user = User.manager.filter(query)
@@ -65,12 +76,22 @@ class User(models.Model):
     def login_by_email(email, password):
         query = Q(Email__exact=email)
         result = User.manager.filter(query)
+        if password==defaultFacebookPassword:
+            return False, 'Password incorrect'
         if result.count() == 0:
             return False, 'Email not exists'
         query = Q(Password__exact=password)
         result = result.filter(query)
         if result.count() == 0:
             return False, 'Password incorrect'
+        return True, result.values('U_Id', 'U_Name', 'Email')
+
+    @staticmethod
+    def login_with_facebook(email):
+        query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() == 0:
+            return False, 'Email not exists'
         return True, result.values('U_Id', 'U_Name', 'Email')
 
 

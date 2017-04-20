@@ -54,8 +54,8 @@
     </string-array>
 
     <string-array name="income_or_expense">
-        <item>Request</item>
-        <item>Pay</item>
+        <item>Income</item>
+        <item>Expense</item>
     </string-array>
 
     <string-array name="transaction_category">
@@ -89,5 +89,7 @@
 
     <!-- delete transaction menu -->
     <string name="menu_delete">Delete Transaction</string>
+    <string name="title_addtransactionreceiptitem_list">Friend List</string>
+    <string name="title_addtransactionreceiptitem_detail">Receipt</string>
 
 </resources>

@@ -249,7 +249,7 @@ public class Summary extends AppCompatActivity {
             }
             try {
                 String category = jsonObject.getString("Category");
-                Double amount = jsonObject.getDouble("amount");
+                Double amount = Math.abs(jsonObject.getDouble("amount"));
                 if (amount > 0) {
                     if (!amounts.containsKey(category)) {
                         amounts.put(category, amount);
