@@ -24,19 +24,41 @@ def expocr_get_all_group_transactions(request):
     response = HttpResponse(data, content_type="application/json")
     return response
 
-@csrf_exempt
+#@csrf_exempt
+#def expocr_group_create(request):
+#    if request.method == 'GET':
+#        params = request.GET
+#    elif request.method == 'POST':
+#        params = request.POST
+#    name = params.get('name')
+#    result = Group.create_group(name)
+#    data = {}
+#    data['g_id'] = result.G_Id
+#    data['g_name'] = result.G_Name
+#    response = HttpResponse(json.dumps(data), content_type='application/json')
+#    return response
 def expocr_group_create(request):
     if request.method == 'GET':
         params = request.GET
     elif request.method == 'POST':
         params = request.POST
-    name = params.get('name')
+    name = params.get('group_name')
     result = Group.create_group(name)
     data = {}
+	gid = result.G_Id
     data['g_id'] = result.G_Id
     data['g_name'] = result.G_Name
+	uid = params.get('U_id')
+	uid_res = Member.add_member(gid,uid)
+	emails = data['emails'].split(',')
+	for (email in emails):
+		user = User.get_user_by_email(email)
+		for (result in user):
+			uid = int(result['U_Id'])
+			Member.add_member(gid,email)
     response = HttpResponse(json.dumps(data), content_type='application/json')
     return response
+
 
 @csrf_exempt
 def expocr_group_get_name(request):
