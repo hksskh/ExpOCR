@@ -20,7 +20,7 @@
         android:id="@+id/group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter a group name"
+        android:hint="Enter a group name"
         android:layout_above="@+id/select_members"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="112dp" />
