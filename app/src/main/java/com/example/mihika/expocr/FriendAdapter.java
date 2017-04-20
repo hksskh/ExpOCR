@@ -43,7 +43,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     private final FriendListItemClickListener mOnClickListener;
     private List<String> mData;
     private static Vector<String> friend_name_list = new Vector<>();
-
+    private static Vector<String> friend_email_list = new Vector<>();
     //constructor
     public FriendAdapter(int numberOfItems, TabFragment listener) {
         maxItemNumber = numberOfItems;
@@ -112,6 +112,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     public static Vector<String> get_friend_name_list(){
         return friend_name_list;
+    }
+
+    public static Vector<String> get_friend_email_list(){
+        return friend_email_list;
     }
 
     public void setIsRefreshing(boolean isRefreshing){
@@ -192,6 +196,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         int limit = maxItemNumber;
         mData.clear();
         friend_name_list.clear();
+        friend_email_list.clear();
         for(int index = 0; index < jsonArray.length() && index < limit; index++){
             JSONObject jsonObj = null;
             try {
@@ -207,6 +212,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                         .append(jsonObj.get("balance"));
                 mData.add(builder.toString());
                 friend_name_list.add(jsonObj.getString("receiver_name"));
+                friend_email_list.add(jsonObj.getString("receiver_name"));
                 builder.setLength(0);
             } catch (JSONException e) {
                 e.printStackTrace();
