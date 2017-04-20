@@ -93,23 +93,20 @@ public class IndividualGroupActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             String ret=group_get_transaction_list_for(getIntent().getStringExtra("group_id"));
-            JSONArray tidList=null;
+            JSONArray rawTransactionsArray=null;
             JSONArray transactionsArray=new JSONArray();
             int limit=10;
             try {
-                tidList = new JSONArray(ret);
+                rawTransactionsArray = new JSONArray(ret);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            for(int i=0;i<tidList.length() && i < limit; i++)
+            for(int i=0;i<rawTransactionsArray.length() && i < limit; i++)
             {
                 JSONObject jsonObj=null;
                 try {
-                    jsonObj = tidList.getJSONObject(i);
-                    String s=group_get_transactions_by_t_id(jsonObj.getInt("t_id"));
-                    JSONArray t= new JSONArray(s);
-                    JSONObject jo=t.getJSONObject(0);
-                    transactionsArray.put(jo);
+                    jsonObj = rawTransactionsArray.getJSONObject(i);
+                    transactionsArray.put(jsonObj);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
