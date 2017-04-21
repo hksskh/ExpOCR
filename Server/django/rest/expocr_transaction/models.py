@@ -35,11 +35,18 @@ class Transaction(models.Model):
 
 	@staticmethod
 	def get_transaction_by_sender_id(sender_id):
-		query = Q(Sender_Id=sender_id)
-		result = Transaction.manager.filter(query).order_by('-Date')\
+	    query = Q(Sender_Id=sender_id)
+	    result = Transaction.manager.filter(query).order_by('-Date')\
 			.values('Receiver_Id', 'Amount', 'Date', 'Category')
 		return result
-
+		
+	@staticmethod
+	def get_transaction_by_receiver_id(receiver_id):
+	    query = Q(Sender_Id=receiver_id)
+	    result = Transaction.manager.filter(query).order_by('-Date')\
+            .values('Sender_Id', 'Amount', 'Date', 'Category')
+        return result
+        
 	@staticmethod
 	def get_all_friends_sender(user_id):
 		#TODO friends tab
