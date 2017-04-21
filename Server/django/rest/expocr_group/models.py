@@ -125,9 +125,15 @@ class Group_Transaction(models.Model):
         return result
 
     @staticmethod
-    def get_transactions(g_id, u_id):
+    def get_user_transactions(g_id, u_id):
         query = Q(G_Id=g_id) & Q(U_Id=u_id)
         result = Group_Transaction.manager.filter(query).order_by('-Date')
+        return result
+
+    @staticmethod
+    def get_group_transactions(g_id):
+        query = Q(G_Id=g_id)
+        result = Group_Transaction.manager.filter(query)
         return result
 
     @staticmethod

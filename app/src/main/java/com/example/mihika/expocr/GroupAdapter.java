@@ -267,7 +267,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
 
         private String get_group_transactions(int g_id) {
-            String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_transactions";
+            String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_group_transactions";
             String requestBody = "g_id=" + g_id;
 
             String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");

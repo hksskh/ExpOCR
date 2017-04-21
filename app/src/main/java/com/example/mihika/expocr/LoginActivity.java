@@ -297,6 +297,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onNewIntent(Intent intent){
         super.onNewIntent(intent);
         setIntent(intent);
+
         if(intent.hasExtra("signup")){
             mEmailView.setText(intent.getStringExtra("email"));
             mPasswordView.setText(intent.getStringExtra("password"));

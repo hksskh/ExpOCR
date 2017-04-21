@@ -69,6 +69,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(IndividualGroupActivity.this, GroupBalanceActivity.class);
+                intent.putExtra("g_id", g_id);
                 startActivity(intent);
             }
         });
@@ -160,7 +161,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
     }
 
     private String group_get_transaction_list_for(String g_id, int u_id){
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_transactions";
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_user_transactions";
         String requestBody = "g_id="+g_id + "&u_id=" + u_id;
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");

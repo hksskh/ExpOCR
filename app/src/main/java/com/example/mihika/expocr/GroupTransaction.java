@@ -1,13 +1,14 @@
 package com.example.mihika.expocr;
-//import com.example.mihika.expoocr.util.ServerUtil;
-//import org.json.JSONArray;
-//import org.json.JSONException;
 
+import com.example.mihika.expocr.util.ServerUtil;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by awesomeness on 4/9/2017.
@@ -19,62 +20,36 @@ public class GroupTransaction {
     private Calendar date;
     private String memo;
     private String category;
+    private String u_name;
+    private String u_email;
     private int gid;
     private int uid;
 
-    ///// TODO: 4/9/2017
-    public static ArrayList<GroupTransaction> getGroupTransactionsFromServer(int g_id){
-        ArrayList<GroupTransaction> retval =  new ArrayList<GroupTransaction>();
-        GroupTransaction trans1 = new GroupTransaction();
-        GroupTransaction trans2 = new GroupTransaction();
-        GroupTransaction trans3 = new GroupTransaction();
-        GroupTransaction trans4 = new GroupTransaction();
-        GroupTransaction trans5 = new GroupTransaction();
-        GroupTransaction trans6 = new GroupTransaction();
-        GroupTransaction trans7 = new GroupTransaction();
-        GroupTransaction trans8 = new GroupTransaction();
-        GroupTransaction trans9 = new GroupTransaction();
-        GroupTransaction trans10 = new GroupTransaction();
-        trans1.amount = -10;
-        trans1.gid = 1;
-        trans1.uid = 1;
-        retval.add(trans1);
-        trans2.amount = -20;
-        trans2.gid = 1;
-        trans2.uid = 2;
-        retval.add(trans2);
-        trans3.amount = -45;
-        trans3.gid = 1;
-        trans3.uid = 3;
-        retval.add(trans3);
-        trans4.amount = 25;
-        trans4.gid = 1;
-        trans4.uid = 4;
-        retval.add(trans4);
-        trans5.amount = 25;
-        trans5.gid = 1;
-        trans5.uid = 5;
-        retval.add(trans5);
-        trans6.amount = 25;
-        trans6.gid = 1;
-        trans6.uid = 6;
-        retval.add(trans6);
-        trans7.amount = 30;
-        trans7.gid = 2;
-        trans7.uid = 7;
-        retval.add(trans7);
-        trans8.amount = -10;
-        trans8.gid = 2;
-        trans8.uid = 8;
-        retval.add(trans8);
-        trans9.amount = -10;
-        trans9.gid = 2;
-        trans9.uid = 9;
-        retval.add(trans9);
-        trans10.amount = -10;
-        trans10.gid = 2;
-        trans10.uid = 10;
-        retval.add(trans10);
+    public static List<GroupTransaction> getGroupTransactionsFromServer(int g_id){
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_group_transactions";
+        String requestBody = "g_id="+g_id;
+
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+
+        System.out.println("getGroupTransactionsFromServer: " + text);
+
+        List<GroupTransaction> retval = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(text);
+            for (int index = 0; index < jsonArray.length(); index++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(index);
+                GroupTransaction groupTransaction = new GroupTransaction();
+                groupTransaction.gid = g_id;
+                groupTransaction.uid = jsonObject.getInt("u_id");
+                groupTransaction.amount = jsonObject.getDouble("amount");
+                groupTransaction.u_name = jsonObject.getString("u_name");
+                groupTransaction.u_email = jsonObject.getString("u_email");
+                retval.add(groupTransaction);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         return retval;
     }
     /*
@@ -115,12 +90,12 @@ public class GroupTransaction {
         return text;
     }*/
 
-    public static ArrayList<Pair> getOwedAmounts(int g_id,int u_id){
-        ArrayList<Pair> amounts = getUserNetBalances(g_id);
-        ArrayList<Pair> dues = new ArrayList<Pair>();
+    public static List<Pair> getOwedAmounts(int g_id, int u_id){
+        List<Pair> amounts = getUserNetBalances(g_id);
+        List<Pair> dues = new ArrayList<>();
 
-        ArrayList<Pair> positives = new ArrayList<Pair>();
-        ArrayList<Pair> negatives = new ArrayList<Pair>();
+        List<Pair> positives = new ArrayList<Pair>();
+        List<Pair> negatives = new ArrayList<Pair>();
         for(Pair pair : amounts){
             if(pair.amount > 0)
                 positives.add(pair);
@@ -128,6 +103,7 @@ public class GroupTransaction {
                 negatives.add(pair);
         }
 
+        System.out.println("getOwedAmounts: begins while");
         int posIdx = 0;
         int negIdx = 0;
         while (posIdx < positives.size() && negIdx < negatives.size()){
@@ -173,15 +149,15 @@ public class GroupTransaction {
                 }
             }
         }
-
+        System.out.println("getOwedAmounts: ends while");
 
         return dues;
     }
 
 
-    private static ArrayList<Pair> getUserNetBalances(int g_id){
-        ArrayList<GroupTransaction> mDataSource = getGroupTransactionsFromServer(g_id);
-        HashMap<Integer, Double> balances= new HashMap<Integer, Double>();
+    private static List<Pair> getUserNetBalances(int g_id){
+        List<GroupTransaction> mDataSource = getGroupTransactionsFromServer(g_id);
+        HashMap<Integer, Double> balances= new HashMap<>();
         for(GroupTransaction x : mDataSource) {
             if (balances.containsKey(x.uid))
                 balances.put(x.uid, x.amount + balances.get(x.uid));
@@ -189,9 +165,11 @@ public class GroupTransaction {
                 balances.put(x.uid, x.amount);
         }
 
-        ArrayList<Pair> pairs = new ArrayList<Pair>();
+        List<Pair> pairs = new ArrayList<Pair>();
+        int index = 0;
         for(Object uid : balances.keySet().toArray()){
-            pairs.add(new Pair((Integer) uid,balances.get(uid)));
+            pairs.add(new Pair((Integer) uid,balances.get(uid), mDataSource.get(index).u_name, mDataSource.get(index).u_email));
+            index++;
         }
 
         return pairs;
@@ -200,10 +178,23 @@ public class GroupTransaction {
     static class Pair {
         public Integer uid;
         public Double amount;
+        public String u_name;
+        public String u_email;
 
-        Pair(Integer uid, Double amount){
+        Pair(Integer uid, Double amount, String u_name, String u_email){
             this.uid = uid;
             this.amount = amount;
+            this.u_name = u_name;
+            this.u_email = u_email;
+        }
+
+        @Override
+        public String toString() {
+            return "uid: " + uid + ", amount: " + amount;
+        }
+
+        public String getUserBrief() {
+            return u_name + " (" + u_email + ")";
         }
 
     }
@@ -211,7 +202,7 @@ public class GroupTransaction {
         System.out.println("running");
         System.out.println("part 1");
         for (int i = 1; i<=6; i++){
-            ArrayList<Pair> retval = GroupTransaction.getOwedAmounts(1,i);
+            List<Pair> retval = GroupTransaction.getOwedAmounts(1,i);
             for (Pair p : retval){
                 System.out.println("group 1 uid "+i);
                 System.out.println(p.uid+" "+p.amount);
@@ -219,7 +210,7 @@ public class GroupTransaction {
         }
         System.out.println("part 2");
         for (int i = 7; i<=10; i++){
-            ArrayList<Pair> retval = GroupTransaction.getOwedAmounts(2,i);
+            List<Pair> retval = GroupTransaction.getOwedAmounts(2,i);
             for (Pair p : retval){
                 System.out.println("group 2 uid "+i);
                 System.out.println(p.uid+" "+p.amount);

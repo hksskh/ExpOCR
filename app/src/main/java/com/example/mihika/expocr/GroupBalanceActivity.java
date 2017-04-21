@@ -9,11 +9,14 @@ public class GroupBalanceActivity extends AppCompatActivity implements GroupBala
 
     private RecyclerView mList;
     private GroupBalanceAdapter mAdapter;
+    private int g_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_balance);
+
+        g_id = getIntent().getIntExtra("g_id", 1);
 
         mList = (RecyclerView) findViewById(R.id.rv_group_balance);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -25,5 +28,9 @@ public class GroupBalanceActivity extends AppCompatActivity implements GroupBala
 
     @Override
     public void onBalanceListItemClick(int clickedItemIndex) {
+    }
+
+    public int getG_id() {
+        return g_id;
     }
 }

@@ -31,7 +31,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
     public GroupBalanceAdapter(GroupBalanceActivity listener) {
         mOnClickListener = listener;
         mData = new ArrayList<>();
-        //syncBalanceList();
+        syncBalanceList();
     }
 
     interface BalanceListItemClickListener {
@@ -83,7 +83,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
     @Override
     public int getItemCount() {
-        return 10;//mData.size();
+        return mData.size();
     }
 
     public List<String> getmData(){
@@ -112,10 +112,13 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
         void bind(int listIndex){
 
-            String rawData = "test";//mData.get(listIndex);
+            String rawData = mData.get(listIndex);
 
             item_text.setText(rawData);
 
+            if (!rawData.contains("owes")) {
+                item_settle_up.setVisibility(View.GONE);
+            }
             item_settle_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -126,62 +129,49 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
         @Override
         public void onClick(View v) {
-            int clickedPostion = getAdapterPosition();
-            mOnClickListener.onBalanceListItemClick(clickedPostion);
+            int clickedPosition = getAdapterPosition();
+            mOnClickListener.onBalanceListItemClick(clickedPosition);
         }
     }
 
-    private class BalancesQueryTask extends AsyncTask<String, Void, String> {
+    private class BalancesQueryTask extends AsyncTask<String, Void, List<GroupTransaction.Pair>> {
 
         @Override
-        protected String doInBackground(String... params) {
-            return friend_retrieve_all_receivers();
+        protected List<GroupTransaction.Pair> doInBackground(String... params) {
+            return get_user_balances();
         }
 
         @Override
-        protected void onPostExecute(String s){
-            fill_receivers_list(s);
+        protected void onPostExecute(List<GroupTransaction.Pair> list){
+            fill_balances_list(list);
 
         }
     }
 
-    private void fill_receivers_list(String s){
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = new JSONArray(s);
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private void fill_balances_list(List<GroupTransaction.Pair> list){
+        System.out.println("GroupBalanceAdapter: fill_balances_list: size: " + list.size());
+        if (list.isEmpty()) {
+            String text = "You are all settled up!";
+            mData.add(text);
         }
-        mData.clear();
-        for(int index = 0; index < jsonArray.length(); index++){
-            JSONObject jsonObj = null;
-            try {
-                jsonObj = jsonArray.getJSONObject(index);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        for (GroupTransaction.Pair pair: list) {
+            String text = "";
+            if (pair.amount >= 0) {
+                text = "You owes u_id: " + pair.uid + " amount: " + pair.amount;
+            } else {
+                text = pair.uid + " owes you amount: " + Math.abs(pair.amount);
             }
-            StringBuilder builder = new StringBuilder();
-            try {
-                builder.append(jsonObj.get("receiver_id")).append(",")
-                        .append(jsonObj.get("receiver_name")).append(",")
-                        .append(jsonObj.get("receiver_email")).append(":")
-                        .append(jsonObj.get("balance"));
-                mData.add(builder.toString());
-                builder.setLength(0);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            mData.add(text);
+            System.out.println("GroupBalanceAdapter: fill_balances_list: " + text);
         }
+
         notifyDataSetChanged();
     }
 
-    private String friend_retrieve_all_receivers(){
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_all_receivers";
-        String requestBody = "sender_id=" + MainActivity.getU_id();
+    private List<GroupTransaction.Pair> get_user_balances(){
+        List<GroupTransaction.Pair> result = GroupTransaction.getOwedAmounts(((GroupBalanceActivity)mOnClickListener).getG_id(), MainActivity.getU_id());
 
-        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
-
-        return text;
+        return result;
     }
 
 

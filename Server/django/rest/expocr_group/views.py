@@ -213,14 +213,14 @@ def expocr_group_add_transaction(request):
 	return response
 
 @csrf_exempt
-def expocr_group_get_transactions(request):
+def expocr_group_get_user_transactions(request):
 	if request.method == 'GET':
 		params = request.GET
 	elif request.method == 'POST':
 		params = request.POST
 	g_id = params.get('g_id')
 	u_id = params.get('u_id')
-	result = Group_Transaction.get_transactions(g_id, u_id)
+	result = Group_Transaction.get_user_transactions(g_id, u_id)
 	data_list = []
 	for entry in result:
 		data = {}
@@ -229,6 +229,32 @@ def expocr_group_get_transactions(request):
 		data['memo'] = str(entry.Memo)
 		data['date'] = str(entry.Date)
 		data_list.append(data)
+	response = HttpResponse(json.dumps(data_list), content_type='application/json')
+	return response
+
+@csrf_exempt
+def expocr_group_get_group_transactions(request):
+	if request.method == 'GET':
+		params = request.GET
+	elif request.method == 'POST':
+		params = request.POST
+	g_id = params.get('g_id')
+	result = Group_Transaction.get_group_transactions(g_id)
+	id_list = []
+	data_list = []
+	for entry in result:
+		data = {}
+		data['g_id'] = int(entry.G_Id)
+		data['amount'] = float(entry.Amount)
+		data_list.append(data)
+		id_list.append(entry.U_Id)
+	receiver_bulk = User.manager.in_bulk(id_list)
+	index = 0
+	while index < len(id_list):
+		pk = id_list[index]
+		data_list[index]['u_name'] = receiver_bulk[pk].U_Name
+		data_list[index]['u_email'] = receiver_bulk[pk].Email
+		index += 1
 	response = HttpResponse(json.dumps(data_list), content_type='application/json')
 	return response
 
