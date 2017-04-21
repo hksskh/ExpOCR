@@ -54,7 +54,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     private Spinner transactionKindSpinner;
     private MultiSelectionSpinner userSpinner;
     private Spinner categorySpinner;
-    private Spinner incomeOrExpenseSpinner;
+    private Spinner oweORowed;
     private AutoCompleteTextView email_text;
     private AutoCompleteTextView amount_text;
     private AutoCompleteTextView memo_text;
@@ -90,7 +90,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
         userSpinner = (MultiSelectionSpinner) findViewById(R.id.user_spinner);
         categorySpinner = (Spinner) findViewById(R.id.transaction_category_spinner);
-        incomeOrExpenseSpinner = (Spinner) findViewById(R.id.income_or_expense_spinner);
+        oweORowed = (Spinner) findViewById(R.id.income_or_expense_spinner);
         addEntriesForSpinner();
         addListenerOnSpinnerItemSelection();
         set_autotext_adapters();
@@ -160,14 +160,24 @@ public class AddTransactionActivity extends AppCompatActivity {
 
                 String url = "http://" + ServerUtil.getServerAddress() + "transaction/create_by_email";
                 StringBuilder requestString = new StringBuilder();
-                requestString.append("sender_id=").append(MainActivity.getU_id())
-                        .append("&receiver_email=").append(email_text.getText())
-                        .append("&category=").append(categorySpinner.getSelectedItem().toString())
-                        .append("&memo=").append(memo_text.getText())
-                        .append("&amount=");
-                if(incomeOrExpenseSpinner.getSelectedItem().toString().equals("Income")){
-                    requestString.append("-");
+                if(oweORowed.getSelectedItem().toString().equals("You Owe")) {
+                    requestString.append("sender_id=").append(MainActivity.getU_id())
+                            .append("&receiver_email=").append(email_text.getText())
+                            .append("&category=").append(categorySpinner.getSelectedItem().toString())
+                            .append("&memo=").append(memo_text.getText())
+                            .append("&amount=")
+                            .append("&am_I_sender=").append("yes");
                 }
+                else {
+                    if(oweORowed.getSelectedItem().toString().equals("You are Owed")) {
+                        requestString.append("sender_id=").append(MainActivity.getU_id())
+                                .append("&receiver_email=").append(email_text.getText())
+                                .append("&category=").append(categorySpinner.getSelectedItem().toString())
+                                .append("&memo=").append(memo_text.getText())
+                                .append("&amount=")
+                                .append("&am_I_sender=").append("no");
+                }
+
                 requestString.append(Math.abs(Double.parseDouble(amount_text.getText().toString())))
                         .append("&date=").append(datetime);
                 Log.d(TAG, requestString.toString());
