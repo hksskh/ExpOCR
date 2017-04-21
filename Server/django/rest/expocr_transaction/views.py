@@ -101,8 +101,8 @@ def expocr_transaction_get_all_friends(request):
 	index = 0
 	while index < len(id_list):
 		pk = id_list[index]
-		data_list[index]['receiver_name'] = receiver_bulk[pk].U_Name
-		data_list[index]['receiver_email'] = receiver_bulk[pk].Email
+		data_list[index]['friend_name'] = receiver_bulk[pk].U_Name
+		data_list[index]['friend_email'] = receiver_bulk[pk].Email
 		index += 1
 	response = HttpResponse(json.dumps(data_list), content_type="application/json")
 	return response
