@@ -73,7 +73,42 @@ def expocr_transaction_get_by_sender_id(request):
         index += 1
     response = HttpResponse(json.dumps(data_list), content_type="application/json")
     return response
-
+@csrf_exempt
+def expocr_transaction_get_by_uid(request):
+	if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    uid = params.get('U_Id')
+    data_list = []
+    id_list = []
+	user = User.get_user_by_id(uid)
+	username = user['U_Name']
+    result = Transaction.get_transaction_by_sender_id(uid)
+	
+    for entry in result:
+        data = {}
+		other_user = User.get_user_by_id(int(entry['Receiver_Id']))
+		other_name = other_user['U_Name']
+		data['who_paid'] = other_name
+        data['whom'] = username
+        data['amount'] = float(entry['Amount'])
+        data['date'] = str(entry['Date'])
+        data['Category'] = str(entry['Category'])
+        data_list.append(data)
+	 result = Transaction.get_transaction_by_receiver_id(uid)
+    for entry in result:
+        data = {}
+		other_user = User.get_user_by_id(int(entry['Receiver_Id']))
+		other_name = other_user['U_Name']
+		data['who_paid'] = username
+        data['whom'] = other_name
+        data['amount'] = -float(entry['Amount'])
+        data['date'] = str(entry['Date'])
+        data['Category'] = str(entry['Category'])
+        data_list.append(data)
+    response = HttpResponse(json.dumps(data_list), content_type="application/json")
+    return response
 @csrf_exempt
 def expocr_transaction_get_all_friends(request):
     if request.method == 'GET':
