@@ -83,11 +83,18 @@ def expocr_transaction_get_all_friends(request):
 	user_id = params.get('user_id')
 	data_list = []
 	id_list = []
-	result = Transaction.get_all_friends(user_id)
+	result = Transaction.get_all_friends_sender(user_id)
 	for entry in result:
 		data = {}
 		data['receiver_id'] = int(entry['Receiver_Id'])
 		id_list.append(data['receiver_id'])
+		data['balance'] = float(entry['Amount__sum'])
+		data_list.append(data)
+	result = Transaction.get_all_friends_receiver(user_id)
+	for entry in result:
+		data = {}
+		data['sender_id'] = int(entry['Sender_Id'])
+		id_list.append(data['sender_id'])
 		data['balance'] = float(entry['Amount__sum'])
 		data_list.append(data)
 	receiver_bulk = User.manager.in_bulk(id_list)
@@ -99,7 +106,27 @@ def expocr_transaction_get_all_friends(request):
 		index += 1
 	response = HttpResponse(json.dumps(data_list), content_type="application/json")
 	return response
-
+#takes in a user_id for the current user and a friend_id for the friend to get balance with and returns a json with value net_balance as the balance between the users
+@csrf_exempt
+def expocr_transaction_get_balance_between_friends(request):
+	if request.method == 'GET':
+		params = request.GET
+	elif request.method == 'POST':
+		params = request.POST
+	uid = params.get('user_id')
+	friend_id = params.get('friend_id')
+	balance = 0.0
+	result = Transaction.get_transaction_between_one_way(uid, friend_id)
+	for entry in result:
+		balance = balance+float(entry['Amount'])
+	result = Transaction.get_transaction_between_one_way(friend_id, uid)
+	for entry in result:
+		balance = balance-float(entry['Amount'])
+	data = {}
+	data['net_balance'] = balance
+	response = HttpResponse(json.dumps(data), content_type="application/json")
+	return response
+	
 
 @csrf_exempt
 def expocr_transaction_get_between(request):

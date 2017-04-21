@@ -41,19 +41,31 @@ class Transaction(models.Model):
         return result
 
     @staticmethod
-    def get_all_friends(user_id):
+    def get_all_friends_sender(user_id):
         #TODO friends tab
-        query = Q(Sender_Id=sender_id) 
+        query = Q(Sender_Id=user_id) 
         result = Transaction.manager.filter(query).order_by('Receiver_Id').\
             values('Receiver_Id').annotate(Sum('Amount'))
         return result
-
+	@staticmethod
+    def get_all_friends_receiver(user_id):
+        #TODO friends tab
+        query = Q(Receiver_Id=user_id) 
+        result = Transaction.manager.filter(query).order_by('Sender_Id').\
+            values('Receiver_Id').annotate(Sum('Amount'))
+        return result
+	
     @staticmethod
     def get_transaction_between(sender_id, receiver_id):
         query = ((Q(Sender_Id=sender_id) & Q(Receiver_Id=receiver_id)) | (Q(Sender_Id=receiver_id) & Q(Receiver_Id=sender_id)))
         result = Transaction.manager.filter(query).order_by('-Date').values('T_Id', 'Category', 'Memo', 'Amount', 'Date')
         return result
-
+	
+	@staticmethod
+    def get_transaction_between_one_way(sender_id, receiver_id):
+        query = ((Q(Sender_Id=sender_id) & Q(Receiver_Id=receiver_id)))
+        result = Transaction.manager.filter(query).order_by('-Date').values('T_Id', 'Category', 'Memo', 'Amount', 'Date')
+        return result
     @staticmethod
     def get_transaction_by_t_id(t_id):
         query = Q(T_Id=t_id)
