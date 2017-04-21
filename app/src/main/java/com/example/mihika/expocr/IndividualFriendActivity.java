@@ -144,6 +144,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s){
+            System.out.print(s);
             JSONArray jsonArray = null;
             try {
                 jsonArray = new JSONArray(s);
@@ -164,6 +165,8 @@ public class IndividualFriendActivity extends AppCompatActivity {
                 try {
                     expense = new Expense(jsonObj.getInt("id"), jsonObj.getString("category") + ": " + jsonObj.getString("memo"),
                             Double.parseDouble(jsonObj.getString("amount")), jsonObj.getString("date"));
+
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {

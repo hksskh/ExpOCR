@@ -146,6 +146,7 @@ def expocr_transaction_get_between(request):
         amount = float(entry['Amount'])
         if (int(entry['Sender_Id']) == int(uid)):
             amount = -amount
+            print (amount)
         data = {'id': entry['T_Id'], 'category': entry['Category'], 'memo': entry['Memo'], 'amount': amount,
                 'date': str(entry['Date'])}
         data_list.append(data)
