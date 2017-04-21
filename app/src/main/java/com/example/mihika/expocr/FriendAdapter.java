@@ -151,11 +151,17 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             item_avatar.setImageResource(R.drawable.ic_list_group);
             item_name.setText(rawList[1]);
             rawList = rawList[2].split(":");
-            item_balance.setText(rawList[1]);
-            if(Double.parseDouble(item_balance.getText().toString()) < 0){
-                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.orange));
+            String bal =  rawList[1];
+
+            if(Double.parseDouble(bal) < 0){
+                String dollar_bal =  "$"+bal;
+                item_balance.setText(dollar_bal);
+//                    item_balance.getText().toString()) < 0){
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
             }else{
-                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.green));
+                String dollar_bal =  "$"+bal;
+                item_balance.setText(dollar_bal);
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
             }
         }
 
@@ -206,13 +212,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             }
             StringBuilder builder = new StringBuilder();
             try {
-                builder.append(jsonObj.get("receiver_id")).append(",")
-                        .append(jsonObj.get("receiver_name")).append(",")
-                        .append(jsonObj.get("receiver_email")).append(":")
+                builder.append(jsonObj.get("friend_id")).append(",")
+                        .append(jsonObj.get("friend_name")).append(",")
+                        .append(jsonObj.get("friend_email")).append(":")
                         .append(jsonObj.get("balance"));
                 mData.add(builder.toString());
-                friend_name_list.add(jsonObj.getString("receiver_name"));
-                friend_email_list.add(jsonObj.getString("receiver_email"));
+                friend_name_list.add(jsonObj.getString("friend_name"));
+                friend_email_list.add(jsonObj.getString("friend_email"));
                 builder.setLength(0);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -222,8 +228,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     }
 
     private String friend_retrieve_all_receivers(){
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_all_receivers";
-        String requestBody = "sender_id=" + MainActivity.getU_id();
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_all_friends";
+        String requestBody = "user_id=" + MainActivity.getU_id();
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
 
