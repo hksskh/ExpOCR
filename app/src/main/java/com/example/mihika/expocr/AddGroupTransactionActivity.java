@@ -40,7 +40,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
     private Handler handler;
     private ArrayList<Integer> groupMemberArray;
     private final String TAG = "AddGroupTransactionActivity";
-    private HashMap<String, Integer> nameIdMap;
+    private HashMap<String, Integer> nameIdMap = new HashMap<>();
 
     private int g_id;
     private String g_name;
@@ -58,12 +58,14 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_group_transaction);
 
         Intent inIntent = getIntent();
-        g_id = inIntent.getIntExtra("group_id", 1);
-        g_name = inIntent.getStringExtra("group_name");
+        g_id = inIntent.getIntExtra("g_id", 1);
+        g_name = inIntent.getStringExtra("g_name");
 
         userSpinner = (MultiSelectionSpinner) findViewById(R.id.group_transaction_user_spinner);
         categorySpinner = (Spinner) findViewById(R.id.group_transaction_category_spinner);
+
         addEntriesForSpinner();
+
         set_autotext_adapters();
 
         Button add_transaction_button = (Button) findViewById(R.id.add_group_transaction_button);
@@ -86,7 +88,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
     }
 
     protected void addEntriesForSpinner() {
-        List<String> list = new ArrayList<String>();
+//        List<String> list = new ArrayList<String>();
 
         new Thread(new Runnable(){
             @Override
@@ -99,7 +101,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
 //                Log.d(TAG, requestString.toString());
                 String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
 
-//                Log.d(TAG, "From server:" + response);
+                System.out.println("From server:" + response);
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     groupMemberArray = new ArrayList<Integer>();
@@ -118,15 +120,15 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
             }
         }).start();
 
-        userSpinner.setItems(list);
+//        userSpinner.setItems(list);
 
     }
 
     private ArrayList<String> getNamesFromIds() {
         final ArrayList<String> spinnerNames = new ArrayList<String>();
-        new Thread(new Runnable(){
-            @Override
-            public void run() {
+        //new Thread(new Runnable(){
+            //@Override
+            //public void run() {
 
                 for(int i =0; i< groupMemberArray.size(); i++) {
                     if(!(groupMemberArray.get(i) == MainActivity.getU_id())) {
@@ -136,7 +138,8 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                         String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
 
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = new JSONArray(response);
+                            JSONObject jsonObject = jsonArray.getJSONObject(0);
                             String name = jsonObject.getJSONObject("fields").getString("U_Name");
                             String email = jsonObject.getJSONObject("fields").getString("Email");
                             nameIdMap.put(name + " (" + email + ")", groupMemberArray.get(i));
@@ -147,9 +150,9 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                         }
                     }
                 }
-            }
-        }).start();
-        return null;
+            //}
+        //}).start();
+        return spinnerNames;
     }
 
     private void set_autotext_adapters(){
@@ -157,12 +160,12 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
         ArrayAdapter<String> amount_adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, amount_autos);
         amount_text = (AutoCompleteTextView)
-                findViewById(R.id.add_transaction_amount);
+                findViewById(R.id.add_group_transaction_amount);
         amount_text.setAdapter(amount_adapter);
         ArrayAdapter<String> memo_adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, memo_autos);
         memo_text = (AutoCompleteTextView)
-                findViewById(R.id.add_transaction_memo);
+                findViewById(R.id.add_group_transaction_memo);
         memo_text.setAdapter(memo_adapter);
     }
 
@@ -171,7 +174,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
         View focusView = null;
         String amount = amount_text.getText().toString();
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(amount)|| !isAmountValid(amount)) {
+        if (TextUtils.isEmpty(amount)|| !isAmountValid(amount) || (userSpinner.getSelectedIndicies().size() == 0)) {
             amount_text.setError(getString(R.string.error_invalid_amount));
             focusView = amount_text;
             cancel = true;
@@ -204,15 +207,16 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                     String url = "http://" + ServerUtil.getServerAddress() + "group/add_transaction";
                     StringBuilder requestString = new StringBuilder();
                     requestString.append("receiver_id=").append(userId)
-                            .append("&group_id").append(g_id)
+                            .append("&group_id=").append(g_id)
                             .append("&category=").append(categorySpinner.getSelectedItem().toString())
                             .append("&memo=").append(memo_text.getText())
                             .append("&amount=")
                             .append(individualAmount)
                             .append("&date=").append(datetime);
-//                    Log.d(TAG, requestString.toString());
+                    System.out.println(requestString.toString());
                     String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
 
+                    System.out.println(response);
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.has("warning")) {
@@ -226,15 +230,16 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                 String url = "http://" + ServerUtil.getServerAddress() + "group/add_transaction";
                 StringBuilder requestString = new StringBuilder();
                 requestString.append("receiver_id=").append(MainActivity.getU_id())
-                        .append("&group_id").append(g_id)
+                        .append("&group_id=").append(g_id)
                         .append("&category=").append(categorySpinner.getSelectedItem().toString())
                         .append("&memo=").append(memo_text.getText())
                         .append("&amount=")
                         .append(individualAmount*selectedNames.size()*(-1))
                         .append("&date=").append(datetime);
-//                    Log.d(TAG, requestString.toString());
+                System.out.println(requestString.toString());
                 String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
 
+                System.out.println(response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.has("warning")) {

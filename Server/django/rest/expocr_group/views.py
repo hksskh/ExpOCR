@@ -208,18 +208,8 @@ def expocr_group_add_transaction(request):
 	amount = float(params.get('amount'))
 	date = params.get('date')
 	result = Group_Transaction.add_transaction(g_id, u_id, category, memo, amount, date)
-	if result[1] == 0:
-		data = {}
-		data['g_id'] = result[0].G_Id
-		data['u_id'] = result[0].U_Id
-		data['category'] = result[0].Category
-		data['memo'] = result[0].Memo
-		data['amount'] = result[0].Amount
-		data['date'] = result[0].Date
-		data = json.dumps(data)
-	else:
-		data = serializers.serialize('json', result[0])
-	response = HttpResponse(data, content_type='application/json')
+	data = {'g_id': result.G_Id, 'u_id': result.U_Id, 'amount': amount}
+	response = HttpResponse(json.dumps(data), content_type='application/json')
 	return response
 
 @csrf_exempt
@@ -229,14 +219,15 @@ def expocr_group_get_transactions(request):
 	elif request.method == 'POST':
 		params = request.POST
 	g_id = params.get('g_id')
-	result = Group_Transaction.get_transactions(g_id)
+	u_id = params.get('u_id')
+	result = Group_Transaction.get_transactions(g_id, u_id)
 	data_list = []
 	for entry in result:
 		data = {}
-		data['amount'] = float(entry['Amount'])
-		data['category'] = int(entry['Category'])
-		data['memo'] = str(entry['Memo'])
-		data['date'] = str(entry['Date'])
+		data['amount'] = float(entry.Amount)
+		data['category'] = str(entry.Category)
+		data['memo'] = str(entry.Memo)
+		data['date'] = str(entry.Date)
 		data_list.append(data)
 	response = HttpResponse(json.dumps(data_list), content_type='application/json')
 	return response

@@ -46,7 +46,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_individual_group);
 
         Intent inIntent = getIntent();
-        g_id = inIntent.getIntExtra("group_id", 1);
+        g_id = Integer.parseInt(inIntent.getStringExtra("group_id"));
         g_name = inIntent.getStringExtra("group_name");
         //receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
         ((TextView)findViewById(R.id.group_name)).setText(inIntent.getStringExtra("group_name"));
@@ -61,6 +61,15 @@ public class IndividualGroupActivity extends AppCompatActivity {
                 goToAddGroupTransaction.putExtra("g_id", g_id);
                 goToAddGroupTransaction.putExtra("g_name", g_name);
                 startActivity(goToAddGroupTransaction);
+            }
+        });
+
+        Button settle_up_btn = (Button) findViewById(R.id.settle_up_individual_grp);
+        settle_up_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(IndividualGroupActivity.this, GroupBalanceActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -92,7 +101,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            String ret=group_get_transaction_list_for(getIntent().getStringExtra("group_id"));
+            String ret=group_get_transaction_list_for(getIntent().getStringExtra("group_id"), MainActivity.getU_id());
             JSONArray rawTransactionsArray=null;
             JSONArray transactionsArray=new JSONArray();
             int limit=10;
@@ -150,9 +159,9 @@ public class IndividualGroupActivity extends AppCompatActivity {
         }
     }
 
-    private String group_get_transaction_list_for(String g_id){
+    private String group_get_transaction_list_for(String g_id, int u_id){
         String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_transactions";
-        String requestBody = "g_id="+g_id;
+        String requestBody = "g_id="+g_id + "&u_id=" + u_id;
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         return text;

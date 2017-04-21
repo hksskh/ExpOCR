@@ -193,8 +193,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                     JSONArray nameArray=new JSONArray(nameJson);
                     nameObj=nameArray.getJSONObject(0);
                     groupnamesArray.put(nameObj);
-                    System.out.println(nameJson);
-                    System.out.println(nameObj.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -238,11 +236,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                     JSONArray transactionArray = new JSONArray(get_group_transactions(jsonObj.getInt("g_id")));
                     int balance=0;
                     for (int j = 0; j < transactionArray.length(); j++) {
-                        balance += transactionArray.getJSONObject(j).getDouble("Amount");
+                        balance += transactionArray.getJSONObject(j).getDouble("amount");
                     }
                     builder.append(jsonObj.get("g_id")).append(",")
                             .append(nameObj.getJSONObject("fields").get("G_Name")).append(","+balance)
-                            .append(jsonObj.get(Double.toString(balance)));
+                            .append(balance);
                     mData.add(builder.toString());
                     group_name_list.add(nameObj.getJSONObject("fields").get("G_Name").toString());
                     builder.setLength(0);

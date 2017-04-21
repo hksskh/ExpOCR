@@ -1,4 +1,4 @@
-package com.example.mikiha.expoocr;
+package com.example.mihika.expocr;
 //import com.example.mihika.expoocr.util.ServerUtil;
 //import org.json.JSONArray;
 //import org.json.JSONException;
@@ -209,6 +209,7 @@ public class GroupTransaction {
     }
     public static void main(String[] args){
         System.out.println("running");
+        System.out.println("part 1");
         for (int i = 1; i<=6; i++){
             ArrayList<Pair> retval = GroupTransaction.getOwedAmounts(1,i);
             for (Pair p : retval){
@@ -216,6 +217,7 @@ public class GroupTransaction {
                 System.out.println(p.uid+" "+p.amount);
             }
         }
+        System.out.println("part 2");
         for (int i = 7; i<=10; i++){
             ArrayList<Pair> retval = GroupTransaction.getOwedAmounts(2,i);
             for (Pair p : retval){
