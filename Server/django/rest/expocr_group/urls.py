@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^get_members', views.expocr_group_get_members),
     url(r'^get_groups_by_member', views.expocr_group_get_groups_by_member),
     url(r'^delete_member', views.expocr_group_delete_member),
+    url(r'^add_transaction_by_email', views.expocr_group_add_transaction_by_email),
     url(r'^add_transaction', views.expocr_group_add_transaction),
     url(r'^get_user_transactions', views.expocr_group_get_user_transactions),
     url(r'^get_group_transactions', views.expocr_group_get_group_transactions),

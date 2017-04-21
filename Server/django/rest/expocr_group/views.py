@@ -225,6 +225,27 @@ def expocr_group_add_transaction(request):
 	return response
 
 @csrf_exempt
+def expocr_group_add_transaction_by_email(request):
+	if request.method == 'GET':
+		params = request.GET
+	elif request.method == 'POST':
+		params = request.POST
+
+	u_email = params.get('receiver_email')
+	g_id = params.get('group_id')
+	category = params.get('category')
+	memo = params.get('memo')
+	amount = float(params.get('amount'))
+	date = params.get('date')
+
+	u_id = User.get_user_by_email(u_email)[0].U_Id
+	result = Group_Transaction.add_transaction(g_id, u_id, category, memo, amount, date)
+
+	data = {'g_id': result.G_Id, 'u_id': result.U_Id, 'amount': amount}
+	response = HttpResponse(json.dumps(data), content_type='application/json')
+	return response
+
+@csrf_exempt
 def expocr_group_get_user_transactions(request):
 	if request.method == 'GET':
 		params = request.GET

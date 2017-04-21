@@ -41,6 +41,9 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
     private ArrayList<Integer> groupMemberArray;
     private final String TAG = "AddGroupTransactionActivity";
     private HashMap<String, Integer> nameIdMap = new HashMap<>();
+    private final List<String> userSpinnerNames = new ArrayList<>();
+
+    private final int SET_USER_SPINNER_ENTRIES = 1;
 
     private int g_id;
     private String g_name;
@@ -81,7 +84,9 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 switch(msg.what){
-
+                    case SET_USER_SPINNER_ENTRIES:
+                        userSpinner.setItems(userSpinnerNames);
+                        break;
                 }
             }
         };
@@ -111,7 +116,10 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                         groupMemberArray.add(u_id);
                     }
 
-                    userSpinner.setItems(getNamesFromIds());
+                    getNamesFromIds();
+                    Message msg = new Message();
+                    msg.what = SET_USER_SPINNER_ENTRIES;
+                    handler.sendMessage(msg);
 
                 } catch (JSONException jsex){
                     jsex.printStackTrace();
@@ -124,8 +132,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<String> getNamesFromIds() {
-        final ArrayList<String> spinnerNames = new ArrayList<String>();
+    private void getNamesFromIds() {
         //new Thread(new Runnable(){
             //@Override
             //public void run() {
@@ -143,7 +150,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                             String name = jsonObject.getJSONObject("fields").getString("U_Name");
                             String email = jsonObject.getJSONObject("fields").getString("Email");
                             nameIdMap.put(name + " (" + email + ")", groupMemberArray.get(i));
-                            spinnerNames.add(name + " (" + email + ")");
+                            userSpinnerNames.add(name + " (" + email + ")");
 
                         } catch (JSONException jsex) {
                             jsex.printStackTrace();
@@ -152,7 +159,6 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                 }
             //}
         //}).start();
-        return spinnerNames;
     }
 
     private void set_autotext_adapters(){
