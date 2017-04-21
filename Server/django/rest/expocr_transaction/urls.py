@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^ocr_test', views.expocr_transaction_ocr_test),
     url(r'^delete_by_id', views.expocr_transaction_delete_by_id),
     url(r'^get_balance_between_friends', views.expocr_transaction_get_balance_between_friends),
+    url(r'^get_by_uid', views.expocr_transaction_get_balance_between_friends)
 ]
