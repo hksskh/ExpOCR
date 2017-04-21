@@ -165,17 +165,18 @@ public class AddTransactionActivity extends AppCompatActivity {
                             .append("&receiver_email=").append(email_text.getText())
                             .append("&category=").append(categorySpinner.getSelectedItem().toString())
                             .append("&memo=").append(memo_text.getText())
-                            .append("&amount=")
-                            .append("&am_I_sender=").append("yes");
+
+                            .append("&am_I_sender=").append("yes").append("&amount=");
                 }
                 else {
-                    if(oweORowed.getSelectedItem().toString().equals("You are Owed")) {
+                    if (oweORowed.getSelectedItem().toString().equals("You are Owed")) {
                         requestString.append("sender_id=").append(MainActivity.getU_id())
                                 .append("&receiver_email=").append(email_text.getText())
                                 .append("&category=").append(categorySpinner.getSelectedItem().toString())
                                 .append("&memo=").append(memo_text.getText())
-                                .append("&amount=")
-                                .append("&am_I_sender=").append("no");
+
+                                .append("&am_I_sender=").append("no").append("&amount=");
+                    }
                 }
 
                 requestString.append(Math.abs(Double.parseDouble(amount_text.getText().toString())))
@@ -205,6 +206,8 @@ public class AddTransactionActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+
 
     private void set_autotext_adapters(){
         //adapters for AutoCompleteTextViews

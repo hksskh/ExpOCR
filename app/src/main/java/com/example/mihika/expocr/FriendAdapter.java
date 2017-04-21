@@ -151,11 +151,17 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             item_avatar.setImageResource(R.drawable.ic_list_group);
             item_name.setText(rawList[1]);
             rawList = rawList[2].split(":");
-            item_balance.setText(rawList[1]);
-            if(Double.parseDouble(item_balance.getText().toString()) < 0){
-                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.orange));
+            String bal =  rawList[1];
+
+            if(Double.parseDouble(bal) < 0){
+                String dollar_bal =  "$"+bal;
+                item_balance.setText(dollar_bal);
+//                    item_balance.getText().toString()) < 0){
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
             }else{
-                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.green));
+                String dollar_bal =  "$"+bal;
+                item_balance.setText(dollar_bal);
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
             }
         }
 
