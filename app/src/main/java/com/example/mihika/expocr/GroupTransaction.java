@@ -109,29 +109,29 @@ public class GroupTransaction {
         while (posIdx < positives.size() && negIdx < negatives.size()){
             if (positives.get(posIdx).uid == u_id){
                 if(-negatives.get(negIdx).amount > positives.get(posIdx).amount){
-                    dues.add(new Pair(negatives.get(negIdx).uid,positives.get(posIdx).amount));
+                    dues.add(new Pair(negatives.get(negIdx).uid,positives.get(posIdx).amount, negatives.get(negIdx).u_name, negatives.get(negIdx).u_email));
                     break;
                 } else if(-negatives.get(negIdx).amount == positives.get(posIdx).amount){
-                    dues.add(new Pair(negatives.get(negIdx).uid,positives.get(posIdx).amount));
+                    dues.add(new Pair(negatives.get(negIdx).uid,positives.get(posIdx).amount, negatives.get(negIdx).u_name, negatives.get(negIdx).u_email));
                     break;
                 }
                 else{
                     positives.get(posIdx).amount += negatives.get(negIdx).amount;
-                    dues.add(new Pair(negatives.get(negIdx).uid,-negatives.get(negIdx).amount));
+                    dues.add(new Pair(negatives.get(negIdx).uid,-negatives.get(negIdx).amount, negatives.get(negIdx).u_name, negatives.get(negIdx).u_email));
                     negIdx++;
                 }
             }
             else if (negatives.get(negIdx).uid == u_id){
                 if(positives.get(posIdx).amount > -negatives.get(negIdx).amount){
-                    dues.add(new Pair(positives.get(posIdx).uid,negatives.get(negIdx).amount));
+                    dues.add(new Pair(positives.get(posIdx).uid,negatives.get(negIdx).amount, positives.get(posIdx).u_name, positives.get(posIdx).u_email));
                     break;
                 } else if(-negatives.get(negIdx).amount == positives.get(posIdx).amount){
-                    dues.add(new Pair(positives.get(posIdx).uid,negatives.get(negIdx).amount));
+                    dues.add(new Pair(positives.get(posIdx).uid,negatives.get(negIdx).amount, positives.get(posIdx).u_name, positives.get(posIdx).u_email));
                     break;
                 }
                 else{
                     negatives.get(negIdx).amount += positives.get(posIdx).amount;
-                    dues.add(new Pair(positives.get(posIdx).uid,-positives.get(posIdx).amount));
+                    dues.add(new Pair(positives.get(posIdx).uid,-positives.get(posIdx).amount, positives.get(posIdx).u_name, positives.get(posIdx).u_email));
                     posIdx++;
                 }
             }
@@ -157,19 +157,20 @@ public class GroupTransaction {
 
     private static List<Pair> getUserNetBalances(int g_id){
         List<GroupTransaction> mDataSource = getGroupTransactionsFromServer(g_id);
-        HashMap<Integer, Double> balances= new HashMap<>();
+        HashMap<Integer, GroupTransaction> balances= new HashMap<>();
         for(GroupTransaction x : mDataSource) {
-            if (balances.containsKey(x.uid))
-                balances.put(x.uid, x.amount + balances.get(x.uid));
+            if (balances.containsKey(x.uid)) {
+                x.amount += balances.get(x.uid).amount;
+                balances.put(x.uid, x);
+            }
             else
-                balances.put(x.uid, x.amount);
+                balances.put(x.uid, x);
         }
 
-        List<Pair> pairs = new ArrayList<Pair>();
-        int index = 0;
+        List<Pair> pairs = new ArrayList<>();
         for(Object uid : balances.keySet().toArray()){
-            pairs.add(new Pair((Integer) uid,balances.get(uid), mDataSource.get(index).u_name, mDataSource.get(index).u_email));
-            index++;
+            GroupTransaction value = balances.get(uid);
+            pairs.add(new Pair(value.uid, value.amount, value.u_name, value.u_email));
         }
 
         return pairs;

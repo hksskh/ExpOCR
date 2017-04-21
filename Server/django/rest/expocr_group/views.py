@@ -245,6 +245,7 @@ def expocr_group_get_group_transactions(request):
 	for entry in result:
 		data = {}
 		data['g_id'] = int(entry.G_Id)
+		data['u_id'] = int(entry.U_Id)
 		data['amount'] = float(entry.Amount)
 		data_list.append(data)
 		id_list.append(entry.U_Id)

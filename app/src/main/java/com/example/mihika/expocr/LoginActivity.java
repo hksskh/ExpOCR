@@ -98,7 +98,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private Handler handler;
-    private Dialog loading_dialog;
     private ArrayAdapter<String> emailAdapter;
 
     private final String TAG = "LoginActivity";
@@ -167,7 +166,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    loading_dialog = LoadingDialog.showDialog(LoginActivity.this, "Try to Login...");
                     attemptLogin();
                     return true;
                 }
@@ -179,7 +177,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                loading_dialog = LoadingDialog.showDialog(LoginActivity.this, "Try to Login...");
                 attemptLogin();
             }
         });
@@ -208,19 +205,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 super.handleMessage(msg);
                 switch(msg.what){
                     case EMAIL_NOT_EXIST:
-                        LoadingDialog.closeDialog(loading_dialog);
                         Bundle bundle = msg.getData();
                         String warning = bundle.getString("warning");
                         mEmailView.setError(warning);
                         break;
                     case PASSWORD_INCORRECT:
-                        LoadingDialog.closeDialog(loading_dialog);
                         bundle = msg.getData();
                         warning = bundle.getString("warning");
                         mPasswordView.setError(warning);
                         break;
                     case LOGIN_SUCCESS:
-                        LoadingDialog.closeDialog(loading_dialog);
                         break;
                     case SERVER_ERROR:
                         Toast.makeText(LoginActivity.this, "Server error occurs when trying to login with FaceBook!", Toast.LENGTH_LONG).show();
@@ -483,7 +477,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-            LoadingDialog.closeDialog(loading_dialog);//do not forget
         } else {
             login();
             /*

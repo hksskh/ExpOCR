@@ -159,22 +159,22 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
 
 
             if(category.equals("Payment")){
-                builder.append(rawList[0]).append(" paid ").append(rawList[1]).append(" $").append(Math.abs(amount));
+                builder.append(rawList[1]).append(" paid ").append(rawList[0]).append(" $").append(Math.abs(amount));
             }
             else if(rawList[0].equals("You")){
 
-                builder.append(rawList[0]).append(" lent $").append(Math.abs(amount)).append(" to").append(rawList[1]);
+                builder.append(rawList[0]).append(" lent $").append(Math.abs(amount)).append(" to ").append(rawList[1]);
 
             }
             else {
-                builder.append(rawList[1]).append(" borrowed $").append(Math.abs(amount)).append(" from").append(rawList[0]);
+                builder.append(rawList[1]).append(" borrowed $").append(Math.abs(amount)).append(" from ").append(rawList[0]);
 
             }
             item_alert.setText(builder.toString());
-            if(amount < 0){
+            if(amount < 0 ){
 //                builder.append("You received $").append(Math.abs(amount));
 
-                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
+                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
                 builder.setLength(0);
 //                builder.append("You received a payment from ").append(rawList[1]);
                 item_info.setText(builder.toString());
@@ -182,10 +182,11 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
             }else{
 //                builder.append("You paid $").append(amount);
 
-                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
+                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
                 builder.setLength(0);
 //                builder.append("You made a payment to ").append(rawList[1]);
                 item_info.setText(builder.toString());
+
                 item_avatar.setImageResource(R.drawable.ic_list_money_off);
             }
             builder.setLength(0);

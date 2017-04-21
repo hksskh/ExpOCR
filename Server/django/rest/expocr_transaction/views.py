@@ -85,9 +85,9 @@ def expocr_transaction_get_by_uid(request):
 	user = User.get_user_by_id(uid)
 	username = "You"
 	#username = user['U_Name']
-	result = Transaction.get_transaction_by_sender_id(uid)
-	
-	for entry in result:
+	#result = Transaction.get_transaction_by_sender_id(uid)
+
+	'''for entry in result:
 		data = {}
 		other_user = User.get_user_by_id(int(entry['Receiver_Id']))
 		other_name_set = other_user.values('U_Name')
@@ -98,20 +98,34 @@ def expocr_transaction_get_by_uid(request):
 		data['amount'] = float(entry['Amount'])
 		data['date'] = str(entry['Date'])
 		data['Category'] = str(entry['Category'])
-		data_list.append(data)
-	result = Transaction.get_transaction_by_receiver_id(uid)
+		data_list.append(data)'''
+	#result = Transaction.get_transaction_by_receiver_id(uid)
+
+	result = Transaction.get_transaction_by_id(uid)
+
 	for entry in result:
 		data = {}
-		other_user = User.get_user_by_id(int(entry['Sender_Id']))
-		other_name_set = other_user.values('U_Name')
-		for val in other_name_set:
-		    other_name = val['U_Name']
-		data['who_paid'] = username
-		data['whom'] = other_name
-		data['amount'] = -float(entry['Amount'])
+		if entry['Sender_Id'] == int(uid):
+			print ('in sender_id')
+			other_user = User.get_user_by_id(int(entry['Receiver_Id']))
+			other_name_set = other_user.values('U_Name')
+			for val in other_name_set:
+				other_name = val['U_Name']
+			data['who_paid'] = other_name
+			data['whom'] = username
+			data['amount'] = float(entry['Amount'])
+		else:
+			other_user = User.get_user_by_id(int(entry['Sender_Id']))
+			other_name_set = other_user.values('U_Name')
+			for val in other_name_set:
+				other_name = val['U_Name']
+			data['who_paid'] = username
+			data['whom'] = other_name
+			data['amount'] = -float(entry['Amount'])
 		data['date'] = str(entry['Date'])
 		data['Category'] = str(entry['Category'])
 		data_list.append(data)
+	print (data_list)
 	response = HttpResponse(json.dumps(data_list), content_type="application/json")
 	return response
 @csrf_exempt

@@ -133,10 +133,10 @@ public class RecordPaymentActivity extends AppCompatActivity {
     }
 
     private void recordPayment() {
-        final String sender = dropdown1.getSelectedItem().toString();
-        String receiver = dropdown2.getSelectedItem().toString();
-        final String senderId = usernameIdMap.get(sender);
+        final String receiver = dropdown1.getSelectedItem().toString();
+        String sender = dropdown2.getSelectedItem().toString();
         final String receiverId = usernameIdMap.get(receiver);
+        final String senderId = usernameIdMap.get(sender);
 
 
         new Thread(new Runnable(){
