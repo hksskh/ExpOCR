@@ -88,7 +88,7 @@ def expocr_transaction_get_all_friends(request):
         data = {}
         data['friend_id'] = int(entry['Receiver_Id'])
         id_list.append(data['friend_id'])
-        data['balance'] = float(entry['Amount__sum'])
+        data['balance'] = -float(entry['Amount__sum'])
         data_list.append(data)
     result = Transaction.get_all_friends_receiver(user_id)
     for entry in result:
@@ -96,7 +96,7 @@ def expocr_transaction_get_all_friends(request):
         data['friend_id'] = int(entry['Sender_Id'])
         if data['friend_id'] not in id_list:
             id_list.append(data['friend_id'])
-            data['balance'] = -float(entry['Amount__sum'])
+            data['balance'] = float(entry['Amount__sum'])
             data_list.append(data)
         else:
             index = id_list.index(data['friend_id'])
@@ -144,7 +144,7 @@ def expocr_transaction_get_between(request):
     data_list = []
     for entry in result:
         amount = float(entry['Amount'])
-        if (entry['Sender_Id'] == uid):
+        if (int(entry['Sender_Id']) == int(uid)):
             amount = -amount
         data = {'id': entry['T_Id'], 'category': entry['Category'], 'memo': entry['Memo'], 'amount': amount,
                 'date': str(entry['Date'])}
