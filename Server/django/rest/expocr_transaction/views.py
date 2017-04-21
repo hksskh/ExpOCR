@@ -138,12 +138,15 @@ def expocr_transaction_get_between(request):
 		params = request.GET
 	elif request.method == 'POST':
 		params = request.POST
-	sender_id = params.get('sender_id')
-	receiver_id = params.get('receiver_id')
-	result = Transaction.get_transaction_between(sender_id, receiver_id)
+	uid = params.get('sender_id')
+	friend_id = params.get('receiver_id')
+	result = Transaction.get_transaction_between(uid, friend_id)
 	data_list = []
 	for entry in result:
-		data = {'id': entry['T_Id'], 'category': entry['Category'], 'memo': entry['Memo'], 'amount': float(entry['Amount']),
+	    amount = float(entry['Amount'])
+	    if (entry['Sender_Id'] == uid):
+	        amount = -amount
+		data = {'id': entry['T_Id'], 'category': entry['Category'], 'memo': entry['Memo'], 'amount': amount),
 				'date': str(entry['Date'])}
 		data_list.append(data)
 	response = HttpResponse(json.dumps(data_list), content_type="application/json")
