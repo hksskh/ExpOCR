@@ -102,7 +102,7 @@ def expocr_transaction_get_by_uid(request):
 	result = Transaction.get_transaction_by_receiver_id(uid)
 	for entry in result:
 		data = {}
-		other_user = User.get_user_by_id(int(entry['Receiver_Id']))
+		other_user = User.get_user_by_id(int(entry['Sender_Id']))
 		other_name_set = other_user.values('U_Name')
 		for val in other_name_set:
 		    other_name = val['U_Name']

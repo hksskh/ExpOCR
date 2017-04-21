@@ -138,6 +138,7 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
 
         void bind(int listIndex){
             String rawData = mData.get(listIndex);
+            System.out.println(rawData);
             String[] rawList = rawData.split(",");
             StringBuilder builder = new StringBuilder();
             String category = rawList[4];
@@ -165,7 +166,7 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
                 builder.append(rawList[0]).append(" lent $").append(Math.abs(amount)).append(" to").append(rawList[1]);
 
             }
-            else{
+            else if(rawList){
                 builder.append(rawList[1]).append(" borrowed $").append(Math.abs(amount)).append(" from").append(rawList[0]);
 
             }
@@ -239,7 +240,7 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
                 builder.append(jsonObj.get("who_paid")).append(",")
                         .append(jsonObj.get("whom")).append(",")
                         .append(jsonObj.get("amount")).append(",")
-                        .append(jsonObj.get("date"))
+                        .append(jsonObj.get("date")).append(",")
                         .append(jsonObj.get("Category"));
                 mData.add(builder.toString());
                 builder.setLength(0);
