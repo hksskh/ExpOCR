@@ -42,27 +42,47 @@
     <string name="error_cannot_match_password">Should be the same as password</string>
 
     <!-- strings in add transaction page -->
-    <string name="prompt_amount">Enter amount of transaction</string>
-    <string name="prompt_memo">Enter memo for this transaction</string>
-    <string name="prompt_fab">Choose kind of transaction</string>
+    <string name="prompt_amount">Enter amount</string>
+    <string name="prompt_memo">Enter a memo</string>
+    <string name="prompt_fab">Select a category for this transaction</string>
+
     <string name="prompt_user">Please select users</string>
 
+
+
+    <string name="owe_full">You owe full amount</string>
+    <string name="owed_full">You are owed full amount</string>
+    <string name="owe_share">You owe equal split</string>
+    <string name="owed_share">You are owed equal split</string>
+
+    <string name="select_category">Select a category for this transaction</string>
+    <string name="category_general">General</string>
 
     <string-array name="transaction_options">
         <item>For individual</item>
         <item>For group</item>
     </string-array>
 
-    <string-array name="income_or_expense">
-        <item>You Owe</item>
-        <item>You are Owed</item>
+    <string-array name="split_spinner_array">
+        <item>@string/owe_full</item>
+        <item>@string/owe_share</item>
+        <item>@string/owed_full</item>
+        <item>@string/owed_share</item>
+
     </string-array>
 
     <string-array name="transaction_category">
-        <item>Clothing</item>
+        <item>@string/select_category</item>
+        <item>@string/category_general</item>
+        <item>Shopping</item>
         <item>Food</item>
-        <item>Housing</item>
-        <item>Salary</item>
+        <item>Rent</item>
+        <item>Health</item>
+        <item>Clothing</item>
+        <item>Holidays</item>
+        <item>Fuel</item>
+        <item>Auto</item>
+        <item>Sports</item>
     </string-array>
 
 

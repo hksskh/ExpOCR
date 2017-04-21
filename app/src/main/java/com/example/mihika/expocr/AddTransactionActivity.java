@@ -51,10 +51,10 @@ public class AddTransactionActivity extends AppCompatActivity {
 
     private final int FRIEND_EMAIL_NOT_EXIST = 1;
 
-    private Spinner transactionKindSpinner;
-    private MultiSelectionSpinner userSpinner;
+    //private Spinner transactionKindSpinner;
+   // private MultiSelectionSpinner userSpinner;
     private Spinner categorySpinner;
-    private Spinner oweORowed;
+    private Spinner split_owe_owed;
     private AutoCompleteTextView email_text;
     private AutoCompleteTextView amount_text;
     private AutoCompleteTextView memo_text;
@@ -65,10 +65,10 @@ public class AddTransactionActivity extends AppCompatActivity {
     private final List<String> friend_autos = new ArrayList<>();
     private List<String> group_autos = new ArrayList<>();
     private static final String[] amount_autos = new String[]{
-            "1", "10", "100", "1000"
+            "10", "20"
     };
     private static final String[] memo_autos = new String[]{
-            "Movie", "Snack", "Popcorn"
+            "Movie", "Snack", "Popcorn", "Pizza", "Grocery", "Lunch", "Dinner", "Electricity", "Utility Bills"
     };
 
     @Override
@@ -87,11 +87,11 @@ public class AddTransactionActivity extends AppCompatActivity {
         }
         friend_autos.addAll(FriendAdapter.get_friend_email_list());
 
-        transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
-        userSpinner = (MultiSelectionSpinner) findViewById(R.id.user_spinner);
+        //transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
+        //userSpinner = (MultiSelectionSpinner) findViewById(R.id.user_spinner);
         categorySpinner = (Spinner) findViewById(R.id.transaction_category_spinner);
-        oweORowed = (Spinner) findViewById(R.id.income_or_expense_spinner);
-        addEntriesForSpinner();
+        split_owe_owed = (Spinner) findViewById(R.id.split_spinner);
+        //addEntriesForSpinner();
         addListenerOnSpinnerItemSelection();
         set_autotext_adapters();
 
@@ -116,11 +116,13 @@ public class AddTransactionActivity extends AppCompatActivity {
                     }
                     Intent intent = new Intent(AddTransactionActivity.this, AddTransactionReceiptItemListActivity.class);
                     intent.putExtra("receipt_list", receipt_list.toString());
-                    if (transactionKindSpinner.getSelectedItem().equals("For Individual")) {
-                        intent.putExtra("friend_list", new String[]{email_text.getText().toString()});
-                    } else {
-                        intent.putExtra("friend_list", group_autos.toArray(new String[group_autos.size()]));
-                    }
+//                    if (transactionKindSpinner.getSelectedItem().equals("For Individual")) {
+//                        intent.putExtra("friend_list", new String[]{email_text.getText().toString()});
+//                    } else {
+//                        intent.putExtra("friend_list", group_autos.toArray(new String[group_autos.size()]));
+//                    }
+                    intent.putExtra("friend_list", new String[]{email_text.getText().toString()});
+//
                     startActivity(intent);
                 }
             }
@@ -160,27 +162,56 @@ public class AddTransactionActivity extends AppCompatActivity {
 
                 String url = "http://" + ServerUtil.getServerAddress() + "transaction/create_by_email";
                 StringBuilder requestString = new StringBuilder();
-                if(oweORowed.getSelectedItem().toString().equals("You Owe")) {
+
+                Double amt =  Math.abs(Double.parseDouble(amount_text.getText().toString()));
+                Double amt_half = amt/2;
+                System.out.print(amt);
+                System.out.print(amt_half);
+
+                String category = categorySpinner.getSelectedItem().toString();
+
+                if(categorySpinner.getSelectedItem().toString().equals(getResources().getString(R.string.select_category)))
+                    category = getResources().getString(R.string.category_general);
+
+                if(split_owe_owed.getSelectedItem().toString().equals(getResources().getString(R.string.owe_full))) {
+
                     requestString.append("sender_id=").append(MainActivity.getU_id())
                             .append("&receiver_email=").append(email_text.getText())
-                            .append("&category=").append(categorySpinner.getSelectedItem().toString())
+                            .append("&category=").append(category)
                             .append("&memo=").append(memo_text.getText())
-
-                            .append("&am_I_sender=").append("yes").append("&amount=");
+                            .append("&am_I_sender=").append("yes")
+                            .append("&amount=").append(amt);
                 }
-                else {
-                    if (oweORowed.getSelectedItem().toString().equals("You are Owed")) {
+                else if (split_owe_owed.getSelectedItem().toString().equals(getResources().getString(R.string.owe_share))){
+                    requestString.append("sender_id=").append(MainActivity.getU_id())
+                            .append("&receiver_email=").append(email_text.getText())
+                            .append("&category=").append(category)
+                            .append("&memo=").append(memo_text.getText())
+                            .append("&am_I_sender=").append("yes")
+                            .append("&amount=").append(amt_half);
+                }
+                else if (split_owe_owed.getSelectedItem().toString().equals(getResources().getString(R.string.owed_full))) {
                         requestString.append("sender_id=").append(MainActivity.getU_id())
                                 .append("&receiver_email=").append(email_text.getText())
-                                .append("&category=").append(categorySpinner.getSelectedItem().toString())
+                                .append("&category=").append(category)
                                 .append("&memo=").append(memo_text.getText())
-
-                                .append("&am_I_sender=").append("no").append("&amount=");
+                                .append("&am_I_sender=").append("no")
+                                .append("&amount=").append(amt);
                     }
+                else {  requestString.append("sender_id=").append(MainActivity.getU_id())
+                                   .append("&receiver_email=").append(email_text.getText())
+                                   .append("&category=").append(category)
+                                   .append("&memo=").append(memo_text.getText())
+                                   .append("&am_I_sender=").append("no")
+                                   .append("&amount=").append(amt_half);
+
                 }
 
-                requestString.append(Math.abs(Double.parseDouble(amount_text.getText().toString())))
-                        .append("&date=").append(datetime);
+
+
+                requestString.append("&date=").append(datetime);
+                        //.append(Math.abs(Double.parseDouble(amount_text.getText().toString())))
+
                 Log.d(TAG, requestString.toString());
                 String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
 
@@ -229,30 +260,32 @@ public class AddTransactionActivity extends AppCompatActivity {
     }
 
     protected void addEntriesForSpinner() {
-        List<String> list = new ArrayList<String>();
-        //We use fake list here for demo
-        list.add("Me");
-        list.add("User 1");
-        list.add("User 2");
-        list.add("User 3");
-        //List<String> list = getUsersFromServer();
-        userSpinner.setItems(list);
-
-        List<String> list2 = new ArrayList<String>();
-        //We use fake list here for demo
-        list2.add("Clothing");
-        list2.add("Food");
-        list2.add("Housing");
-        list2.add("Salary");
-        //List<String> list = getCatergoriesFromServer();
-        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list2);
-        categorySpinner.setAdapter(dataAdapter2);
-
-        List<String> list3 = new ArrayList<>();
-        list3.add("For Individual");
-        list3.add("For Group");
-        ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list3);
-        transactionKindSpinner.setAdapter(dataAdapter3);
+//        List<String> list = new ArrayList<String>();
+//        //We use fake list here for demo
+//        list.add("Me");
+//        list.add("User 1");
+//        list.add("User 2");
+//        list.add("User 3");
+//        List<String> list = getUsersFromServer();
+//        userSpinner.setItems(list);
+//
+//        List<String> list2 = new ArrayList<String>();
+//        //We use fake list here for demo
+//        list2.add("Clothing");
+//
+//        list2.add("General");
+//        list2.addGeneralusing");
+//        list2.add("Salary");
+//        List<String> list = getCatergoriesFromServer();
+//
+//        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list2);
+//        categorySpinner.setAdapter(dataAdapter2);
+//
+//        List<String> list3 = new ArrayList<>();
+//        list3.add("For Individual");
+//        list3.add("For Group");
+//        ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list3);
+//        transactionKindSpinner.setAdapter(dataAdapter3);
     }
 
     protected String getUsersFromServer() {
@@ -261,24 +294,24 @@ public class AddTransactionActivity extends AppCompatActivity {
     }
 
     public void addListenerOnSpinnerItemSelection() {
-        transactionKindSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getItemAtPosition(position).toString().equals("For group")) {
-                    userSpinner.setVisibility(View.VISIBLE);
-                    email_text.setVisibility(View.GONE);
-                }
-                else {
-                    userSpinner.setVisibility(View.INVISIBLE);
-                    email_text.setVisibility(View.VISIBLE);
-                }
-            }
+//        transactionKindSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                if (parent.getItemAtPosition(position).toString().equals("For group")) {
+//                   // userSpinner.setVisibility(View.VISIBLE);
+//                    email_text.setVisibility(View.GONE);
+//                }
+//                else {
+//                    //userSpinner.setVisibility(View.INVISIBLE);
+//                    email_text.setVisibility(View.VISIBLE);
+//                }
+//            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
     }
 }
 
