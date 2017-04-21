@@ -31,7 +31,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
     public GroupBalanceAdapter(GroupBalanceActivity listener) {
         mOnClickListener = listener;
         mData = new ArrayList<>();
-        syncBalanceList();
+        //syncBalanceList();
     }
 
     interface BalanceListItemClickListener {
@@ -83,7 +83,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return 10;//mData.size();
     }
 
     public List<String> getmData(){
@@ -112,7 +112,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
         void bind(int listIndex){
 
-            String rawData = mData.get(listIndex);
+            String rawData = "test";//mData.get(listIndex);
 
             item_text.setText(rawData);
 
@@ -152,11 +152,8 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        int limit = maxItemNumber;
         mData.clear();
-        friend_name_list.clear();
-        friend_email_list.clear();
-        for(int index = 0; index < jsonArray.length() && index < limit; index++){
+        for(int index = 0; index < jsonArray.length(); index++){
             JSONObject jsonObj = null;
             try {
                 jsonObj = jsonArray.getJSONObject(index);
@@ -170,8 +167,6 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
                         .append(jsonObj.get("receiver_email")).append(":")
                         .append(jsonObj.get("balance"));
                 mData.add(builder.toString());
-                friend_name_list.add(jsonObj.getString("receiver_name"));
-                friend_email_list.add(jsonObj.getString("receiver_email"));
                 builder.setLength(0);
             } catch (JSONException e) {
                 e.printStackTrace();
