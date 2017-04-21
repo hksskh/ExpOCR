@@ -52,7 +52,7 @@ class Transaction(models.Model):
         #TODO friends tab
         query = Q(Receiver_Id=user_id) 
         result = Transaction.manager.filter(query).order_by('Sender_Id').\
-            values('Receiver_Id').annotate(Sum('Amount'))
+            values('Sender_Id').annotate(Sum('Amount'))
         return result
 	
     @staticmethod
