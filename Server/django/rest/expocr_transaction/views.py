@@ -214,6 +214,7 @@ def expocr_transaction_create_by_email(request):
 		params = request.GET
 	elif request.method == 'POST':
 		params = request.POST
+	am_I_sender = params.get("am_I_sender")
 	sender_id = params.get('sender_id')
 	receiver_email = params.get('receiver_email')
 	category = params.get('category')
@@ -227,6 +228,10 @@ def expocr_transaction_create_by_email(request):
 		return response
 	for entry in result:
 		receiver_id = entry.U_Id
+	if am_I_sender =="no":
+        temp = receiever_id
+        receiver_id = sender_id
+        sender_id = temp
 	result = Transaction.create_transaction(sender_id, receiver_id, category, memo, amount, date)
 	data = {}
 	data['t_id'] = result.T_Id
