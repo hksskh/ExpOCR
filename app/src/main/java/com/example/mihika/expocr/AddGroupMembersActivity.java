@@ -110,13 +110,14 @@ public class AddGroupMembersActivity extends AppCompatActivity {
                         msg.setData(bundle);
                         //handler.sendMessage(msg);
                     } else {
-                        Intent intent = new Intent(AddGroupMembersActivity.this, IndividualGroupActivity.class);
-
-                        intent.putExtra("group_id", jsonObject.getInt("g_id"));
-                        intent.putExtra("group_name", group_name);
-
-                        intent.putExtra("balance", "0");
-                        intent.putExtra("u_id", u_id );
+                        Intent intent = new Intent(AddGroupMembersActivity.this, MainActivity.class);
+//                        Intent intent = new Intent(AddGroupMembersActivity.this, IndividualGroupActivity.class);
+//
+//                        intent.putExtra("group_id", jsonObject.getInt("g_id"));
+//                        intent.putExtra("group_name", group_name);
+//
+//                        intent.putExtra("balance", "0");
+//                        intent.putExtra("u_id", u_id );
                         startActivity(intent);
                     }
                 } catch (JSONException jsex){

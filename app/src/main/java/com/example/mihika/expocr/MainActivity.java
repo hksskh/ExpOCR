@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity
             tabAdapter.refreshTabs();
         } else if(intent.hasExtra("u_id")){//crucial
             u_id = intent.getIntExtra("u_id", 1);
+
             u_name = intent.getStringExtra("u_name");
             u_email = intent.getStringExtra("u_email");
             System.out.println("u_id: " + u_id);
