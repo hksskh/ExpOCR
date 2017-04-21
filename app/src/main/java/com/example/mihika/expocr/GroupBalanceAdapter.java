@@ -1,25 +1,35 @@
 package com.example.mihika.expocr;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mihika.expocr.util.LoadingDialog;
 import com.example.mihika.expocr.util.ServerUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapter.BalanceViewHolder> {
@@ -27,10 +37,13 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
     private final BalanceListItemClickListener mOnClickListener;
     private List<String> mData;
 
+    private Dialog loading_dialog;
+
     //constructor
     public GroupBalanceAdapter(GroupBalanceActivity listener) {
         mOnClickListener = listener;
         mData = new ArrayList<>();
+        loading_dialog = LoadingDialog.showDialog((GroupBalanceActivity)mOnClickListener, "Initializing...");
         syncBalanceList();
     }
 
@@ -90,7 +103,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         return mData;
     }
 
-    public void syncBalanceList(){
+    private void syncBalanceList(){
         new BalancesQueryTask().execute();
     }
 
@@ -112,19 +125,27 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
         void bind(int listIndex){
 
-            String rawData = mData.get(listIndex);
+            final String rawData = mData.get(listIndex);
 
             item_text.setText(rawData);
 
             if (!rawData.contains("owes")) {
                 item_settle_up.setVisibility(View.GONE);
+            } else {
+                item_settle_up.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (rawData.startsWith("You owes")) {
+                            String friendBrief = "You paid " + rawData.substring(8, rawData.lastIndexOf("$")).trim();
+                            double balance = Double.parseDouble(rawData.substring(rawData.lastIndexOf("$") + 1).trim());
+                            show_settle_up_dialog(friendBrief, balance);
+                        } else {
+                            Toast.makeText((GroupBalanceActivity)mOnClickListener, "Remind your friend!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
-            item_settle_up.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText((GroupBalanceActivity)mOnClickListener, "SETTLE UP...", Toast.LENGTH_LONG).show();
-                }
-            });
+
         }
 
         @Override
@@ -132,6 +153,93 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
             int clickedPosition = getAdapterPosition();
             mOnClickListener.onBalanceListItemClick(clickedPosition);
         }
+    }
+
+    private void show_settle_up_dialog(final String brief, double balance) {
+        AlertDialog.Builder builder = new AlertDialog.Builder((GroupBalanceActivity)mOnClickListener);
+        LayoutInflater inflater = ((GroupBalanceActivity)mOnClickListener).getLayoutInflater();
+        View settle_up_view = inflater.inflate(R.layout.dialog_group_settle_up, null);
+
+        TextView brief_view = (TextView) settle_up_view.findViewById(R.id.dialog_group_settle_up_brief);
+        final EditText balance_view = (EditText) settle_up_view.findViewById(R.id.dialog_group_settle_up_balance);
+
+        brief_view.setText(brief);
+        balance_view.setText(String.valueOf(balance));
+
+        builder.setTitle("Group Settle Up")
+                .setView(settle_up_view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener(){
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String balance_text = balance_view.getText().toString();
+                        final double balance_double = Double.parseDouble(balance_text);
+                        final String u_email = brief.substring(brief.indexOf("(") + 1, brief.lastIndexOf(")")).trim();
+
+                        loading_dialog = LoadingDialog.showDialog((GroupBalanceActivity)mOnClickListener, "Saving...");
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                doSettleUp(u_email, balance_double);
+                                syncBalanceList();
+                            }
+                        }).start();
+
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void doSettleUp(String u_email, double balance) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        String datetime = dateFormat.format(date);
+
+        String url = "http://" + ServerUtil.getServerAddress() + "group/add_transaction_by_email";
+        StringBuilder requestString = new StringBuilder();
+        requestString.append("receiver_email=").append(u_email)
+                .append("&group_id=").append(((GroupBalanceActivity)mOnClickListener).getG_id())
+                .append("&category=").append("Payment")
+                .append("&memo=").append("Cash")
+                .append("&amount=")
+                .append(balance * -1)//take care
+                .append("&date=").append(datetime);
+        System.out.println(requestString.toString());
+        String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
+
+        System.out.println(response);
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            if (jsonObject.has("warning")) {
+                // handle it
+            }
+        } catch (JSONException jsex){
+            jsex.printStackTrace();
+        }
+
+        url = "http://" + ServerUtil.getServerAddress() + "group/add_transaction";
+        requestString = new StringBuilder();
+        requestString.append("receiver_id=").append(MainActivity.getU_id())
+                .append("&group_id=").append(((GroupBalanceActivity)mOnClickListener).getG_id())
+                .append("&category=").append("Payment")
+                .append("&memo=").append("Cash")
+                .append("&amount=")
+                .append(balance)
+                .append("&date=").append(datetime);
+        System.out.println(requestString.toString());
+        response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
+
+        System.out.println(response);
     }
 
     private class BalancesQueryTask extends AsyncTask<String, Void, List<GroupTransaction.Pair>> {
@@ -144,6 +252,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         @Override
         protected void onPostExecute(List<GroupTransaction.Pair> list){
             fill_balances_list(list);
+            LoadingDialog.closeDialog(loading_dialog);
         }
     }
 
