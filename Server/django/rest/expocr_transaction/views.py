@@ -86,15 +86,15 @@ def expocr_transaction_get_all_friends(request):
 	result = Transaction.get_all_friends_sender(user_id)
 	for entry in result:
 		data = {}
-		data['receiver_id'] = int(entry['Receiver_Id'])
-		id_list.append(data['receiver_id'])
+		data['friend_id'] = int(entry['Receiver_Id'])
+		id_list.append(data['friend_id'])
 		data['balance'] = float(entry['Amount__sum'])
 		data_list.append(data)
 	result = Transaction.get_all_friends_receiver(user_id)
 	for entry in result:
 		data = {}
-		data['sender_id'] = int(entry['Sender_Id'])
-		id_list.append(data['sender_id'])
+		data['friend_id'] = int(entry['Sender_Id'])
+		id_list.append(data['friend_id'])
 		data['balance'] = float(entry['Amount__sum'])
 		data_list.append(data)
 	receiver_bulk = User.manager.in_bulk(id_list)
