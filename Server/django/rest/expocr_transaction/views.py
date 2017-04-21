@@ -73,28 +73,6 @@ def expocr_transaction_get_by_sender_id(request):
 		index += 1
 	response = HttpResponse(json.dumps(data_list), content_type="application/json")
 	return response
-@csrf_exempt
-def expocr_transaction_sum_all_transactions_by_user(request):
-	if request.method == 'GET':
-		params = request.GET
-	elif request.method == 'POST':
-		params = request.POST
-	data_list = []
-	id = params.get('U_Id')
-	sent = Transaction.get_transaction_by_sender_id(id)
-	received = Transaction.get_transaction_by_receiver_id(id)
-	data = {}
-	sum = 0.0
-	for entry in sent:
-		amount = float(entry['Amount'])
-		sum=sum+amount
-	for entry in received:
-		amount = float(entry['Amount'])
-		sum=sum-amount
-	data['netBalance']=sum
-	data_list.append(data)
-	response = HttpResponse(json.dumps(data_list), content_type="application/json")
-	return response
 
 @csrf_exempt
 def expocr_transaction_get_all_receivers(request):

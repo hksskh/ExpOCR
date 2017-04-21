@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^get_transactions', views.expocr_group_get_transactions),
     url(r'^get_group_by_transaction', views.expocr_group_get_group_by_transaction),
     url(r'^delete_transaction', views.expocr_group_delete_transaction),
+    url(r'^net_balance', views.expocr_net_balance),
 ]

@@ -24,8 +24,23 @@ def expocr_get_all_group_transactions(request):
 	data = serializers.serialize('json', Group_Transaction.get_all_group_transactions())
 	response = HttpResponse(data, content_type="application/json")
 	return response
-
+	
 @csrf_exempt
+def expocr_net_balance(request):
+    
+    uid = params.get('U_id')
+    gid = params.get('G_Id')
+    data = {}
+    transactions = Group_Transaction.get_transactions(g_id)
+    sum = 0
+    for transaction in transactions():
+        transaction_uid = int(transaction['U_Id'])
+        if (uid == transaction_uid):
+           sum=sum+float(transaction['Amount'])
+    data['net_balance'] = sum
+    response = HttpResponse(data, content_type="application/json")
+    return response
+
 #def expocr_group_create(request):
 #    if request.method == 'GET':
 #        params = request.GET
@@ -38,6 +53,7 @@ def expocr_get_all_group_transactions(request):
 #    data['g_name'] = result.G_Name
 #    response = HttpResponse(json.dumps(data), content_type='application/json')
 #    return response
+@csrf_exempt
 def expocr_group_create(request):
 	if request.method == 'GET':
 		params = request.GET
