@@ -90,7 +90,7 @@ def expocr_transaction_get_by_uid(request):
 	for entry in result:
 		data = {}
 		other_user = User.get_user_by_id(int(entry['Receiver_Id']))
-		other_name = other_user['U_Name']
+		other_name = other_user.U_Name
 		data['who_paid'] = other_name
 		data['whom'] = username
 		data['amount'] = float(entry['Amount'])
@@ -101,7 +101,7 @@ def expocr_transaction_get_by_uid(request):
 	for entry in result:
 		data = {}
 		other_user = User.get_user_by_id(int(entry['Receiver_Id']))
-		other_name = other_user['U_Name']
+		other_name = other_user.U_Name
 		data['who_paid'] = username
 		data['whom'] = other_name
 		data['amount'] = -float(entry['Amount'])
