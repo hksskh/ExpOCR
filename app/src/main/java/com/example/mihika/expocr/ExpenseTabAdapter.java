@@ -140,7 +140,7 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
             String rawData = mData.get(listIndex);
             String[] rawList = rawData.split(",");
             StringBuilder builder = new StringBuilder();
-
+            String category = rawList[4];
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             try {
@@ -155,20 +155,35 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
             builder.setLength(0);
 
             double amount = Double.parseDouble(rawList[2]);
+
+
+            if(category.equals("Payment")){
+                builder.append(rawList[0]).append(" paid ").append(rawList[1]).append(" $").append(Math.abs(amount));
+            }
+            else if(rawList[0].equals("You")){
+
+                builder.append(rawList[0]).append(" lent $").append(Math.abs(amount)).append(" to").append(rawList[1]);
+
+            }
+            else{
+                builder.append(rawList[1]).append(" borrowed $").append(Math.abs(amount)).append(" from").append(rawList[0]);
+
+            }
+            item_alert.setText(builder.toString());
             if(amount < 0){
-                builder.append("You received $").append(Math.abs(amount));
-                item_alert.setText(builder.toString());
-                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.orange));
+//                builder.append("You received $").append(Math.abs(amount));
+
+                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
                 builder.setLength(0);
-                builder.append("You received a payment from ").append(rawList[1]);
+//                builder.append("You received a payment from ").append(rawList[1]);
                 item_info.setText(builder.toString());
                 item_avatar.setImageResource(R.drawable.ic_list_money_in);
             }else{
-                builder.append("You paid $").append(amount);
-                item_alert.setText(builder.toString());
-                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.green));
+//                builder.append("You paid $").append(amount);
+
+                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
                 builder.setLength(0);
-                builder.append("You made a payment to ").append(rawList[1]);
+//                builder.append("You made a payment to ").append(rawList[1]);
                 item_info.setText(builder.toString());
                 item_avatar.setImageResource(R.drawable.ic_list_money_off);
             }
@@ -203,6 +218,7 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
     }
 
     private void fill_expenses_list(String s){
+        System.out.print("Expense Adapter " +s);
         JSONArray jsonArray = null;
         try {
             jsonArray = new JSONArray(s);
@@ -220,10 +236,11 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
             }
             StringBuilder builder = new StringBuilder();
             try {
-                builder.append(jsonObj.get("receiver_id")).append(",")
-                        .append(jsonObj.get("receiver_name")).append(",")
+                builder.append(jsonObj.get("who_paid")).append(",")
+                        .append(jsonObj.get("whom")).append(",")
                         .append(jsonObj.get("amount")).append(",")
-                        .append(jsonObj.get("date"));
+                        .append(jsonObj.get("date"))
+                        .append(jsonObj.get("Category"));
                 mData.add(builder.toString());
                 builder.setLength(0);
             } catch (JSONException e) {
@@ -234,8 +251,8 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
     }
 
     private String expense_retrieve_all(){
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_by_sender";
-        String requestBody = "sender_id=" + MainActivity.getU_id();
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_by_uid";
+        String requestBody = "U_Id=" + MainActivity.getU_id();
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
 
