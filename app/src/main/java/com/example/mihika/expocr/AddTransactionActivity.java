@@ -165,8 +165,8 @@ public class AddTransactionActivity extends AppCompatActivity {
                             .append("&receiver_email=").append(email_text.getText())
                             .append("&category=").append(categorySpinner.getSelectedItem().toString())
                             .append("&memo=").append(memo_text.getText())
-                            .append("&amount=")
-                            .append("&am_I_sender=").append("yes");
+
+                            .append("&am_I_sender=").append("yes").append("&amount=");
                 }
                 else {
                     if (oweORowed.getSelectedItem().toString().equals("You are Owed")) {
@@ -174,8 +174,8 @@ public class AddTransactionActivity extends AppCompatActivity {
                                 .append("&receiver_email=").append(email_text.getText())
                                 .append("&category=").append(categorySpinner.getSelectedItem().toString())
                                 .append("&memo=").append(memo_text.getText())
-                                .append("&amount=")
-                                .append("&am_I_sender=").append("no");
+
+                                .append("&am_I_sender=").append("no").append("&amount=");
                     }
                 }
 
