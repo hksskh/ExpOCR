@@ -75,15 +75,15 @@ def expocr_transaction_get_by_sender_id(request):
 	return response
 
 @csrf_exempt
-def expocr_transaction_get_all_receivers(request):
+def expocr_transaction_get_all_friends(request):
 	if request.method == 'GET':
 		params = request.GET
 	elif request.method == 'POST':
 		params = request.POST
-	sender_id = params.get('sender_id')
+	user_id = params.get('user_id')
 	data_list = []
 	id_list = []
-	result = Transaction.get_all_receivers(sender_id)
+	result = Transaction.get_all_friends(user_id)
 	for entry in result:
 		data = {}
 		data['receiver_id'] = int(entry['Receiver_Id'])

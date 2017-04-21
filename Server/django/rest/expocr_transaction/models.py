@@ -41,8 +41,9 @@ class Transaction(models.Model):
         return result
 
     @staticmethod
-    def get_all_receivers(sender_id):
-        query = Q(Sender_Id=sender_id)
+    def get_all_friends(user_id):
+        #TODO friends tab
+        query = Q(Sender_Id=sender_id) 
         result = Transaction.manager.filter(query).order_by('Receiver_Id').\
             values('Receiver_Id').annotate(Sum('Amount'))
         return result

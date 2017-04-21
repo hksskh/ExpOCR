@@ -222,8 +222,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     }
 
     private String friend_retrieve_all_receivers(){
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_all_receivers";
-        String requestBody = "sender_id=" + MainActivity.getU_id();
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_all_friends";
+        String requestBody = "user_id=" + MainActivity.getU_id();
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
 
