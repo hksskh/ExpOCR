@@ -49,7 +49,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
         g_id = Integer.parseInt(inIntent.getStringExtra("group_id"));
         g_name = inIntent.getStringExtra("group_name");
         //receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
-        ((TextView)findViewById(R.id.group_name)).setText(inIntent.getStringExtra("group_name"));
+        ((TextView)findViewById(R.id.group_name)).setText(g_name);
 
         ((TextView)findViewById(R.id.net_balance)).setText("Net Balance: " + inIntent.getStringExtra("balance"));
 
@@ -70,6 +70,17 @@ public class IndividualGroupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(IndividualGroupActivity.this, GroupBalanceActivity.class);
                 intent.putExtra("g_id", g_id);
+                startActivity(intent);
+            }
+        });
+
+        Button settings_btn = (Button) findViewById(R.id.individual_grp_settings);
+        settings_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(IndividualGroupActivity.this, GroupSettingsActivity.class);
+                intent.putExtra("g_id", g_id);
+                intent.putExtra("g_name", g_name);
                 startActivity(intent);
             }
         });
@@ -95,6 +106,17 @@ public class IndividualGroupActivity extends AppCompatActivity {
         }*/
 
         mListView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+
+        if (intent.hasExtra("new_group_name")) {
+            g_name = intent.getStringExtra("new_group_name");
+            ((TextView)findViewById(R.id.group_name)).setText(g_name);
+        }
     }
 
     class TransactionBetweenQueryTask extends AsyncTask<String, Void, String> {

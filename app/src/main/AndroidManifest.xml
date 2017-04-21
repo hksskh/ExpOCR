@@ -121,7 +121,16 @@
         <activity
             android:name=".GroupBalanceActivity"
             android:label="Group Balances"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".GroupSettingsActivity"
+            android:label="@string/title_activity_group_settings"
+            android:parentActivityName=".IndividualGroupActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mihika.expocr.IndividualGroupActivity" />
+        </activity>
     </application>
 
 </manifest>

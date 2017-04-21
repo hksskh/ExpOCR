@@ -3,7 +3,7 @@
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/friend_list_item_avatar"
+        android:id="@+id/item_member_list_group_avatar"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="@dimen/tab_list_margin"
@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:id="@+id/friend_list_item_balance"
+        android:id="@+id/item_member_list_group_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/tab_list_margin"
@@ -27,13 +27,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/friend_list_item_balance"
-        android:layout_toEndOf="@id/friend_list_item_avatar"
-        android:layout_toLeftOf="@id/friend_list_item_balance"
-        android:layout_toRightOf="@id/friend_list_item_avatar">
+        android:layout_toStartOf="@id/item_member_list_group_balance"
+        android:layout_toEndOf="@id/item_member_list_group_avatar"
+        android:layout_toLeftOf="@id/item_member_list_group_balance"
+        android:layout_toRightOf="@id/item_member_list_group_avatar">
 
         <TextView
-            android:id="@+id/friend_list_item_name"
+            android:id="@+id/item_member_list_group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
@@ -41,7 +41,7 @@
             android:textColor="@color/black" />
 
         <TextView
-            android:id="@+id/friend_list_item_email"
+            android:id="@+id/item_member_list_group_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"

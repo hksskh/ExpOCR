@@ -149,14 +149,15 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
     private void fill_balances_list(List<GroupTransaction.Pair> list){
         System.out.println("GroupBalanceAdapter: fill_balances_list: size: " + list.size());
+        mData.clear();//do not forget
         if (list.isEmpty()) {
             String text = "You are all settled up!";
             mData.add(text);
         }
         for (GroupTransaction.Pair pair: list) {
             String text;
-            if (pair.amount >= 0) {
-                text = "You owes " + pair.getUserBrief() + " $" + pair.amount;
+            if (pair.amount < 0) {
+                text = "You owes " + pair.getUserBrief() + " $" + Math.abs(pair.amount);
             } else {
                 text = pair.getUserBrief() + " owes you $" + Math.abs(pair.amount);
             }

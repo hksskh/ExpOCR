@@ -85,7 +85,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        friend_autos.addAll(FriendAdapter.get_friend_name_list());
+        friend_autos.addAll(FriendAdapter.get_friend_email_list());
 
         transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
         userSpinner = (MultiSelectionSpinner) findViewById(R.id.user_spinner);

@@ -44,6 +44,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     private List<String> mData;
     private static Vector<String> friend_name_list = new Vector<>();
     private static Vector<String> friend_email_list = new Vector<>();
+    private static List<String> friend_brief_list = new ArrayList<>();
     //constructor
     public FriendAdapter(int numberOfItems, TabFragment listener) {
         maxItemNumber = numberOfItems;
@@ -118,6 +119,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         return friend_email_list;
     }
 
+    public static List<String> get_friend_brief_list() {
+        return friend_brief_list;
+    }
+
     public void setIsRefreshing(boolean isRefreshing){
         this.isRefreshing = isRefreshing;
     }
@@ -131,6 +136,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
         ImageView item_avatar;
         TextView item_name;
+        TextView item_email;
         TextView item_balance;
 
         //constructor
@@ -140,6 +146,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
             item_avatar = (ImageView) itemView.findViewById(R.id.friend_list_item_avatar);
             item_name = (TextView) itemView.findViewById(R.id.friend_list_item_name);
+            item_email = (TextView) itemView.findViewById(R.id.friend_list_item_email);
             item_balance = (TextView) itemView.findViewById(R.id.friend_list_item_balance);
 
         }
@@ -151,6 +158,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             item_avatar.setImageResource(R.drawable.ic_list_group);
             item_name.setText(rawList[1]);
             rawList = rawList[2].split(":");
+            item_email.setText(rawList[0]);
             double bal = Double.parseDouble(rawList[1]);
 
             if(bal < 0){
@@ -203,6 +211,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         mData.clear();
         friend_name_list.clear();
         friend_email_list.clear();
+        friend_brief_list.clear();
         for(int index = 0; index < jsonArray.length() && index < limit; index++){
             JSONObject jsonObj = null;
             try {
@@ -219,6 +228,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                 mData.add(builder.toString());
                 friend_name_list.add(jsonObj.getString("friend_name"));
                 friend_email_list.add(jsonObj.getString("friend_email"));
+                friend_brief_list.add(jsonObj.getString("friend_name") + " (" + jsonObj.getString("friend_email") + ")");
                 builder.setLength(0);
             } catch (JSONException e) {
                 e.printStackTrace();

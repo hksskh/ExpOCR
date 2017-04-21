@@ -156,11 +156,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             //rawList = rawList[2].split(":");
             //item_balance.setText(rawList[1]);
             //String test=new String("10");
-            item_balance.setText(rawList[2]);
-            if(Double.parseDouble(item_balance.getText().toString()) < 0){
-                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.orange));
+            double balance = Double.parseDouble(rawList[2]);
+            if(balance < 0){
+                item_balance.setText("you owe" + System.getProperty("line.separator") + "$" + Math.abs(balance));
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
             }else{
-                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.green));
+                item_balance.setText("you are owed" + System.getProperty("line.separator") + "$" + balance);
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
             }
         }
 
@@ -171,106 +173,65 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
     }
 
-    private class GroupsQueryTask extends AsyncTask<String, Void, Pair> {
+    private class GroupsQueryTask extends AsyncTask<String, Void, JSONArray> {
 
         @Override
-        protected Pair doInBackground(String... params) {
+        protected JSONArray doInBackground(String... params) {
             String groups= retrieve_all_groups();
-            JSONArray groupnamesArray=new JSONArray();
             JSONArray groupArray = null;
-            int limit=maxItemNumber;
             try {
                 groupArray = new JSONArray(groups);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            for(int index = 0; index < groupArray.length() && index < limit; index++){
-                JSONObject jsonObj = null;
-                JSONObject nameObj = null;
-                try {
-                    jsonObj =groupArray.getJSONObject(index);
-                    String nameJson=get_group_name(jsonObj.get("g_id").toString());
-                    JSONArray nameArray=new JSONArray(nameJson);
-                    nameObj=nameArray.getJSONObject(0);
-                    groupnamesArray.put(nameObj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            Pair<JSONObject, JSONArray> grouppair=new Pair( groupArray, groupnamesArray);
 
-            fill_groups_list(grouppair);
+            fill_groups_list(groupArray);
 
-            return grouppair;
+            return groupArray;
         }
 
         @Override
-        protected void onPostExecute(Pair p){
+        protected void onPostExecute(JSONArray jsonArray){
 
             notifyDataSetChanged();
             mNumberItems = mData.size() > maxItemNumber ? maxItemNumber : mData.size();
             if(isRefreshing){
                 isRefreshing = false;//do not forget
                 Message msg = new Message();
-                msg.what = ((TabFragment)mOnClickListener).GROUP_FRAGMENT_REFRESH;
+                msg.what = TabFragment.GROUP_FRAGMENT_REFRESH;
                 ((TabFragment)mOnClickListener).getHandler().sendMessage(msg);
             }
         }
     }
 
-        private void fill_groups_list(Pair p){
-            JSONArray jsonArray = null;
-            JSONArray nameArray = null;
-            jsonArray = (JSONArray)p.first;
-            nameArray = (JSONArray)p.second;
-            int limit = maxItemNumber;
-            mData.clear();
-            group_name_list.clear();
-            for(int index = 0; index < jsonArray.length() && index < limit; index++){
-                JSONObject jsonObj = null;
-                JSONObject nameObj = null;
-                StringBuilder builder = new StringBuilder();
-                try {
-                    jsonObj=jsonArray.getJSONObject(index);
-                    nameObj=nameArray.getJSONObject(index);
-                    JSONArray transactionArray = new JSONArray(get_group_transactions(jsonObj.getInt("g_id")));
-                    int balance=0;
-                    for (int j = 0; j < transactionArray.length(); j++) {
-                        balance += transactionArray.getJSONObject(j).getDouble("amount");
-                    }
-                    builder.append(jsonObj.get("g_id")).append(",")
-                            .append(nameObj.getJSONObject("fields").get("G_Name")).append(","+balance)
-                            .append(balance);
-                    mData.add(builder.toString());
-                    group_name_list.add(nameObj.getJSONObject("fields").get("G_Name").toString());
-                    builder.setLength(0);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+    private void fill_groups_list(JSONArray jsonArray){
+        int limit = maxItemNumber;
+        mData.clear();
+        group_name_list.clear();
+        for(int index = 0; index < jsonArray.length() && index < limit; index++){
+            JSONObject jsonObject;
+            StringBuilder builder = new StringBuilder();
+            try {
+                jsonObject = jsonArray.getJSONObject(index);
+                double balance = GroupTransaction.getUserNetBalance(jsonObject.getInt("g_id"), u_id);
+                builder.append(jsonObject.getInt("g_id")).append(",")
+                        .append(jsonObject.getString("g_name")).append(",")
+                        .append(balance);
+                mData.add(builder.toString());
+                group_name_list.add(jsonObject.getString("g_name"));
+                builder.setLength(0);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
+    }
 
-        private String get_group_name(String group_id){
-            String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_name";
-            String requestBody = "id=" + group_id;
+    private String retrieve_all_groups(){
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_groups_by_member";
+        String requestBody = "u_id=" + u_id;
 
-            String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
-            return text;
-        }
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+        return text;
+    }
 
-        private String retrieve_all_groups(){
-            String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_groups_by_member";
-            String requestBody = "u_id=" + u_id;
-
-            String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
-            return text;
-        }
-
-        private String get_group_transactions(int g_id) {
-            String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_group_transactions";
-            String requestBody = "g_id=" + g_id;
-
-            String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
-            return text;
-        }
 }

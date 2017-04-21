@@ -81,28 +81,15 @@ def expocr_group_create(request):
 	response = HttpResponse(json.dumps(data), content_type='application/json')
 	return response
 
-
 @csrf_exempt
-def expocr_group_get_name(request):
+def expocr_group_update_group_name(request):
 	if request.method == 'GET':
 		params = request.GET
 	elif request.method == 'POST':
 		params = request.POST
-	id = params.get('id')
-	result = Group.get_group_name(id)
-	data = serializers.serialize('json', result)
-	response = HttpResponse(data, content_type='application/json')
-	return response
-
-@csrf_exempt
-def expocr_group_update_name(request):
-	if request.method == 'GET':
-		params = request.GET
-	elif request.method == 'POST':
-		params = request.POST
-	id = params.get('id')
-	name = params.get('name')
-	result = Group.update_group_name(id, name)
+	g_id = params.get('g_id')
+	g_name = params.get('g_name')
+	result = Group.update_group_name(g_id, g_name)
 	data = {}
 	data['updated_rows'] = result
 	response = HttpResponse(json.dumps(data), content_type='application/json')
@@ -148,6 +135,30 @@ def expocr_group_add_member(request):
 	return response
 
 @csrf_exempt
+def expocr_group_add_member_by_email(request):
+	if request.method == 'GET':
+		params = request.GET
+	elif request.method == 'POST':
+		params = request.POST
+	g_id = params.get('g_id')
+	u_email = params.get('u_email')
+	result = Member.add_member_by_email(g_id, u_email)
+	data_list = []
+	if result[1] == 0:
+		data = {}
+		data['g_id'] = result[0].G_Id
+		data['u_id'] = result[0].U_Id
+		data_list.append(data)
+	else:
+		for entry in result[0]:
+			data = {}
+			data['g_id'] = int(entry['G_Id'])
+			data['u_id'] = int(entry['U_Id'])
+			data_list.append(data)
+	response = HttpResponse(json.dumps(data_list), content_type='application/json')
+	return response
+
+@csrf_exempt
 def expocr_group_get_members(request):
 	if request.method == 'GET':
 		params = request.GET
@@ -175,6 +186,7 @@ def expocr_group_get_groups_by_member(request):
 	for entry in result:
 		data = {}
 		data['g_id'] = int(entry['G_Id'])
+		data['g_name'] = Group.get_group_name(data['g_id'])[0].G_Name
 		data_list.append(data)
 	response = HttpResponse(json.dumps(data_list), content_type='application/json')
 	return response

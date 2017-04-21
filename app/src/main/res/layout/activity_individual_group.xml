@@ -44,7 +44,6 @@ tools:context="com.example.mihika.expocr.IndividualGroupActivity">
             android:text="Balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/net_balance"
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
             android:textSize="12sp"
@@ -54,11 +53,19 @@ tools:context="com.example.mihika.expocr.IndividualGroupActivity">
             android:text="Add Transaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/settle_up"
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
             android:textSize="12sp"
             android:id="@+id/add_group_transaction" />
+
+        <Button
+            android:text="Settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:textSize="12sp"
+            android:id="@+id/individual_grp_settings" />
 
     </LinearLayout>
 

@@ -94,8 +94,8 @@ public class GroupTransaction {
         List<Pair> amounts = getUserNetBalances(g_id);
         List<Pair> dues = new ArrayList<>();
 
-        List<Pair> positives = new ArrayList<Pair>();
-        List<Pair> negatives = new ArrayList<Pair>();
+        List<Pair> positives = new ArrayList<>();
+        List<Pair> negatives = new ArrayList<>();
         for(Pair pair : amounts){
             if(pair.amount > 0)
                 positives.add(pair);
@@ -154,8 +154,22 @@ public class GroupTransaction {
         return dues;
     }
 
+    public static double getUserNetBalance(int g_id, int u_id){
+        List<GroupTransaction> mDataSource = getGroupTransactionsFromServer(g_id);
+        HashMap<Integer, Double> balances= new HashMap<>();
+        for(GroupTransaction x : mDataSource) {
+            if (balances.containsKey(x.uid)) {
+                balances.put(x.uid, x.amount + balances.get(x.uid));
+            }
+            else
+                balances.put(x.uid, x.amount);
+        }
 
-    private static List<Pair> getUserNetBalances(int g_id){
+        return balances.isEmpty() ? 0: balances.get(u_id);
+
+    }
+
+    public static List<Pair> getUserNetBalances(int g_id){
         List<GroupTransaction> mDataSource = getGroupTransactionsFromServer(g_id);
         HashMap<Integer, GroupTransaction> balances= new HashMap<>();
         for(GroupTransaction x : mDataSource) {

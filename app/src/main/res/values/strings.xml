@@ -91,5 +91,6 @@
     <string name="menu_delete">Delete Transaction</string>
     <string name="title_addtransactionreceiptitem_list">Friend List</string>
     <string name="title_addtransactionreceiptitem_detail">Receipt</string>
+    <string name="title_activity_group_settings">GroupSettingsActivity</string>
 
 </resources>

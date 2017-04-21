@@ -6,6 +6,8 @@ from django.db.models import Q
 
 
 # Create your models here.
+from expocr_user.models import User
+
 
 class Group(models.Model):
     G_Id = models.AutoField(primary_key=True, null=False, unique=True)
@@ -37,9 +39,9 @@ class Group(models.Model):
         return result
 
     @staticmethod
-    def update_group_name(id, name):
-        query = Q(G_Id=id)
-        result = Group.manager.filter(query).update(G_Name=name)
+    def update_group_name(g_id, g_name):
+        query = Q(G_Id=g_id)
+        result = Group.manager.filter(query).update(G_Name=g_name)
         return result
 
     @staticmethod
@@ -72,6 +74,22 @@ class Member(models.Model):
         created = result.count()
         if created == 0:
             result = Member.manager.create(G_Id=g_id,U_Id=u_id)
+        else:
+            # since the model Member has no primary key, need to use values to extract fields from filter result
+            # if return the original filter result, then the serializers cannot serialize it without primary key
+            result = result.values('G_Id', 'U_Id')
+
+        return result, created
+
+    @staticmethod
+    def add_member_by_email(g_id, u_email):
+        result = User.get_user_by_email(u_email)
+        u_id = result[0].U_Id
+        query = Q(G_Id=g_id) & Q(U_Id=u_id)
+        result = Member.manager.filter(query)
+        created = result.count()
+        if created == 0:
+            result = Member.manager.create(G_Id=g_id, U_Id=u_id)
         else:
             # since the model Member has no primary key, need to use values to extract fields from filter result
             # if return the original filter result, then the serializers cannot serialize it without primary key
