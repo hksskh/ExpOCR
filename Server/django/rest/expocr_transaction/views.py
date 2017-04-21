@@ -146,7 +146,7 @@ def expocr_transaction_get_between(request):
 	    amount = float(entry['Amount'])
 	    if (entry['Sender_Id'] == uid):
 	        amount = -amount
-		data = {'id': entry['T_Id'], 'category': entry['Category'], 'memo': entry['Memo'], 'amount': amount),
+		data = {'id': entry['T_Id'], 'category': entry['Category'], 'memo': entry['Memo'], 'amount': amount,
 				'date': str(entry['Date'])}
 		data_list.append(data)
 	response = HttpResponse(json.dumps(data_list), content_type="application/json")
