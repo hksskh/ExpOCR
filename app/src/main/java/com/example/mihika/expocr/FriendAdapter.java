@@ -206,13 +206,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             }
             StringBuilder builder = new StringBuilder();
             try {
-                builder.append(jsonObj.get("receiver_id")).append(",")
-                        .append(jsonObj.get("receiver_name")).append(",")
-                        .append(jsonObj.get("receiver_email")).append(":")
+                builder.append(jsonObj.get("friend_id")).append(",")
+                        .append(jsonObj.get("friend_name")).append(",")
+                        .append(jsonObj.get("friend_email")).append(":")
                         .append(jsonObj.get("balance"));
                 mData.add(builder.toString());
-                friend_name_list.add(jsonObj.getString("receiver_name"));
-                friend_email_list.add(jsonObj.getString("receiver_email"));
+                friend_name_list.add(jsonObj.getString("friend_name"));
+                friend_email_list.add(jsonObj.getString("friend_email"));
                 builder.setLength(0);
             } catch (JSONException e) {
                 e.printStackTrace();
