@@ -99,7 +99,7 @@ def expocr_transaction_get_all_friends(request):
 		    data['balance'] = -float(entry['Amount__sum'])
 		    data_list.append(data)
 	    else:
-	        index = data_list.index(data['friend_id'])
+	        index = id_list.index(data['friend_id'])
 	        data_list[index]['balance'] = data_list[index]['balance'] -float(entry['Amount__sum'])
 	receiver_bulk = User.manager.in_bulk(id_list)
 	index = 0
