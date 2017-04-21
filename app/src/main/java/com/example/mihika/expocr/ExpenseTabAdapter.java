@@ -166,7 +166,7 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
                 builder.append(rawList[0]).append(" lent $").append(Math.abs(amount)).append(" to").append(rawList[1]);
 
             }
-            else if(rawList){
+            else {
                 builder.append(rawList[1]).append(" borrowed $").append(Math.abs(amount)).append(" from").append(rawList[0]);
 
             }
