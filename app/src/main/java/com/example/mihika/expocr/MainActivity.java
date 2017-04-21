@@ -194,10 +194,11 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_friend) {
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Add a transaction with your friend to add him to your Friends tab!", Toast.LENGTH_LONG).show();
             return true;
         }else if(id == R.id.action_create_group){
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, CreateGroupActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -213,19 +214,22 @@ public class MainActivity extends AppCompatActivity
         if(id == R.id.nav_home){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_plan) {
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_create_group) {
+            Intent intent = new Intent(this, CreateGroupActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_camera) {
             Intent intent = new Intent(MainActivity.this, PhotoCaptureActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_summary) {
             Intent intent = new Intent(MainActivity.this, Summary.class);
             startActivity(intent);
-        } else if (id == R.id.nav_settings) {
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
-        } else if (id == R.id.nav_contact) {
-            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
-        } else if (id == R.id.nav_logout){
+        }
+// else if (id == R.id.nav_settings) {
+//            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+//        } else if (id == R.id.nav_contact) {
+//            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
+//        }
+        else if (id == R.id.nav_logout){
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
@@ -329,6 +333,7 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         startActivityForResult(intent, CROP_PHOTO);
     }
+
 
 }
 
