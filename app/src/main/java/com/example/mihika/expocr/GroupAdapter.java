@@ -201,12 +201,14 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             }
             Pair<JSONObject, JSONArray> grouppair=new Pair( groupArray, groupnamesArray);
 
+            fill_groups_list(grouppair);
+
             return grouppair;
         }
 
         @Override
         protected void onPostExecute(Pair p){
-            fill_groups_list(p);
+
             notifyDataSetChanged();
             mNumberItems = mData.size() > maxItemNumber ? maxItemNumber : mData.size();
             if(isRefreshing){

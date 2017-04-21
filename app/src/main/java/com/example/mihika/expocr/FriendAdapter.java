@@ -212,7 +212,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                         .append(jsonObj.get("balance"));
                 mData.add(builder.toString());
                 friend_name_list.add(jsonObj.getString("receiver_name"));
-                friend_email_list.add(jsonObj.getString("receiver_name"));
+                friend_email_list.add(jsonObj.getString("receiver_email"));
                 builder.setLength(0);
             } catch (JSONException e) {
                 e.printStackTrace();

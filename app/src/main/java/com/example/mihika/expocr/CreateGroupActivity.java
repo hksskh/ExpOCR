@@ -32,9 +32,10 @@ public class CreateGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateGroupActivity.this, AddGroupMembersActivity.class);
-                intent.putExtra("GroupName", group_name.getText());
+                String gname = group_name.getText().toString();
+                intent.putExtra("GroupName", gname);
                 intent.putExtra("u_id",u_id);
-
+                System.out.println("Create Group Activity GROUP NAME: " + gname+ "\n....................");
                 startActivity(intent);
 
 

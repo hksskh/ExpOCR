@@ -5,7 +5,7 @@ urlpatterns = [
     url(r'^all_groups', views.expocr_get_all_groups),
     url(r'^all_members', views.expocr_get_all_members),
     url(r'^all_group_transactions', views.expocr_get_all_group_transactions),
-    url(r'^create', views.expocr_group_create),
+    url(r'^create_group', views.expocr_group_create),
     url(r'^get_name', views.expocr_group_get_name),
     url(r'^update_name', views.expocr_group_update_name),
     url(r'^delete_group', views.expocr_group_delete),

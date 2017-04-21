@@ -24,7 +24,10 @@ class Group(models.Model):
 
     @staticmethod
     def create_group(name):
+        print ("Group Name is")
+        print (name)
         result = Group.manager.create(G_Name=name)
+
         return result
 
     @staticmethod

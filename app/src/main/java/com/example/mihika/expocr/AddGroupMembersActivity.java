@@ -46,6 +46,7 @@ public class AddGroupMembersActivity extends AppCompatActivity {
         group_members = (MultiAutoCompleteTextView) findViewById(R.id.group_members_emails);
         Intent intent = getIntent();
         group_name = intent.getStringExtra("GroupName");
+        System.out.println("GROUP NAME: " + group_name+ "\n....................");
         u_id = MainActivity.getU_id();
         friend_autos.addAll(FriendAdapter.get_friend_email_list());
 
@@ -90,15 +91,15 @@ public class AddGroupMembersActivity extends AppCompatActivity {
 
                 String url = "http://" + ServerUtil.getServerAddress() + "group/create_group";
                 StringBuilder requestString = new StringBuilder();
-                requestString.append("&u_id=").append(MainActivity.getU_id())
-                        .append("&group_name").append(group_name)
+                requestString.append("u_id=").append(MainActivity.getU_id())
+                        .append("&group_name=").append(group_name)
                         .append("&group_members_emails=").append(group_members.getText());
                 //group_members_emails have comma separated entries. parse it to get all group members and add it to database
                 //e.g. "bob@gmail.com, bill@gmail.com"
 
                 String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
 
-                //Log.d(TAG, "From server:" + response);
+                System.out.println("From server:" + response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.has("warning")) {
@@ -111,10 +112,10 @@ public class AddGroupMembersActivity extends AppCompatActivity {
                     } else {
                         Intent intent = new Intent(AddGroupMembersActivity.this, IndividualGroupActivity.class);
 
-                        //intent.putExtra("group_id", rawList[0]);
+                        intent.putExtra("group_id", jsonObject.getInt("g_id"));
                         intent.putExtra("group_name", group_name);
 
-                        intent.putExtra("balance", 0);
+                        intent.putExtra("balance", "0");
                         intent.putExtra("u_id", u_id );
                         startActivity(intent);
                     }
