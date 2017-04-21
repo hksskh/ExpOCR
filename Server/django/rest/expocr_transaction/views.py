@@ -94,9 +94,13 @@ def expocr_transaction_get_all_friends(request):
 	for entry in result:
 		data = {}
 		data['friend_id'] = int(entry['Sender_Id'])
-		id_list.append(data['friend_id'])
-		data['balance'] = float(entry['Amount__sum'])
-		data_list.append(data)
+		if data['friend_id'] not in id_list:
+		    id_list.append(data['friend_id'])
+		    data['balance'] = -float(entry['Amount__sum'])
+		    data_list.append(data)
+	    else:
+	        index = data_list.index(elem)
+	        data_list[index] = data_list[index] -float(entry['Amount__sum'])
 	receiver_bulk = User.manager.in_bulk(id_list)
 	index = 0
 	while index < len(id_list):
