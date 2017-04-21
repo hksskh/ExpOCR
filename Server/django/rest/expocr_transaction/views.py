@@ -232,7 +232,7 @@ def expocr_transaction_create_by_email(request):
     for entry in result:
         receiver_id = entry.U_Id
     if am_I_sender =="no":
-        temp = receiever_id
+        temp = receiver_id
         receiver_id = sender_id
         sender_id = temp
     result = Transaction.create_transaction(sender_id, receiver_id, category, memo, amount, date)
