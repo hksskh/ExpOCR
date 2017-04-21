@@ -91,7 +91,7 @@ def expocr_transaction_get_by_uid(request):
 		data = {}
 		other_user = User.get_user_by_id(int(entry['Receiver_Id']))
 		other_name_set = other_user.values('U_Name')
-		for val in other_name_set
+		for val in other_name_set:
 		    other_name = val['U_Name']
 		data['who_paid'] = other_name
 		data['whom'] = username
@@ -104,7 +104,7 @@ def expocr_transaction_get_by_uid(request):
 		data = {}
 		other_user = User.get_user_by_id(int(entry['Receiver_Id']))
 		other_name_set = other_user.values('U_Name')
-		for val in other_name_set
+		for val in other_name_set:
 		    other_name = val['U_Name']
 		data['who_paid'] = username
 		data['whom'] = other_name
