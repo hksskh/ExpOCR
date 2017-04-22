@@ -5,7 +5,12 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,8 +31,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by mihika on 4/8/17.
@@ -39,6 +47,8 @@ public class IndividualGroupActivity extends AppCompatActivity {
     private int g_id;
     private String g_name;
     private Button mAddTransactionButton;
+    List<Expense> data;
+    private int currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +98,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
         new IndividualGroupActivity.TransactionBetweenQueryTask().execute();
 
         mListView = (ListView) findViewById(R.id.expenses_list_view);
+        registerForContextMenu(mListView);
 
         final ArrayList<Expense> expenseList = new ArrayList<>();//Expense.getRecipesFromFile("recipes.json", this);
         ExpenseAdapter adapter = new ExpenseAdapter(this, expenseList);
@@ -106,6 +117,57 @@ public class IndividualGroupActivity extends AppCompatActivity {
         }*/
 
         mListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.expenses_list_view) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch(item.getItemId()) {
+            case R.id.delete:
+                Expense clickedExpense = data.get(info.position);
+                currentPosition = info.position;
+                Calendar transactionDate = clickedExpense.getDate();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                String transactionDateString = dateFormat.format(transactionDate.getTime());
+                new IndividualGroupActivity.DeleteTransactionQueryTask().execute(transactionDateString);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    class DeleteTransactionQueryTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String transactionDate = params[0];
+            return delete_transaction(transactionDate);
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            data.remove(currentPosition);
+            ((ExpenseAdapter)mListView.getAdapter()).notifyDataSetChanged();
+            //TODO: update net balance
+        }
+    }
+
+    private String delete_transaction(String transactionDate) {
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/delete_transaction_by_date";
+        String requestBody = "date=" + transactionDate;
+        Log.d("delete_transaction", requestBody);
+
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+        return text;
     }
 
     @Override
@@ -156,7 +218,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            List<Expense> data = ((ExpenseAdapter)mListView.getAdapter()).getData();
+            data = ((ExpenseAdapter)mListView.getAdapter()).getData();
             //int limit = data.size();
             data.clear();
             for(int index = 0; index < jsonArray.length(); index++){ //&& index < limit; index++){
@@ -168,7 +230,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
                 }
                 Expense expense = null;
                 try {
-                    expense = new Expense(jsonObj.getString("category") + ":" + jsonObj.getString("memo"),
+                    expense = new Expense(jsonObj.getString("category") + ": " + jsonObj.getString("memo"),
                             Double.parseDouble(jsonObj.getString("amount")), jsonObj.getString("date"));
                     //TODO can also fetch people involved
                 } catch (ParseException e) {
