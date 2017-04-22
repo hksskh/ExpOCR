@@ -185,6 +185,6 @@ class Group_Transaction(models.Model):
         print(hour)
         print(minute)
         print(second)
-        query = Q(Date__year=year, Date__month=month, Date__day=day, Date__hour=hour, Date__minute=minute, Date__second=second)
+        query = Q(Date__startswith=date)
         result = Group_Transaction.manager.filter(query).delete()
         return result
