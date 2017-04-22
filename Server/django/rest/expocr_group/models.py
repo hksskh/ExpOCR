@@ -168,6 +168,17 @@ class Group_Transaction(models.Model):
 
     @staticmethod
     def delete_transaction_by_date(date):
-        query = Q(Date=date)
+        date_array = date.split(" ")
+        date = date_array[0]
+        time = date_array[1]
+        date_array = date.split("-")
+        year = int(date_array[0])
+        month = int(date_array[1])
+        day = int(date_array[2])
+        time_array = time.split(":")
+        hour = int(time_array[0])
+        minute = int(time_array[1])
+        second = int(time_array[2])
+        query = Q(Date__year=year) & Q(Date__month=month) & Q(Date__day=day) & Q(Date__hour=hour) & Q(Date__minute=minute) & Q(Date__second=second)
         result = Group_Transaction.manager.filter(query).delete()
         return result
