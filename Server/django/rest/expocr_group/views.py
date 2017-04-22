@@ -323,5 +323,19 @@ def expocr_group_delete_transaction(request):
 	response = HttpResponse(json.dumps(data), content_type='application/json')
 	return response
 
+@csrf_exempt
+def expocr_group_delete_by_date(request):
+	if request.method == 'GET':
+		params = request.GET
+	elif request.method == 'POST':
+		params = request.POST
+	date = params.get('date')
+	data = {}
+	result = Group_Transaction.delete_transaction_by_date(date)
+	data['deleted rows'] = result[0]
+	data['deleted details'] = result[1]
+	response = HttpResponse(json.dumps(data), content_type="application/json")
+	return response
+
 
 
