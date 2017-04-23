@@ -165,3 +165,26 @@ class Group_Transaction(models.Model):
         query = Q(G_Id=g_id) & Q(GT_Id=gt_id)
         result = Group_Transaction.manager.filter(query).delete()
         return result
+
+    @staticmethod
+    def delete_transaction_by_date(date):
+        date_array = date.split(" ")
+        date = date_array[0]
+        time = date_array[1]
+        date_array = date.split("-")
+        year = int(date_array[0])
+        month = int(date_array[1])
+        day = int(date_array[2])
+        time_array = time.split(":")
+        hour = int(time_array[0])
+        minute = int(time_array[1])
+        second = int(time_array[2])
+        print(year)
+        print(month)
+        print(day)
+        print(hour)
+        print(minute)
+        print(second)
+        query = Q(Date__startswith=date)
+        result = Group_Transaction.manager.filter(query).delete()
+        return result

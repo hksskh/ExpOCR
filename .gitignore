@@ -11,5 +11,5 @@
 /Server/django/rest/expocr_user/migrations/
 /Server/django/rest/expocr_transaction/migrations/
 /Server/django/rest/expocr_group/migrations/
-*.py
+*.pyc
 .idea/
