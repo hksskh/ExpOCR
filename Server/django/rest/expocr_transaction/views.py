@@ -361,4 +361,4 @@ def expocr_transaction_ocr_test(request):
 		data['warning'] = 'Fail to retrieve receipt sketch'
 	finally:
 		response = HttpResponse(json.dumps(data), content_type="application/json")
-	return responses
+	return response
