@@ -5,7 +5,8 @@ from django.core import serializers
 from django.core import signing
 from django.core.mail import EmailMessage
 from django.views.decorators.csrf import csrf_exempt
-from models import User, Transaction
+from models import User
+from expocr_transaction.models import Transaction
 import json
 import random
 import string
