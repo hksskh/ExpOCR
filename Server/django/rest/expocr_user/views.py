@@ -5,7 +5,7 @@ from django.core import serializers
 from django.core import signing
 from django.core.mail import EmailMessage
 from django.views.decorators.csrf import csrf_exempt
-from models import User
+from models import User, Transaction
 import json
 import random
 import string
@@ -294,3 +294,17 @@ def expocr_create_facebook_user(request):
         data = {'warning': user[0]}
     response = HttpResponse(json.dumps(data), content_type="application/json")
     return response
+
+@csrf_exempt
+def expocr_user_delete_friend_by_id(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    u_id = params.get('u_id')
+    my_u_id = params.get('my_u_id')
+    Transaction.delete_transaction_between(u_id, my_u_id)
+    Transaction.delete_transaction_between(my_u_id, u_id)
+    return
+
+

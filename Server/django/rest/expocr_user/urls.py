@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^check_vericode', views.expocr_user_check_vericode),
     url(r'^change_password', views.expocr_user_change_password),
     url(r'^get_two_users', views.expocr_user_get_two_users_by_id),
+    url(r'^delete_friend', views.expocr_user_delete_friend_by_id)
     ]
