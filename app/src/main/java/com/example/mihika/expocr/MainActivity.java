@@ -29,6 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mihika.expocr.util.ImageUtil;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -231,6 +233,8 @@ public class MainActivity extends AppCompatActivity
 //            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
 //        }
         else if (id == R.id.nav_logout){
+            FacebookSdk.sdkInitialize(getApplicationContext());
+            LoginManager.getInstance().logOut();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
