@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.db.models import Q
-import datetime
 
 
 # Create your models here.
@@ -48,6 +47,8 @@ class Group(models.Model):
     @staticmethod
     def delete_group(id, name):
         query = Q(G_Id=id) & Q(G_Name=name)
+        result = Member.delete_all_members(id)
+        result = Group_Transaction.delete_all_transaction(id)
         result = Group.manager.filter(query).delete()
         return result
 
@@ -116,6 +117,11 @@ class Member(models.Model):
         result = Member.manager.filter(query).delete()
         return result
 
+    @staticmethod
+    def delete_all_members(g_id):
+        query = Q(G_Id=g_id)
+        result = Member.manager.filter(query).delete()
+        return result
 
 class Group_Transaction(models.Model):
     GT_Id = models.AutoField(primary_key=True, null=False, unique=True)
@@ -162,19 +168,36 @@ class Group_Transaction(models.Model):
         return result
 
     @staticmethod
-    def delete_transaction_by_date(date):
-            date_array = date.split(" ")
-            date = date_array[0]
-            time = date_array[1]
-            date_array = date.split("-")
-            year = int(date_array[0])
-            month = int(date_array[1])
-            day = int(date_array[2])
-            time_array = time.split(":")
-            hour = int(time_array[0])
-            minute = int(time_array[1])
-            second = int(time_array[2])
-            query = Q(Date=datetime.datetime(year, month, day, hour, minute, second))
-            result = Group_Transaction.manager.filter(query).delete()
+    def delete_transaction(g_id, gt_id):
+        query = Q(G_Id=g_id) & Q(GT_Id=gt_id)
+        result = Group_Transaction.manager.filter(query).delete()
+        return result
 
-            return result
+    @staticmethod
+    def delete_all_transaction(g_id):
+        query = Q(G_Id=g_id)
+        result = Group_Transaction.manager.filter(query).delete()
+        return result
+
+    @staticmethod
+    def delete_transaction_by_date(date):
+        date_array = date.split(" ")
+        date = date_array[0]
+        time = date_array[1]
+        date_array = date.split("-")
+        year = int(date_array[0])
+        month = int(date_array[1])
+        day = int(date_array[2])
+        time_array = time.split(":")
+        hour = int(time_array[0])
+        minute = int(time_array[1])
+        second = int(time_array[2])
+        print(year)
+        print(month)
+        print(day)
+        print(hour)
+        print(minute)
+        print(second)
+        query = Q(Date__startswith=date)
+        result = Group_Transaction.manager.filter(query).delete()
+        return result
