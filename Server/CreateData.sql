@@ -14,8 +14,8 @@ INSERT INTO `ExpOCR`.`TRANSACTIONS` (`T_Id`, `Sender_Id`, `Receiver_Id`, `Catego
 INSERT INTO GROUPS VALUES
 (0, 'All The Buddies'),
 (1, 'Only Half The Buddies'),
-(2, NULL),
-(3, NULL);
+(2, 'A Third of The Buddies'),
+(3, 'A Fourth of The Buddies');
 
 #CREATE SOME MEMBERS
 INSERT INTO MEMBERS VALUES
