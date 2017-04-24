@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,7 +149,9 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
                         }
                     });
                 } else {
-                    double bal = Double.parseDouble(rawList[1]);
+                    BigDecimal bd = new BigDecimal(rawList[1]);
+                    bd.setScale(2, BigDecimal.ROUND_CEILING);
+                    double bal = bd.doubleValue();
 
                     if(bal < 0){
                         item_balance.setText("owes" + System.getProperty("line.separator") + "$" + Math.abs(bal));

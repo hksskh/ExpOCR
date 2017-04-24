@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -157,6 +158,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             //item_balance.setText(rawList[1]);
             //String test=new String("10");
             double balance = Double.parseDouble(rawList[2]);
+            BigDecimal bd = new BigDecimal(balance);
+            bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
+            balance = bd.doubleValue();
             if(balance < 0){
                 item_balance.setText("you owe" + System.getProperty("line.separator") + "$" + Math.abs(balance));
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));

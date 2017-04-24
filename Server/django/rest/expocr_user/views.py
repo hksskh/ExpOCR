@@ -304,8 +304,38 @@ def expocr_user_delete_friend_by_id(request):
         params = request.POST
     u_id = params.get('u_id')
     my_u_id = params.get('my_u_id')
-    Transaction.delete_transaction_between(u_id, my_u_id)
-    Transaction.delete_transaction_between(my_u_id, u_id)
-    return
+    data = {'deleted rows': 0, 'deleted details': ''}
+    result = Transaction.delete_transaction_between(u_id, my_u_id)
+    data['deleted rows'] += int(result[0])
+    data['deleted details'] += str(result[1])
+    result = Transaction.delete_transaction_between(my_u_id, u_id)
+    data['deleted rows'] += int(result[0])
+    data['deleted details'] += str(result[1])
 
+    response = HttpResponse(json.dumps(data), content_type="application/json")
+    return response
 
+@csrf_exempt
+def expocr_user_get_briefs(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    u_ids = params.get('u_ids')
+    u_id_list = u_ids.split(',')
+    print(u_id_list)
+
+    receiver_bulk = User.manager.in_bulk(u_id_list)
+    index = 0
+    data_list = []
+    while index < len(u_id_list):
+        pk = int(u_id_list[index])
+        data = {}
+        data['u_id'] = int(receiver_bulk[pk].U_Id)
+        data['u_name'] = str(receiver_bulk[pk].U_Name)
+        data['email'] = str(receiver_bulk[pk].Email)
+        data_list.append(data)
+        index += 1
+
+    response = HttpResponse(json.dumps(data_list), content_type="application/json")
+    return response

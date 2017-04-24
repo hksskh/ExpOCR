@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -265,6 +266,9 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         }
         for (GroupTransaction.Pair pair: list) {
             String text;
+            BigDecimal bd = new BigDecimal(pair.amount);
+            bd.setScale(2, BigDecimal.ROUND_CEILING);
+            pair.amount = bd.doubleValue();
             if (pair.amount < 0) {
                 text = "You owes " + pair.getUserBrief() + " $" + Math.abs(pair.amount);
             } else {

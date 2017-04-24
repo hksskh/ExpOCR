@@ -108,7 +108,8 @@ public class AddTransactionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (receipt_list == null || receipt_list.length() == 0) {
-                    Toast.makeText(AddTransactionActivity.this, "Empty receipt!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(AddTransactionActivity.this, PhotoCaptureActivity.class);
+                    startActivity(intent);
                 } else {
                     if (email_text.getText() == null || email_text.getText().length() == 0) {
                         email_text.setError("Empty Email!");
@@ -149,6 +150,13 @@ public class AddTransactionActivity extends AppCompatActivity {
 
         if (intent.hasExtra("amount")) {
             amount_text.setText(String.valueOf(intent.getDoubleExtra("amount", 0.0)));
+        } else if (intent.hasExtra("receipt_list")) {
+            String receipt_list_string = intent.getStringExtra("receipt_list");
+            try {
+                receipt_list = new JSONArray(receipt_list_string);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

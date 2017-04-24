@@ -3,6 +3,7 @@ package com.example.mihika.expocr;
 import com.example.mihika.expocr.util.ServerUtil;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -187,7 +188,65 @@ public class GroupTransaction {
             pairs.add(new Pair(value.uid, value.amount, value.u_name, value.u_email));
         }
 
+        List<Integer> members = getMembers(g_id);
+        List<Integer> missing_members = new ArrayList<>();
+        for (int m_id: members) {
+            if (!balances.containsKey(m_id)) {
+                missing_members.add(m_id);
+            }
+        }
+        if(!missing_members.isEmpty()) {
+            List<Pair> missing_member_briefs = getMemberBriefs(missing_members);
+            pairs.addAll(missing_member_briefs);
+        }
+
         return pairs;
+    }
+
+    public static List<Pair> getMemberBriefs(List<Integer> mids) {
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "user/get_briefs";
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int mid: mids) {
+            stringBuilder.append(mid).append(",");
+        }
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+
+        String requestBody = "u_ids=" + stringBuilder.toString();
+
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+
+        List<Pair> members = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(text);
+            for(int index = 0; index < jsonArray.length(); index++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(index);
+                members.add(new Pair(jsonObject.getInt("u_id"), 0.0, jsonObject.getString("u_name"), jsonObject.getString("email")));
+            }
+        } catch (JSONException jsonex) {
+            jsonex.printStackTrace();
+        }
+
+        return members;
+    }
+
+    public static List<Integer> getMembers(int g_id) {
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_members";
+        String requestBody = "g_id="+g_id;
+
+        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+
+        List<Integer> members = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(text);
+            for(int index = 0; index < jsonArray.length(); index++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(index);
+                members.add(jsonObject.getInt("u_id"));
+            }
+        } catch (JSONException jsonex) {
+            jsonex.printStackTrace();
+        }
+
+        return members;
     }
 
     static class Pair {

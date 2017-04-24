@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
@@ -57,7 +58,9 @@ public class IndividualFriendActivity extends AppCompatActivity {
         receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
         ((TextView) findViewById(R.id.friend_receiver_name)).setText(inIntent.getStringExtra("receiver_name"));
         ((TextView) findViewById(R.id.friend_receiver_email)).setText(inIntent.getStringExtra("receiver_email"));
-        ((TextView) findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: " + inIntent.getStringExtra("balance"));
+        BigDecimal bd = new BigDecimal(inIntent.getStringExtra("balance"));
+        bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
+        ((TextView) findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: " + bd.doubleValue());
 
         new TransactionBetweenQueryTask().execute();
 

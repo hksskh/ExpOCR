@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
@@ -61,7 +62,9 @@ public class IndividualGroupActivity extends AppCompatActivity {
         //receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
         ((TextView)findViewById(R.id.group_name)).setText(g_name);
 
-        ((TextView)findViewById(R.id.net_balance)).setText("Net Balance: " + inIntent.getStringExtra("balance"));
+        BigDecimal bd = new BigDecimal(inIntent.getStringExtra("balance"));
+        bd.setScale(2, BigDecimal.ROUND_CEILING);
+        ((TextView)findViewById(R.id.net_balance)).setText("Net Balance: " + bd.doubleValue());
 
         mAddTransactionButton = (Button) findViewById(R.id.add_group_transaction);
         mAddTransactionButton.setOnClickListener(new View.OnClickListener() {

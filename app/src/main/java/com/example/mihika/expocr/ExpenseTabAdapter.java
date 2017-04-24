@@ -159,7 +159,7 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
 
 
             if(category.equals("Payment")){
-                builder.append(rawList[1]).append(" paid ").append(rawList[0]).append(" $").append(Math.abs(amount));
+                builder.append(rawList[0]).append(" paid ").append(rawList[1]).append(" $").append(Math.abs(amount));
             }
             else if(rawList[0].equals("You")){
 

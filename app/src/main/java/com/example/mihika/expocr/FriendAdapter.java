@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -160,6 +161,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             rawList = rawList[2].split(":");
             item_email.setText(rawList[0]);
             double bal = Double.parseDouble(rawList[1]);
+            BigDecimal bd = new BigDecimal(bal);
+            bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
+            bal = bd.doubleValue();
 
             if(bal < 0){
                 String dollar_bal =  "- $" + Math.abs(bal);
