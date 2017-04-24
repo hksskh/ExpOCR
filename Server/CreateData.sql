@@ -38,7 +38,7 @@ INSERT INTO GROUP_TRANSACTIONS VALUES
 (5,1,5,'Food','Dinner with the gang', '-10', '2017-05-01 11:32:09'),
 (6,1,3,'Food','Dinner with the gang AGAIN', '60', '2017-05-01 12:32:09'),
 (7,1,4,'Food','Dinner with the gang AGAIN', '-35', '2017-05-01 12:32:09'),
-(8,1,5,'Food','Dinner with the gang AGAIN', '-25', '2017-05-01 12:32:09');
+(8,1,5,'Food','Dinner with the gang AGAIN', '-25', '2017-05-01 12:32:09'),
 (9,1,4,'Food','Dinner with the gang AGAIN 2.0', '10', '2017-06-01 12:32:09'),
 (10,1,1,'Food','Dinner with the gang AGAIN 2.0', '-10', '2017-06-01 12:32:09');
 
