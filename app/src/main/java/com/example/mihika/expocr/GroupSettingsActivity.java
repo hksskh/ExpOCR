@@ -65,7 +65,12 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
         name_text.setText(getIntent().getStringExtra("g_name"));
 
         membersList = (RecyclerView) findViewById(R.id.rv_members_group_settings);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         membersList.setLayoutManager(layoutManager);
 
         membersAdapter = new GroupSettingsMembersAdapter(this);
