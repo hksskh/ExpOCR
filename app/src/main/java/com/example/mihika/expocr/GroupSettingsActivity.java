@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -13,22 +14,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.mihika.expocr.util.LoadingDialog;
 import com.example.mihika.expocr.util.ServerUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.LogRecord;
+import android.os.Handler;
 
 public class GroupSettingsActivity extends AppCompatActivity implements GroupSettingsMembersAdapter.MemberListItemClickListener {
 
@@ -38,7 +47,8 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
 
     private RecyclerView membersList;
     private GroupSettingsMembersAdapter membersAdapter;
-
+    private Handler delete_handler;
+    public static final int DELETED = 1;
     private Dialog loading_dialog;
 
     @Override
@@ -60,6 +70,26 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
 
         membersAdapter = new GroupSettingsMembersAdapter(this);
         membersList.setAdapter(membersAdapter);
+
+        Button delete_group_btn = (Button) findViewById(R.id.delete_group);
+        delete_group_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete_group();
+            }
+        });
+
+        delete_handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case DELETED:
+                        Intent gotoMain = new Intent(GroupSettingsActivity.this, MainActivity.class);
+                        startActivity(gotoMain);
+                        break;
+                }
+            }
+        };
     }
 
     @Override
@@ -203,5 +233,19 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
             String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         }
 
+    }
+
+    private void delete_group() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/delete_group";
+                String requestString = "id=" + g_id + "&name=" + name_text;
+                String response = ServerUtil.sendData(serverUrl, requestString, "UTF-8");
+                Message msg = new Message();
+                msg.what = DELETED;
+                delete_handler.sendMessage(msg);
+            }
+        }).start();
     }
 }

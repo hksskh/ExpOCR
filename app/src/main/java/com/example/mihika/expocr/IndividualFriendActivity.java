@@ -3,6 +3,8 @@ package com.example.mihika.expocr;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +45,8 @@ public class IndividualFriendActivity extends AppCompatActivity {
     private Button mSettleUpButton;
     List<Expense> data;
     private int currentPosition;
+    private Handler delete_handler;
+    public static final int DELETED = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +55,9 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
         Intent inIntent = getIntent();
         receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
-        ((TextView)findViewById(R.id.friend_receiver_name)).setText(inIntent.getStringExtra("receiver_name"));
-        ((TextView)findViewById(R.id.friend_receiver_email)).setText(inIntent.getStringExtra("receiver_email"));
-        ((TextView)findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: " + inIntent.getStringExtra("balance"));
+        ((TextView) findViewById(R.id.friend_receiver_name)).setText(inIntent.getStringExtra("receiver_name"));
+        ((TextView) findViewById(R.id.friend_receiver_email)).setText(inIntent.getStringExtra("receiver_email"));
+        ((TextView) findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: " + inIntent.getStringExtra("balance"));
 
         new TransactionBetweenQueryTask().execute();
 
@@ -89,13 +93,31 @@ public class IndividualFriendActivity extends AppCompatActivity {
             }
         });
 
+        Button delete_friend_btn = (Button) findViewById(R.id.delete_friend);
+        delete_friend_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete_friend();
+            }
+        });
 
+        delete_handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case DELETED:
+                        Intent gotoMain = new Intent(IndividualFriendActivity.this, MainActivity.class);
+                        startActivity(gotoMain);
+                        break;
+                }
+            }
+        };
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId()==R.id.expenses_list_view) {
+        if (v.getId() == R.id.expenses_list_view) {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_list, menu);
         }
@@ -104,7 +126,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.delete:
                 Expense clickedExpense = data.get(info.position);
                 currentPosition = info.position;
@@ -125,14 +147,13 @@ public class IndividualFriendActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String s){
+        protected void onPostExecute(String s) {
             data.remove(currentPosition);
-            ((ExpenseAdapter)mListView.getAdapter()).notifyDataSetChanged();
-            double netBalance = ((ExpenseAdapter)mListView.getAdapter()).getNetBalance();
-            ((TextView)findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: " + netBalance);
+            ((ExpenseAdapter) mListView.getAdapter()).notifyDataSetChanged();
+            double netBalance = ((ExpenseAdapter) mListView.getAdapter()).getNetBalance();
+            ((TextView) findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: " + netBalance);
         }
     }
-
 
 
     class TransactionBetweenQueryTask extends AsyncTask<String, Void, String> {
@@ -143,7 +164,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String s){
+        protected void onPostExecute(String s) {
             System.out.print(s);
             JSONArray jsonArray = null;
             try {
@@ -151,10 +172,10 @@ public class IndividualFriendActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            data = ((ExpenseAdapter)mListView.getAdapter()).getData();
+            data = ((ExpenseAdapter) mListView.getAdapter()).getData();
             //int limit = data.size();
             data.clear();
-            for(int index = 0; index < jsonArray.length(); index++){ //&& index < limit; index++){
+            for (int index = 0; index < jsonArray.length(); index++) { //&& index < limit; index++){
                 JSONObject jsonObj = null;
                 try {
                     jsonObj = jsonArray.getJSONObject(index);
@@ -174,11 +195,11 @@ public class IndividualFriendActivity extends AppCompatActivity {
                 }
                 data.add(expense);
             }
-            ((ExpenseAdapter)mListView.getAdapter()).notifyDataSetChanged();
+            ((ExpenseAdapter) mListView.getAdapter()).notifyDataSetChanged();
         }
     }
 
-    private String friend_get_transaction_between(){
+    private String friend_get_transaction_between() {
         String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_between";
         String requestBody = "sender_id=" + MainActivity.getU_id() + "&receiver_id=" + receiver_id;
 
@@ -192,5 +213,19 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         return text;
+    }
+
+    private void delete_friend() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String serverUrl = "http://" + ServerUtil.getServerAddress() + "user/delete_friend";
+                String requestString = "u_id=" + receiver_id + "&my_u_id=" + MainActivity.getU_id();
+                String response = ServerUtil.sendData(serverUrl, requestString, "UTF-8");
+                Message msg = new Message();
+                msg.what = DELETED;
+                delete_handler.sendMessage(msg);
+            }
+        }).start();
     }
 }
