@@ -145,33 +145,9 @@ public class Summary extends AppCompatActivity {
         segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_green));
         segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_red));
         segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_yellow));
-        Log.d(TAG, "Reach line 119");
-        //plot();
+        segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_purple));
+        plot();
 
-        if (false) {
-            s1 = new Segment("Food \n10%", 10);
-            s2 = new Segment("Clothes \n20%", 20);
-            s3 = new Segment("Rent \n50%", 50);
-            s4 = new Segment("Misc. \n20%", 20);
-
-            SegmentFormatter sf1 = new SegmentFormatter(this, R.xml.pie_segment_formatter_blue);
-
-            SegmentFormatter sf2 = new SegmentFormatter(this, R.xml.pie_segment_formatter_green);
-
-            SegmentFormatter sf3 = new SegmentFormatter(this, R.xml.pie_segment_formatter_red);
-
-            SegmentFormatter sf4 = new SegmentFormatter(this, R.xml.pie_segment_formatter_yellow);
-
-            pie.addSegment(s1, sf1);
-            pie.addSegment(s2, sf2);
-            pie.addSegment(s3, sf3);
-            pie.addSegment(s4, sf4);
-
-            pie.getBorderPaint().setColor(Color.GRAY);
-            pie.getBackgroundPaint().setColor(Color.GRAY);
-        } else {
-            plot();
-        }
     }
 
     private void plot() {
