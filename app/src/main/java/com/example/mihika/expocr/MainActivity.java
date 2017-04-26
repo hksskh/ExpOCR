@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -28,11 +30,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mihika.expocr.util.ImageUtil;
+import com.example.mihika.expocr.util.ServerUtil;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
@@ -45,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private final int AVATAR_REQUEST_FROM_GALLERY = 1;
     private final int AVATAR_REQUEST_FROM_CAMERA = 2;
     private final int CROP_PHOTO = 3;
+    private final int DOWNLOAD_AVATAR_FINISH = 4;
 
     private static int u_id;
     private String u_name;
@@ -58,6 +64,8 @@ public class MainActivity extends AppCompatActivity
     private ViewPager tabPager;
     private FloatingActionButton myFAB;
     private ImageView nav_header_avatar;
+
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +95,7 @@ public class MainActivity extends AppCompatActivity
         nav_header_name.setText(u_name);
         TextView nav_header_email = (TextView) nav_header_view.findViewById(R.id.nav_header_email);
         nav_header_email.setText(u_email);
+        //set up user avatar view
         nav_header_avatar = (ImageView) nav_header_view.findViewById(R.id.nav_header_avatar);
         File tempFile = new File(getExternalStorageDirectory(), BuildConfig.APPLICATION_ID);
         tempFileUri = Uri.fromFile(tempFile);
@@ -104,6 +113,7 @@ public class MainActivity extends AppCompatActivity
                 showAvatarDialog();
             }
         });
+        //init avatar image from local cache or remote server
         initAvatar(nav_header_avatar, avatarFile.exists());
 
         tabAdapter = new TabFragmentAdapter(getSupportFragmentManager());
@@ -123,6 +133,18 @@ public class MainActivity extends AppCompatActivity
                 startActivity(transaction);
             }
         });
+
+        handler = new Handler() {
+            @Override
+            public void handleMessage (Message message) {
+                switch(message.what) {
+                    case DOWNLOAD_AVATAR_FINISH:
+                        nav_header_avatar.setImageURI(null);
+                        nav_header_avatar.setImageURI(avatarUri);
+                        break;
+                }
+            }
+        };
     }
 
     @Override
@@ -257,6 +279,11 @@ public class MainActivity extends AppCompatActivity
         return u_id;
     }
 
+    /**
+     * init user avatar ImageView from local cache or remote server
+     * @param avatarView
+     * @param isLocal
+     */
     private void initAvatar(ImageView avatarView, boolean isLocal){
         if(isLocal){
             avatarView.setImageURI(null);
@@ -271,23 +298,59 @@ public class MainActivity extends AppCompatActivity
         new Thread(new Runnable() {
             @Override
             public void run() {
+                byte[] bytes = MainActivity.download_avatar_bytes();
+                if (bytes != null && bytes.length > 0) {
+                    System.out.println("MainActivity: downSyncAvatar: bytes size: " + bytes.length);
+                    try {//do not forget
+                        FileOutputStream fos = new FileOutputStream(new File(avatarUri.getPath()));
+                        fos.write(bytes);
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
+                    Message msg = new Message();
+                    msg.what = DOWNLOAD_AVATAR_FINISH;
+                    handler.sendMessage(msg);
+                }
             }
         }).start();
+    }
+
+    public static byte[] download_avatar_bytes() {
+        byte[] image_byte = null;
+        try {
+            String url = "http://" + ServerUtil.getServerAddress() + "user/download_avatar";
+            String requestString = new String(("u_id=" + u_id).getBytes(), "ISO-8859-1");
+            String response = ServerUtil.sendData(url, requestString, "ISO-8859-1");
+
+            image_byte = response.getBytes("ISO-8859-1");
+            //bitmap = BitmapFactory.decodeByteArray(image_byte, 0, image_byte.length);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return image_byte;
     }
 
     private void upSyncAvatar(){
         new Thread(new Runnable() {
             @Override
-            //Todo: send local avatar to server (in new Thread)
             public void run() {
-                Bitmap bitmap = null;
                 String image_string;
                 byte[] image_byte;
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(MainActivity.this.getContentResolver(), avatarUri);
-                    image_byte = ImageUtil.getBytesFromBitmap(bitmap);
+                    File avatar_file = new File(avatarUri.getPath());
+                    int bytes_len = (int) avatar_file.length();
+                    image_byte = new byte[bytes_len];
+                    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(avatar_file));
+                    bis.read(image_byte);
                     image_string = new String(image_byte, "ISO-8859-1");
+
+                    String url = "http://" + ServerUtil.getServerAddress() + "user/upload_avatar";
+                    String requestString = new String(("u_id=" + u_id + "&image=").getBytes(), "ISO-8859-1") + image_string;
+                    String response = ServerUtil.sendData(url, requestString, "ISO-8859-1");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

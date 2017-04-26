@@ -17,4 +17,6 @@ urlpatterns = [
     url(r'^change_password', views.expocr_user_change_password),
     url(r'^get_two_users', views.expocr_user_get_two_users_by_id),
     url(r'^get_briefs', views.expocr_user_get_briefs),
+    url(r'^upload_avatar', views.expocr_user_upload_avatar),
+    url(r'^download_avatar', views.expocr_user_download_avatar),
     ]
