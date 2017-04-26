@@ -1,7 +1,9 @@
 package com.example.mihika.expocr;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +21,8 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,6 +50,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     private static Vector<String> friend_name_list = new Vector<>();
     private static Vector<String> friend_email_list = new Vector<>();
     private static List<String> friend_brief_list = new ArrayList<>();
+    private static List<Integer> friend_id_list = new ArrayList<>();
+    private static List<Uri> friend_avatar_uri_list = new ArrayList<>();
+
     //constructor
     public FriendAdapter(int numberOfItems, TabFragment listener) {
         maxItemNumber = numberOfItems;
@@ -154,9 +161,14 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
         void bind(int listIndex){
 
+            item_avatar.setImageURI(null);
+            item_avatar.setImageResource(R.drawable.ic_uiuc_seal);
+            if (friend_avatar_uri_list.get(listIndex) != null) {
+                item_avatar.setImageURI(friend_avatar_uri_list.get(listIndex));
+            }
+
             String rawData = mData.get(listIndex);
             String[] rawList = rawData.split(",");
-            item_avatar.setImageResource(R.drawable.ic_list_group);
             item_name.setText(rawList[1]);
             rawList = rawList[2].split(":");
             item_email.setText(rawList[0]);
@@ -188,13 +200,22 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
         @Override
         protected String doInBackground(String... params) {
-            return friend_retrieve_all_receivers();
+            String result = friend_retrieve_all_receivers();
+            fill_receivers_list(result);
+            mNumberItems = mData.size() > maxItemNumber ? maxItemNumber : mData.size();
+
+            friend_avatar_uri_list.clear();
+            for (int friend_id: friend_id_list) {
+                System.out.println("friend_id: " + friend_id);
+                download_friend_avatar(friend_id);
+            }
+
+            return "";
         }
 
         @Override
         protected void onPostExecute(String s){
-            fill_receivers_list(s);
-            mNumberItems = mData.size() > maxItemNumber ? maxItemNumber : mData.size();
+            notifyDataSetChanged();
             if(isRefreshing){
                 isRefreshing = false;//do not forget
                 Message msg = new Message();
@@ -202,6 +223,37 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                 ((TabFragment)mOnClickListener).getHandler().sendMessage(msg);
             }
         }
+    }
+
+    private void download_friend_avatar(int friend_id) {
+        byte[] bytes = MainActivity.download_avatar_bytes(friend_id);
+        Uri avatarUri = null;
+        System.out.println("download_friend_avatar: finish download avatar bytes");
+        if (bytes != null && bytes.length > 0) {
+            System.out.println("FriendAdapter: downSyncAvatar: bytes size: " + bytes.length);
+
+            File avatarDir = new File(MainActivity.getappExternalCacheDir(), "avatar");
+            avatarDir = new File(avatarDir, String.valueOf(friend_id));
+            if(!avatarDir.exists()){
+                avatarDir.mkdirs();
+            }
+            File avatarFile = new File(avatarDir, "avatar.jpg");
+            avatarUri = Uri.fromFile(avatarFile);
+            System.out.println(avatarFile.exists());
+            if (avatarFile.exists()) {
+                avatarFile.delete();
+            }
+            System.out.println(avatarFile.exists());
+
+            try {//do not forget
+                FileOutputStream fos = new FileOutputStream(new File(avatarUri.getPath()));
+                fos.write(bytes);
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        friend_avatar_uri_list.add(avatarUri);
     }
 
     private void fill_receivers_list(String s){
@@ -216,6 +268,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         friend_name_list.clear();
         friend_email_list.clear();
         friend_brief_list.clear();
+        friend_id_list.clear();
         for(int index = 0; index < jsonArray.length() && index < limit; index++){
             JSONObject jsonObj = null;
             try {
@@ -233,12 +286,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                 friend_name_list.add(jsonObj.getString("friend_name"));
                 friend_email_list.add(jsonObj.getString("friend_email"));
                 friend_brief_list.add(jsonObj.getString("friend_name") + " (" + jsonObj.getString("friend_email") + ")");
+                friend_id_list.add(jsonObj.getInt("friend_id"));
                 builder.setLength(0);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        notifyDataSetChanged();
     }
 
     private String friend_retrieve_all_receivers(){

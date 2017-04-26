@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     private Uri avatarUri;
     private File cameraDir;
     private Uri cameraFileUri;
+    private static File externalCacheDir;
 
     private TabFragmentAdapter tabAdapter;
     private ViewPager tabPager;
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity
         File tempFile = new File(getExternalStorageDirectory(), BuildConfig.APPLICATION_ID);
         tempFileUri = Uri.fromFile(tempFile);
         cameraDir = new File(getExternalStorageDirectory(), "DCIM");
+        externalCacheDir = getExternalCacheDir();
         File avatarDir = new File(getExternalCacheDir(), "avatar");
         avatarDir = new File(avatarDir, String.valueOf(u_id));
         if(!avatarDir.exists()){
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity
                 if(resultCode == RESULT_OK){
                     nav_header_avatar.setImageURI(null); //crucial
                     nav_header_avatar.setImageURI(avatarUri);
-                    //syncAvatar();
+                    upSyncAvatar();//do not forget
                 }
                 break;
         }
@@ -279,6 +281,10 @@ public class MainActivity extends AppCompatActivity
         return u_id;
     }
 
+    public static File getappExternalCacheDir() {
+        return externalCacheDir;
+    }
+
     /**
      * init user avatar ImageView from local cache or remote server
      * @param avatarView
@@ -298,7 +304,7 @@ public class MainActivity extends AppCompatActivity
         new Thread(new Runnable() {
             @Override
             public void run() {
-                byte[] bytes = MainActivity.download_avatar_bytes();
+                byte[] bytes = MainActivity.download_avatar_bytes(u_id);
                 if (bytes != null && bytes.length > 0) {
                     System.out.println("MainActivity: downSyncAvatar: bytes size: " + bytes.length);
                     try {//do not forget
@@ -317,7 +323,7 @@ public class MainActivity extends AppCompatActivity
         }).start();
     }
 
-    public static byte[] download_avatar_bytes() {
+    public static byte[] download_avatar_bytes(int u_id) {
         byte[] image_byte = null;
         try {
             String url = "http://" + ServerUtil.getServerAddress() + "user/download_avatar";
