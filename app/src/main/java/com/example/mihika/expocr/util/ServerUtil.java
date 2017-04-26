@@ -26,7 +26,7 @@ public class ServerUtil {
     private static final String ADDR_AZURE = "cs428-expocr2200.cloudapp.net:8000/";
 
     public static String getServerAddress(){
-        return "192.168.0.101:8000/";
+        return getAzureAddress();
     }
 
     private static String getLocalAdresss(){

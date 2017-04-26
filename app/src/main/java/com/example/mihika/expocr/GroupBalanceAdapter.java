@@ -267,7 +267,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         for (GroupTransaction.Pair pair: list) {
             String text;
             BigDecimal bd = new BigDecimal(pair.amount);
-            bd.setScale(2, BigDecimal.ROUND_CEILING);
+            bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
             pair.amount = bd.doubleValue();
             if (pair.amount < 0) {
                 text = "You owes " + pair.getUserBrief() + " $" + Math.abs(pair.amount);
