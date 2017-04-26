@@ -218,7 +218,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             friend_avatar_uri_list.clear();
             for (int friend_id: friend_id_list) {
                 System.out.println("friend_id: " + friend_id);
-                download_friend_avatar(friend_id);
+                friend_avatar_uri_list.put(String.valueOf(friend_id), download_friend_avatar(friend_id));
             }
 
             return "";
@@ -236,12 +236,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         }
     }
 
-    private void download_friend_avatar(int friend_id) {
+    public static Uri download_friend_avatar(int friend_id) {
         byte[] bytes = MainActivity.download_avatar_bytes(friend_id);
         Uri avatarUri = null;
         System.out.println("download_friend_avatar: finish download avatar bytes");
         if (bytes != null && bytes.length > 0) {
-            System.out.println("FriendAdapter: downSyncAvatar: bytes size: " + bytes.length);
+            System.out.println("download_friend_avatar bytes size: " + bytes.length);
 
             File avatarDir = new File(MainActivity.getappExternalCacheDir(), "avatar");
             avatarDir = new File(avatarDir, String.valueOf(friend_id));
@@ -264,7 +264,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                 e.printStackTrace();
             }
         }
-        friend_avatar_uri_list.put(String.valueOf(friend_id), avatarUri);
+        return avatarUri;
     }
 
     private void fill_receivers_list(String s){

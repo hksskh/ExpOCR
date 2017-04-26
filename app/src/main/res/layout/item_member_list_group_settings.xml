@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/item_member_list_group_cardview"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:cardCornerRadius="30dp"
+        android:innerRadius="0dp"
+        android:shape="ring"
+        android:thicknessRatio="1.9"
+
+        android:layout_margin="@dimen/tab_list_margin"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
     <ImageView
         android:id="@+id/item_member_list_group_avatar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="@dimen/tab_list_margin"
-        android:layout_centerVertical="true"
-        android:scaleType="centerInside"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:maxWidth="60dp"
+        android:maxHeight="60dp" />
+
+    </android.support.v7.widget.CardView>
 
     <TextView
         android:id="@+id/item_member_list_group_balance"
@@ -28,9 +45,9 @@
         android:orientation="vertical"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/item_member_list_group_balance"
-        android:layout_toEndOf="@id/item_member_list_group_avatar"
+        android:layout_toEndOf="@id/item_member_list_group_cardview"
         android:layout_toLeftOf="@id/item_member_list_group_balance"
-        android:layout_toRightOf="@id/item_member_list_group_avatar">
+        android:layout_toRightOf="@id/item_member_list_group_cardview">
 
         <TextView
             android:id="@+id/item_member_list_group_name"

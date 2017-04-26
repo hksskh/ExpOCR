@@ -13,15 +13,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSettingsMembersAdapter.MemberViewHolder> {
 
     private final MemberListItemClickListener mOnClickListener;
     private List<String> mData;
     private List<Integer> members_id_list;
+    private static HashMap<String, Uri> members_avatar_uri_list = new HashMap<>();
 
     //constructor
     public GroupSettingsMembersAdapter(GroupSettingsActivity listener) {
@@ -122,6 +127,12 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
             } else {
                 item_avatar.setImageURI(null);
                 item_avatar.setImageResource(R.drawable.ic_uiuc_seal);
+                Uri avatarUri = members_avatar_uri_list.get(String.valueOf(members_id_list.get(listIndex - 1)));
+                if (avatarUri != null) {
+                    item_avatar.setImageURI(null);
+                    item_avatar.setImageURI(avatarUri);
+                }
+
                 String rawData = mData.get(listIndex);
                 String[] rawList = rawData.split(",");
                 item_name.setText(rawList[1]);
@@ -176,16 +187,25 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
         }
     }
 
-    private class MembersQueryTask extends AsyncTask<String, Void, List<GroupTransaction.Pair>> {
+    private class MembersQueryTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected List<GroupTransaction.Pair> doInBackground(String... params) {
-            return GroupTransaction.getUserNetBalances(((GroupSettingsActivity)mOnClickListener).getG_id());
+        protected String doInBackground(String... params) {
+            List<GroupTransaction.Pair> list = GroupTransaction.getUserNetBalances(((GroupSettingsActivity)mOnClickListener).getG_id());
+            fill_Members_list(list);
+
+            members_avatar_uri_list.clear();
+            for (int member_id: members_id_list) {
+                System.out.println("member_id: " + member_id);
+                members_avatar_uri_list.put(String.valueOf(member_id), FriendAdapter.download_friend_avatar(member_id));
+            }
+
+            return "";
         }
 
         @Override
-        protected void onPostExecute(List<GroupTransaction.Pair> list){
-            fill_Members_list(list);
+        protected void onPostExecute(String s) {
+            notifyDataSetChanged();
         }
     }
 
@@ -201,8 +221,6 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
             mData.add(stringBuilder.toString());
             members_id_list.add(pair.uid);
         }
-
-        notifyDataSetChanged();
     }
 
 }
