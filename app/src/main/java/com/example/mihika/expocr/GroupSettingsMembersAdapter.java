@@ -2,6 +2,7 @@ package com.example.mihika.expocr;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +21,13 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
 
     private final MemberListItemClickListener mOnClickListener;
     private List<String> mData;
+    private List<Integer> members_id_list;
 
     //constructor
     public GroupSettingsMembersAdapter(GroupSettingsActivity listener) {
         mOnClickListener = listener;
         mData = new ArrayList<>();
+        members_id_list = new ArrayList<>();
         mData.add("Add friend to group");
         syncMemberList();
     }
@@ -116,9 +120,10 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
                 item_email.setVisibility(View.GONE);
                 item_balance.setVisibility(View.GONE);
             } else {
+                item_avatar.setImageURI(null);
+                item_avatar.setImageResource(R.drawable.ic_uiuc_seal);
                 String rawData = mData.get(listIndex);
                 String[] rawList = rawData.split(",");
-                item_avatar.setImageResource(R.drawable.ic_list_group);
                 item_name.setText(rawList[1]);
                 rawList = rawList[2].split(":");
                 item_email.setText(rawList[0]);
@@ -186,6 +191,7 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
 
     private void fill_Members_list(List<GroupTransaction.Pair> list){
         mData.clear();
+        members_id_list.clear();
         mData.add("Add friend to group");//do not forget
         for (GroupTransaction.Pair pair: list) {
             StringBuilder stringBuilder = new StringBuilder().append(pair.uid).append(",")
@@ -193,6 +199,7 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
                     .append(pair.u_email).append(":")
                     .append(pair.amount);
             mData.add(stringBuilder.toString());
+            members_id_list.add(pair.uid);
         }
 
         notifyDataSetChanged();

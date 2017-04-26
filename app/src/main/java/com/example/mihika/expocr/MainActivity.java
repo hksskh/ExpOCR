@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
     private String u_name;
     private String u_email;
     private Uri tempFileUri;
-    private Uri avatarUri;
+    private static Uri avatarUri;
     private File cameraDir;
     private Uri cameraFileUri;
     private static File externalCacheDir;
@@ -279,6 +279,10 @@ public class MainActivity extends AppCompatActivity
 
     public static int getU_id(){
         return u_id;
+    }
+
+    public static Uri get_avatar_uri() {
+        return avatarUri;
     }
 
     public static File getappExternalCacheDir() {

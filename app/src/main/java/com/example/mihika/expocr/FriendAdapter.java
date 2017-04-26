@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -51,7 +52,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     private static Vector<String> friend_email_list = new Vector<>();
     private static List<String> friend_brief_list = new ArrayList<>();
     private static List<Integer> friend_id_list = new ArrayList<>();
-    private static List<Uri> friend_avatar_uri_list = new ArrayList<>();
+    private static HashMap<String, Uri> friend_avatar_uri_list = new HashMap<>();
 
     //constructor
     public FriendAdapter(int numberOfItems, TabFragment listener) {
@@ -131,6 +132,14 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         return friend_brief_list;
     }
 
+    public static List<Integer> get_friend_id_list() {
+        return friend_id_list;
+    }
+
+    public static HashMap<String, Uri> get_friend_avatar_uri_list() {
+        return friend_avatar_uri_list;
+    }
+
     public void setIsRefreshing(boolean isRefreshing){
         this.isRefreshing = isRefreshing;
     }
@@ -163,8 +172,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
             item_avatar.setImageURI(null);
             item_avatar.setImageResource(R.drawable.ic_uiuc_seal);
-            if (friend_avatar_uri_list.get(listIndex) != null) {
-                item_avatar.setImageURI(friend_avatar_uri_list.get(listIndex));
+            Uri avatarUri = friend_avatar_uri_list.get(String.valueOf(friend_id_list.get(listIndex)));
+            if (avatarUri != null) {
+                item_avatar.setImageURI(null);
+                item_avatar.setImageURI(avatarUri);
             }
 
             String rawData = mData.get(listIndex);
@@ -253,7 +264,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                 e.printStackTrace();
             }
         }
-        friend_avatar_uri_list.add(avatarUri);
+        friend_avatar_uri_list.put(String.valueOf(friend_id), avatarUri);
     }
 
     private void fill_receivers_list(String s){
