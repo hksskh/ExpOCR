@@ -60,7 +60,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.friend_receiver_email)).setText(inIntent.getStringExtra("receiver_email"));
         BigDecimal bd = new BigDecimal(inIntent.getStringExtra("balance"));
         bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
-        ((TextView) findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: " + bd.doubleValue());
+        ((TextView) findViewById(R.id.friend_receiver_net_balance)).setText("Net Balance: $" + bd.doubleValue());
 
         new TransactionBetweenQueryTask().execute();
 

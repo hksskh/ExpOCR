@@ -44,15 +44,18 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
     private final List<String> userSpinnerNames = new ArrayList<>();
 
     private final int SET_USER_SPINNER_ENTRIES = 1;
+    private String my_name = MainActivity.getU_name();
+    private String my_email = MainActivity.getU_email();
 
     private int g_id;
     private String g_name;
 
     private static final String[] amount_autos = new String[]{
-            "1", "10", "100", "1000"
+
     };
     private static final String[] memo_autos = new String[]{
-            "Movie", "Snack", "Popcorn"
+            "Movie", "Snack", "Popcorn", "Pizza", "Grocery", "Lunch", "Dinner", "Electricity", "Utility Bills"
+
     };
 
     @Override
@@ -137,6 +140,11 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
             //@Override
             //public void run() {
 
+        nameIdMap.put(my_name + " (" + my_email + ")", MainActivity.getU_id());
+
+        userSpinnerNames.add(my_name + " (" + my_email + ")");
+
+
                 for(int i =0; i< groupMemberArray.size(); i++) {
                     if(!(groupMemberArray.get(i) == MainActivity.getU_id())) {
                         String url = "http://" + ServerUtil.getServerAddress() + "user/get_user_by_id";
@@ -202,34 +210,38 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
 
                 List<String> selectedNames = userSpinner.getSelectedStrings();
 
+                //boolean i_am_included = selectedNames.get(i).toString().equals(my_name);
                 double amount = Double.parseDouble(amount_text.getText().toString());
                 double individualAmount = ((amount/selectedNames.size())*(-100));
                 individualAmount = Math.round(individualAmount);
                 individualAmount /= 100;
 
                 for(int i = 0; i < selectedNames.size(); i++) {
-                    int userId = nameIdMap.get(selectedNames.get(i));
+                    if (true) {
 
-                    String url = "http://" + ServerUtil.getServerAddress() + "group/add_transaction";
-                    StringBuilder requestString = new StringBuilder();
-                    requestString.append("receiver_id=").append(userId)
-                            .append("&group_id=").append(g_id)
-                            .append("&category=").append(categorySpinner.getSelectedItem().toString())
-                            .append("&memo=").append(memo_text.getText())
-                            .append("&amount=")
-                            .append(individualAmount)
-                            .append("&date=").append(datetime);
-                    System.out.println(requestString.toString());
-                    String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
+                        int userId = nameIdMap.get(selectedNames.get(i));
 
-                    System.out.println(response);
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        if (jsonObject.has("warning")) {
-                           // handle it
+                        String url = "http://" + ServerUtil.getServerAddress() + "group/add_transaction";
+                        StringBuilder requestString = new StringBuilder();
+                        requestString.append("receiver_id=").append(userId)
+                                .append("&group_id=").append(g_id)
+                                .append("&category=").append(categorySpinner.getSelectedItem().toString())
+                                .append("&memo=").append(memo_text.getText())
+                                .append("&amount=")
+                                .append(individualAmount)
+                                .append("&date=").append(datetime);
+                        System.out.println(requestString.toString());
+                        String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
+
+                        System.out.println(response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.has("warning")) {
+                               // handle it
+                            }
+                        } catch (JSONException jsex){
+                            jsex.printStackTrace();
                         }
-                    } catch (JSONException jsex){
-                        jsex.printStackTrace();
                     }
                 }
 

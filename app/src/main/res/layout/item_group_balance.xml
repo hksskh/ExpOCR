@@ -32,12 +32,13 @@ tools:context="com.example.mihika.expocr.GroupBalanceActivity">
 
         <Button
             android:text="SETTLE UP"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/grp_balance_text"
+            android:backgroundTint="@color/colorbutton"
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
-            android:textSize="20sp"
             android:id="@+id/settle_up_grp_balance" />
 
     </LinearLayout>

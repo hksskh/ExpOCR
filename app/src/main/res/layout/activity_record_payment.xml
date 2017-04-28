@@ -2,54 +2,67 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical">
+    >
 
     <Spinner
         android:id="@+id/payer_1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:textSize="24sp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="24sp"
-        android:text=" paid "/>
+        android:layout_marginTop="20dp"
+        android:text=" paid "
+        style="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/ap_black"/>
 
     <Spinner
         android:id="@+id/payer_2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"/>
+        android:textSize="24sp"
+        android:layout_marginTop="20dp"
+        />
 
     <EditText
         android:id="@+id/payment_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="24sp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:hint="$ 0.00"/>
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:hint="$0.00"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="24sp"
-        android:text=" via "/>
+        android:text=" via "
+        android:layout_marginTop="20dp"
+        style="@style/TextAppearance.AppCompat.Title"
+
+        />
 
     <Spinner
         android:id="@+id/payment_method"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"/>
+        android:layout_marginTop="20dp"
+        />
 
     <Button
         android:id="@+id/record_payment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
+        android:backgroundTint="@color/colorPrimary"
         android:text="Record Payment"/>
 
 </LinearLayout>

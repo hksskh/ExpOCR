@@ -3,18 +3,38 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.Rosenormal</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar" >
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.Rosenormal</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:textColorPrimary">@color/textcolorprimary_title</item>
+        <item name="android:textColorSecondary">@color/textcolorsecondary_subtitle</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Rosenormal" parent="@android:style/Theme.Holo.Light">
+
+        <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.Rosenormal</item>
+    </style>
+
+    <style name="ActionBarTabText.Rosenormal" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
+        <item name="android:textColor">@color/ap_white</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/MENU_POPUP_BACK_COLOR</item>
+        <item name="android:textColor">@color/MENU_POPUP_ITEMS_COLOR</item>
+    </style>
 
 </resources>

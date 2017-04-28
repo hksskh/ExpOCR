@@ -136,7 +136,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
                 item_settle_up.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (rawData.startsWith("You owes")) {
+                        if (rawData.startsWith("You owe")) {
                             String friendBrief = "You paid " + rawData.substring(8, rawData.lastIndexOf("$")).trim();
                             double balance = Double.parseDouble(rawData.substring(rawData.lastIndexOf("$") + 1).trim());
                             show_settle_up_dialog(friendBrief, balance);
@@ -148,7 +148,6 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
             }
 
         }
-
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
@@ -166,6 +165,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
         brief_view.setText(brief);
         balance_view.setText(String.valueOf(balance));
+
 
         builder.setTitle("Group Settle Up")
                 .setView(settle_up_view)
@@ -270,7 +270,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
             bd.setScale(2, BigDecimal.ROUND_CEILING);
             pair.amount = bd.doubleValue();
             if (pair.amount < 0) {
-                text = "You owes " + pair.getUserBrief() + " $" + Math.abs(pair.amount);
+                text = "You owe " + pair.getUserBrief() + " $" + Math.abs(pair.amount);
             } else {
                 text = pair.getUserBrief() + " owes you $" + Math.abs(pair.amount);
             }
