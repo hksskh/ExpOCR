@@ -189,12 +189,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             bal = bd.doubleValue();
 
             if(bal < 0){
-                String dollar_bal =  "- $" + Math.abs(bal);
+                String dollar_bal =  "- $" + String.format("%.2f", Math.abs(bal));
                 item_balance.setText(dollar_bal);
 //                    item_balance.getText().toString()) < 0){
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
             }else{
-                String dollar_bal =  "$" + bal;
+                String dollar_bal =  "$" + String.format("%.2f", Math.abs(bal));
                 item_balance.setText(dollar_bal);
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
             }

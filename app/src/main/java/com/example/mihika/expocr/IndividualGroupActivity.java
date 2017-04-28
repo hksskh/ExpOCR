@@ -64,7 +64,7 @@ public class IndividualGroupActivity extends AppCompatActivity {
 
         BigDecimal bd = new BigDecimal(inIntent.getStringExtra("balance"));
         bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
-        ((TextView)findViewById(R.id.net_balance)).setText("Net Balance: " + bd.doubleValue());
+        ((TextView)findViewById(R.id.net_balance)).setText("Net Balance: " + bd.toString());
 
         mAddTransactionButton = (Button) findViewById(R.id.add_group_transaction);
         mAddTransactionButton.setOnClickListener(new View.OnClickListener() {
