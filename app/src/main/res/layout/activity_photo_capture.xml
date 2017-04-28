@@ -19,11 +19,13 @@
 
     <Button
         android:id="@+id/button_image"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="takePicture"
-        android:text="Take a picture!"/>
+        android:text="Take a picture"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
+        android:backgroundTint="@color/colorbutton"/>
 
 </RelativeLayout>

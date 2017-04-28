@@ -1,74 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_individual_friend"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.mihika.expocr.IndividualFriendActivity">
+    >
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_height="192dp"
+        android:layout_width="match_parent">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:toolbarId="@+id/toolbar"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="?attr/colorPrimary">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/friend_receiver_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.TextAppearance.AppCompat.Headline"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textColor="@color/ap_white" />
+
+                <TextView
+                    android:id="@+id/friend_receiver_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.TextAppearance.AppCompat.Body1"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+
+                    android:textColor="@color/ap_white"
+                    android:layout_below="@id/friend_receiver_name" />
+
+                <TextView
+                    android:id="@+id/friend_receiver_net_balance"
+                    android:text="Net Balance: $"
+                    android:layout_width="match_parent"
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/friend_receiver_email"
+                    android:layout_marginTop="40dp"
+                    android:textColor="@color/ap_white"
+                    android:gravity="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+                    <Button
+                        android:text="Pay / Settle Up"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="match_parent"
+                        android:layout_weight="0.5"
+                        android:backgroundTint="@color/colorPrimary_700"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/friend_receiver_net_balance"
+                        android:layout_gravity="center"
+                        android:id="@+id/settle_up" />
+                    <Button
+                        android:id="@+id/delete_friend"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Delete Friend"
+                        android:backgroundTint="@color/colorPrimary_700"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <ListView
+        android:id="@+id/expenses_list_view"
+        android:layout_marginTop="200dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content"
+        >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_marginTop="0dp"
-            android:gravity="center"
-            android:id="@+id/friend_receiver_name"
-            android:textColor="@color/black" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_marginTop="2dp"
-            android:gravity="center"
-            android:id="@+id/friend_receiver_email"
-            android:textColor="@color/black"
-            android:layout_below="@id/friend_receiver_name" />
-
-        <TextView
-            android:text="Net Balance: "
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/friend_receiver_email"
-            android:textSize="16sp"
-            android:layout_marginTop="2dp"
-            android:gravity="center"
-            android:id="@+id/friend_receiver_net_balance" />
-
-        <Button
-            android:text="Settle Up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/friend_receiver_net_balance"
-            android:layout_gravity="center"
-            android:layout_marginTop="2dp"
-            android:textSize="12sp"
-            android:id="@+id/settle_up" />
-
-
-
-        <ListView
-            android:id="@+id/expenses_list_view"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
-        </ListView>
-
-        <Button
-            android:id="@+id/delete_friend"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delete Friend" />
-
-    </LinearLayout>
-
-</RelativeLayout>
+    </ListView>
+</android.support.design.widget.CoordinatorLayout>

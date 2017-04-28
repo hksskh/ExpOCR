@@ -93,7 +93,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private void attemptChangePassword() {
         Log.d(TAG, "Called attempt_change_password");
 
-        boolean isEmailValid = mEmailView.getText().toString().equals(userEmail);
+        boolean isEmailValid = mEmailView.getText().toString().equals(userEmail.toString());
 
         String password = mPasswordView.getText().toString();
         boolean hasAtLeast8 = password.length() >= 8;
@@ -160,6 +160,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             Message msg = new Message();
                             msg.what = CHANGE_PWD_SUCCESS;
                             handler.sendMessage(msg);
+                            //Toast.makeText(getApplicationContext(), "Password changed successfully. Re-login!", Toast.LENGTH_LONG).show();
+
                             Intent gotoLogin = new Intent(ChangePasswordActivity.this, LoginActivity.class);
                             gotoLogin.putExtra("u_email", email);
                             gotoLogin.putExtra("u_password", password);

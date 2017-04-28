@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity
     private final int DOWNLOAD_AVATAR_FINISH = 4;
 
     private static int u_id;
-    private String u_name;
-    private String u_email;
+    private static String u_name;
+    private static String u_email;
     private Uri tempFileUri;
     private static Uri avatarUri;
     private File cameraDir;
@@ -204,33 +204,33 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint(getResources().getString(R.string.action_search));
-        //Todo: add different listeners for searchView to offer suggestions based on query text
+//        MenuItem searchItem = menu.findItem(R.id.action_search);
+//        final SearchView searchView = (SearchView) searchItem.getActionView();
+//        searchView.setQueryHint(getResources().getString(R.string.action_search));
+//        //Todo: add different listeners for searchView to offer suggestions based on query text
 
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_add_friend) {
-            Toast.makeText(getApplicationContext(), "Add a transaction with your friend to add him to your Friends tab!", Toast.LENGTH_LONG).show();
-            return true;
-        }else if(id == R.id.action_create_group){
-            Intent intent = new Intent(this, CreateGroupActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_add_friend) {
+//            Toast.makeText(getApplicationContext(), "Add a transaction with your friend to add him to your Friends tab!", Toast.LENGTH_LONG).show();
+//            return true;
+//        }else if(id == R.id.action_create_group){
+//            Intent intent = new Intent(this, CreateGroupActivity.class);
+//            startActivity(intent);
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -241,6 +241,9 @@ public class MainActivity extends AppCompatActivity
         if(id == R.id.nav_home){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+        } else if (id == R.id.nav_add_friend) {
+            Toast.makeText(getApplicationContext(), "To add a new friend to FRIENDS tab, add a transaction with him", Toast.LENGTH_LONG).show();
+            return true;
         } else if (id == R.id.nav_create_group) {
             Intent intent = new Intent(this, CreateGroupActivity.class);
             startActivity(intent);
@@ -249,6 +252,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_summary) {
             Intent intent = new Intent(MainActivity.this, Summary.class);
+            startActivity(intent);
+        }  else if (id == R.id.nav_change_password) {
+            Intent intent = new Intent(MainActivity.this, ChangePasswordActivity.class);
+            intent.putExtra("u_email",u_email);
             startActivity(intent);
         }
 // else if (id == R.id.nav_settings) {
@@ -280,6 +287,16 @@ public class MainActivity extends AppCompatActivity
     public static int getU_id(){
         return u_id;
     }
+
+
+    public static String getU_name(){
+        return u_name;
+    }
+    public static String getU_email(){
+        return u_email;
+    }
+
+
 
     public static Uri get_avatar_uri() {
         return avatarUri;
@@ -425,6 +442,7 @@ class TabFragmentAdapter extends FragmentPagerAdapter {
         this.fm = fm;
         //Todo: put strings in strings.xml
         this.tab_titles = new String[]{"FRIENDS", "GROUPS", "EXPENSES"};
+
         this.tab_fragments = new Fragment[tab_titles.length];
         for(int index = 0; index < tab_titles.length; index++){
             tab_fragments[index] = TabFragment.newInstance(tab_titles[index]);

@@ -176,16 +176,22 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
             item_alert.setText(builder.toString());
             if(amount < 0 ){
 //                builder.append("You received $").append(Math.abs(amount));
+                if(category.equals("Payment"))
+                    item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
+                else
+                    item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
 
-                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
                 builder.setLength(0);
 //                builder.append("You received a payment from ").append(rawList[1]);
                 item_info.setText(builder.toString());
                 item_avatar.setImageResource(R.drawable.ic_list_money_in);
             }else{
 //                builder.append("You paid $").append(amount);
+                if(category.equals("Payment"))
+                    item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
+                else
+                    item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
 
-                item_alert.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
                 builder.setLength(0);
 //                builder.append("You made a payment to ").append(rawList[1]);
                 item_info.setText(builder.toString());

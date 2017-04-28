@@ -20,7 +20,7 @@
     <ScrollView
         android:id="@+id/transaction_form"
         android:layout_width="match_parent"
-        android:layout_height="329dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="1dp"
         android:layout_weight="0.42"
         android:paddingBottom="2dp"
@@ -37,10 +37,11 @@
                 android:id="@+id/add_transaction_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Share transaction with:"
+                android:hint="Share with"
                 android:inputType="text"
                 android:maxLines="1"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:backgroundTint="@color/colorPrimary"/>
 
 
             <AutoCompleteTextView
@@ -51,33 +52,37 @@
                 android:hint="@string/prompt_memo"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:backgroundTint="@color/colorPrimary"/>
 
 
             <AutoCompleteTextView
-                    android:id="@+id/add_transaction_amount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_amount"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                android:id="@+id/add_transaction_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_amount"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:backgroundTint="@color/colorPrimary"/>
 
 
             <Spinner
                 android:id="@+id/split_spinner"
+                style="@style/Widget.AppCompat.Light.DropDownItem.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/split_spinner_array"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:prompt="@string/prompt_fab"
+
                 android:textSize="40sp"
                 android:theme="@style/AlertDialog.AppCompat.Light"
                 android:translationX="-5dp" />
 
             <Spinner
                 android:id="@+id/transaction_category_spinner"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:entries="@array/transaction_category"
@@ -86,8 +91,33 @@
                 android:layout_marginTop="35dp"
                 android:prompt="@string/prompt_fab"
                 android:textSize="40sp"
+
                 android:theme="@style/AlertDialog.AppCompat.Light"
                 android:translationX="-5dp" />
+
+            <Button
+                android:id="@+id/add_transaction_from_receipt"
+                style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:drawableLeft="@drawable/ic_menu_camera"
+                android:drawableStart="@drawable/ic_menu_camera"
+                android:drawableTint="@color/ap_white"
+                android:text="Scan a bill"
+                android:backgroundTint="@color/colorbutton"
+                />
+
+            <Button
+                android:id="@+id/add_transaction_button"
+                style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorbutton"
+                android:layout_marginTop="50dp"
+
+                android:text="Add"
+                />
 
             <!--<Spinner-->
             <!--android:id="@+id/transaction_kind_spinner"-->
@@ -115,26 +145,10 @@
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/add_transaction_from_receipt"
-        style="?android:textAppearanceSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:drawableLeft="@drawable/ic_menu_camera"
-        android:drawableStart="@drawable/ic_menu_camera"
-        android:text="Scan a bill"
-        android:textStyle="bold" />
 
 
-    <Button
-        android:id="@+id/add_transaction_button"
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
 
-        android:text="Add"
-        android:textStyle="bold" />
+
 
 
 </LinearLayout>

@@ -11,14 +11,20 @@
 
     <group android:id="@+id/nav_group_account"
         android:checkableBehavior="none">
-        <!--<item
-            android:id="@+id/nav_account"
+        <!--<item-->
+            <!--android:id="@+id/nav_account"-->
+            <!--android:icon="@drawable/ic_menu_account"-->
+            <!--android:title="Account" />-->
+        <item
+            android:id="@+id/nav_add_friend"
             android:icon="@drawable/ic_menu_account"
-            android:title="Account" />-->
+            android:title="New Friend" />
+
         <item
             android:id="@+id/nav_create_group"
             android:icon="@drawable/ic_list_group"
-            android:title="Create New Group" />
+            android:title="New group" />
+
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
@@ -31,19 +37,23 @@
             android:id="@+id/nav_trend"
             android:icon="@drawable/ic_menu_trend"
             android:title="Trends" />-->
+
+
     </group>
 
     <group android:id="@+id/nav_group_help"
-        android:checkableBehavior="none">
-        <!--<item-->
-            <!--android:id="@+id/nav_settings"-->
-            <!--android:icon="@drawable/ic_menu_settings"-->
-            <!--android:title="Settings" />-->
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_change_password"
+            android:icon="@drawable/ic_menu_settings"
+            android:title="Change password" />
         <!--<item-->
             <!--android:id="@+id/nav_contact"-->
             <!--android:icon="@drawable/ic_menu_contact"-->
             <!--android:title="Contact us" />-->
+
         <item
+
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_logout"
             android:title="Log out" />

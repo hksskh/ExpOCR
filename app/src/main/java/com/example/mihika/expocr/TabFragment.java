@@ -128,6 +128,7 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                 switch(msg.what){
                     case FRIEND_FRAGMENT_REFRESH:
                         swipeRefreshLayout.setRefreshing(false);
+
                         break;
                     case GROUP_FRAGMENT_REFRESH:
                         swipeRefreshLayout.setRefreshing(false);
