@@ -198,8 +198,8 @@ public class Summary extends AppCompatActivity {
     }
 
     protected String expense_retrieve_all(){
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_by_sender";
-        String requestBody = "sender_id=" + MainActivity.getU_id() + "&category=no_payment";
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_by_receiver";
+        String requestBody = "receiver_id=" + MainActivity.getU_id() + "&category=no_payment";
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         Log.d(TAG, text);
