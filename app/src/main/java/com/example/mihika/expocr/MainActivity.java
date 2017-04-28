@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(tabPager);
 
-        myFAB = (FloatingActionButton) findViewById(R.id.fab);
+        /*myFAB = (FloatingActionButton) findViewById(R.id.fab);
         myFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity
                 Intent transaction = new Intent(MainActivity.this, AddTransactionActivity.class);
                 startActivity(transaction);
             }
-        });
+        });*/
 
         handler = new Handler() {
             @Override

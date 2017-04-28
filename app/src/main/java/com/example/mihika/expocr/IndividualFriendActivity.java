@@ -5,10 +5,14 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +57,10 @@ public class IndividualFriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_individual_friend);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.individual_friend_toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent inIntent = getIntent();
         receiver_id = Integer.parseInt(inIntent.getStringExtra("receiver_id"));
@@ -85,7 +93,7 @@ public class IndividualFriendActivity extends AppCompatActivity {
 
         mListView.setAdapter(adapter);
 
-        mSettleUpButton = (Button) findViewById(R.id.settle_up);
+        /*mSettleUpButton = (Button) findViewById(R.id.settle_up);
         mSettleUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,13 +102,23 @@ public class IndividualFriendActivity extends AppCompatActivity {
                 goToRecordPayment.putExtra("receiver_id", receiver_id);
                 startActivity(goToRecordPayment);
             }
-        });
+        });*/
 
+        /*
         Button delete_friend_btn = (Button) findViewById(R.id.delete_friend);
         delete_friend_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 delete_friend();
+            }
+        });*/
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.individual_friend_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent transaction = new Intent(IndividualFriendActivity.this, AddTransactionActivity.class);
+                startActivity(transaction);
             }
         });
 
@@ -115,6 +133,33 @@ public class IndividualFriendActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_friend_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_individual_friend_settle_up:
+                Intent goToRecordPayment = new Intent(IndividualFriendActivity.this, RecordPaymentActivity.class);
+                goToRecordPayment.putExtra("u_id", MainActivity.getU_id());
+                goToRecordPayment.putExtra("receiver_id", receiver_id);
+                startActivity(goToRecordPayment);
+                return true;
+            case R.id.action_individual_friend_save:
+
+                return true;
+            case R.id.action_individual_friend_delete:
+                delete_friend();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
