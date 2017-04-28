@@ -2,6 +2,7 @@ package com.example.mihika.expocr;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -11,19 +12,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSettingsMembersAdapter.MemberViewHolder> {
 
     private final MemberListItemClickListener mOnClickListener;
     private List<String> mData;
+    private List<Integer> members_id_list;
+    private static HashMap<String, Uri> members_avatar_uri_list = new HashMap<>();
 
     //constructor
     public GroupSettingsMembersAdapter(GroupSettingsActivity listener) {
         mOnClickListener = listener;
         mData = new ArrayList<>();
+        members_id_list = new ArrayList<>();
         mData.add("Add friend to group");
         syncMemberList();
     }
@@ -116,9 +125,16 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
                 item_email.setVisibility(View.GONE);
                 item_balance.setVisibility(View.GONE);
             } else {
+                item_avatar.setImageURI(null);
+                item_avatar.setImageResource(R.drawable.ic_uiuc_seal);
+                Uri avatarUri = members_avatar_uri_list.get(String.valueOf(members_id_list.get(listIndex - 1)));
+                if (avatarUri != null) {
+                    item_avatar.setImageURI(null);
+                    item_avatar.setImageURI(avatarUri);
+                }
+
                 String rawData = mData.get(listIndex);
                 String[] rawList = rawData.split(",");
-                item_avatar.setImageResource(R.drawable.ic_list_group);
                 item_name.setText(rawList[1]);
                 rawList = rawList[2].split(":");
                 item_email.setText(rawList[0]);
@@ -150,7 +166,7 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
                     });
                 } else {
                     BigDecimal bd = new BigDecimal(rawList[1]);
-                    bd.setScale(2, BigDecimal.ROUND_CEILING);
+                    bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
                     double bal = bd.doubleValue();
 
                     if(bal < 0){
@@ -171,21 +187,31 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
         }
     }
 
-    private class MembersQueryTask extends AsyncTask<String, Void, List<GroupTransaction.Pair>> {
+    private class MembersQueryTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected List<GroupTransaction.Pair> doInBackground(String... params) {
-            return GroupTransaction.getUserNetBalances(((GroupSettingsActivity)mOnClickListener).getG_id());
+        protected String doInBackground(String... params) {
+            List<GroupTransaction.Pair> list = GroupTransaction.getUserNetBalances(((GroupSettingsActivity)mOnClickListener).getG_id());
+            fill_Members_list(list);
+
+            members_avatar_uri_list.clear();
+            for (int member_id: members_id_list) {
+                System.out.println("member_id: " + member_id);
+                members_avatar_uri_list.put(String.valueOf(member_id), FriendAdapter.download_friend_avatar(member_id));
+            }
+
+            return "";
         }
 
         @Override
-        protected void onPostExecute(List<GroupTransaction.Pair> list){
-            fill_Members_list(list);
+        protected void onPostExecute(String s) {
+            notifyDataSetChanged();
         }
     }
 
     private void fill_Members_list(List<GroupTransaction.Pair> list){
         mData.clear();
+        members_id_list.clear();
         mData.add("Add friend to group");//do not forget
         for (GroupTransaction.Pair pair: list) {
             StringBuilder stringBuilder = new StringBuilder().append(pair.uid).append(",")
@@ -193,9 +219,8 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
                     .append(pair.u_email).append(":")
                     .append(pair.amount);
             mData.add(stringBuilder.toString());
+            members_id_list.add(pair.uid);
         }
-
-        notifyDataSetChanged();
     }
 
 }

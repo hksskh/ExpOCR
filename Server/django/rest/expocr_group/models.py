@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.db.models import Q
+import datetime
 
 
 # Create your models here.
@@ -20,14 +21,7 @@ class Group(models.Model):
         ordering = ['G_Id']
 
     @staticmethod
-    def get_all_groups():
-        result = Group.manager.all()
-        return result
-
-    @staticmethod
     def create_group(name):
-        print ("Group Name is")
-        print (name)
         result = Group.manager.create(G_Name=name)
 
         return result
@@ -63,25 +57,6 @@ class Member(models.Model):
     class Meta:
         db_table = 'MEMBERS'
         ordering = ['GU_Id']
-
-    @staticmethod
-    def get_all_members():
-        result = Member.manager.all()
-        return result
-
-    @staticmethod
-    def add_member(g_id, u_id):
-        query = Q(G_Id=g_id) & Q(U_Id=u_id)
-        result = Member.manager.filter(query)
-        created = result.count()
-        if created == 0:
-            result = Member.manager.create(G_Id=g_id,U_Id=u_id)
-        else:
-            # since the model Member has no primary key, need to use values to extract fields from filter result
-            # if return the original filter result, then the serializers cannot serialize it without primary key
-            result = result.values('G_Id', 'U_Id')
-
-        return result, created
 
     @staticmethod
     def add_member_by_email(g_id, u_email):
@@ -139,11 +114,6 @@ class Group_Transaction(models.Model):
         ordering = ['GT_Id']
 
     @staticmethod
-    def get_all_group_transactions():
-        result = Group_Transaction.manager.all()
-        return result
-
-    @staticmethod
     def add_transaction(g_id, u_id, category, memo, amount, date):
         result = Group_Transaction.manager.create(G_Id=g_id, U_Id=u_id, Amount=amount, Memo=memo, Date=date, Category=category)
 
@@ -159,12 +129,6 @@ class Group_Transaction(models.Model):
     def get_group_transactions(g_id):
         query = Q(G_Id=g_id)
         result = Group_Transaction.manager.filter(query)
-        return result
-
-    @staticmethod
-    def get_group(gt_id):
-        query = Q(GT_Id=gt_id)
-        result = Group_Transaction.manager.filter(query).order_by('G_Id').values('G_Id')
         return result
 
     @staticmethod
@@ -191,13 +155,8 @@ class Group_Transaction(models.Model):
         time_array = time.split(":")
         hour = int(time_array[0])
         minute = int(time_array[1])
-        second = int(time_array[2])
-        print(year)
-        print(month)
-        print(day)
-        print(hour)
-        print(minute)
-        print(second)
-        query = Q(Date__startswith=date)
+        second = int(float(time_array[2]))
+        query = Q(Date=datetime.datetime(year, month, day, hour, minute, second))
         result = Group_Transaction.manager.filter(query).delete()
+
         return result

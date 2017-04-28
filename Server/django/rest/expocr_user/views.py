@@ -7,35 +7,16 @@ from django.core.mail import EmailMessage
 from django.views.decorators.csrf import csrf_exempt
 from models import User
 from expocr_transaction.models import Transaction
+from PIL import Image
 import json
 import random
 import string
+import io
+import os
 
 # Create your views here.
 
 create_user_key = 'j8Pmnh23f443E2mi'
-
-
-@csrf_exempt
-def expocr_get_all_users(request):
-    data = serializers.serialize('json', User.get_all_users())
-    response = HttpResponse(data, content_type="application/json")
-    return response
-
-
-@csrf_exempt
-def expocr_user_count_edu_user(request):
-    data = {}
-    data['user_count'] = User.count_edu_user()
-    response = HttpResponse(json.dumps(data), content_type="application/json")
-    return response
-
-
-@csrf_exempt
-def expocr_user_get_gmail_user(request):
-    data = serializers.serialize('json', User.get_gmail_user(), fields=('U_Name', 'Email'))
-    response = HttpResponse(data, content_type="application/json")
-    return response
 
 
 @csrf_exempt
@@ -182,27 +163,6 @@ def expocr_user_delete(request):
 
 
 @csrf_exempt
-def expocr_user_email_auth_test(request):
-    if request.method == 'GET':
-        params = request.GET
-    elif request.method == 'POST':
-        params = request.POST
-    email = params.get('email')
-    msg = EmailMessage(
-        'Email Auth testing!',
-        'Hi, this is a testing response for your email authentication, please click on the link <a '
-        'href="www.baidu.com" target="_blank">www.baidu.com</a>',
-        'ExpOCR428@gmail.com',
-        [email],
-    )
-    msg.content_subtype = 'html'
-    ret = msg.send()
-    data = {'email sending status': ret}
-    response = HttpResponse(json.dumps(data), content_type='application/json')
-    return response
-
-
-@csrf_exempt
 def expocr_user_send_vericode(request):
     if request.method == 'GET':
         params = request.GET
@@ -246,6 +206,7 @@ def expocr_user_change_password(request):
     response = HttpResponse(json.dumps(data), content_type="application/json")
     return response
 
+
 @csrf_exempt
 def expocr_user_get_two_users_by_id(request):
     if request.method == 'GET':
@@ -257,6 +218,7 @@ def expocr_user_get_two_users_by_id(request):
     data = serializers.serialize('json', User.get_two_users_by_id(id1, id2), fields=('U_Id', 'U_Name', 'Email'))
     response = HttpResponse(data, content_type="application/json")
     return response
+
 
 @csrf_exempt
 def expocr_login_with_facebook(request):
@@ -280,6 +242,7 @@ def expocr_login_with_facebook(request):
         print('%s (%s)' % (e.message, type(e)))
     return response
 
+
 @csrf_exempt
 def expocr_create_facebook_user(request):
     if request.method == 'GET':
@@ -295,6 +258,7 @@ def expocr_create_facebook_user(request):
         data = {'warning': user[0]}
     response = HttpResponse(json.dumps(data), content_type="application/json")
     return response
+
 
 @csrf_exempt
 def expocr_user_delete_friend_by_id(request):
@@ -314,6 +278,7 @@ def expocr_user_delete_friend_by_id(request):
 
     response = HttpResponse(json.dumps(data), content_type="application/json")
     return response
+
 
 @csrf_exempt
 def expocr_user_get_briefs(request):
@@ -338,4 +303,57 @@ def expocr_user_get_briefs(request):
         index += 1
 
     response = HttpResponse(json.dumps(data_list), content_type="application/json")
+    return response
+
+
+@csrf_exempt
+def expocr_user_upload_avatar(request):
+    try:
+        data = {}
+        # print(request.META['CONTENT_LENGTH'])
+        # print(request.method)
+        body = request.body
+        # print(len(body))
+
+        image_index = body.index('image=')
+        # print(image_index)
+        u_id = int(body[len('u_id='): image_index - 1])
+        image_bytes = body[image_index + len('image='):]
+
+        print('avatar size: ' + str(len(image_bytes)))
+
+        if not os.path.exists(str(u_id) + '/avatar'):
+            os.makedirs(str(u_id) + '/avatar')
+
+        avatar_fp = open(str(u_id) + '/avatar/' + 'avatar.jpg', 'wb')
+        avatar_fp.write(image_bytes)
+        data['store_avatar_size'] = len(image_bytes)
+    except Exception as e:
+        print(repr(e))
+        data['warning'] = 'Fail to store avatar on server'
+    finally:
+        response = HttpResponse(json.dumps(data), content_type="application/json")
+    return response
+
+@csrf_exempt
+def expocr_user_download_avatar(request):
+    try:
+        data = ''
+        # print(request.META['CONTENT_LENGTH'])
+        # print(request.method)
+        body = request.body
+        # print(len(body))
+
+        u_id = int(body[len('u_id='):])
+
+        if os.path.exists(str(u_id) + '/avatar/' + 'avatar.jpg'):
+            image_file = open(str(u_id) + '/avatar/' + 'avatar.jpg', 'rb')
+            data = image_file.read()
+            image_file.close()
+            print ('download avatar size: ' + str(len(data)))
+
+    except Exception as e:
+        print(repr(e))
+    finally:
+        response = HttpResponse(data, content_type='application/octet-stream')
     return response

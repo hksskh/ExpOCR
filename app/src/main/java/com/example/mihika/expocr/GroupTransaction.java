@@ -166,7 +166,7 @@ public class GroupTransaction {
                 balances.put(x.uid, x.amount);
         }
 
-        return balances.isEmpty() ? 0: balances.get(u_id);
+        return balances.isEmpty() || !balances.containsKey(u_id) ? 0: balances.get(u_id);
 
     }
 

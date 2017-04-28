@@ -23,11 +23,6 @@ class User(models.Model):
         ordering = ['U_Id']
 
     @staticmethod
-    def get_all_users():
-        users = User.manager.all()
-        return users
-
-    @staticmethod
     def try_create_user(username, email, password):
         query = Q(Email__exact=email)
         result = User.manager.filter(query)
@@ -67,12 +62,6 @@ class User(models.Model):
         return result
 
     @staticmethod
-    def get_gmail_user():
-        query = Q(Email__contains='@gmail.com') & Q(U_Id__gte=4)
-        users = User.manager.filter(query).exclude(U_Id=5).order_by('U_Id', 'U_Name')
-        return users
-
-    @staticmethod
     def login_by_email(email, password):
         query = Q(Email__exact=email)
         result = User.manager.filter(query)
@@ -93,11 +82,6 @@ class User(models.Model):
         if result.count() == 0:
             return False, 'Email not exists'
         return True, result.values('U_Id', 'U_Name', 'Email')
-
-
-    @staticmethod
-    def count_edu_user():
-        return User.manager.filter(Email__regex=r'^.+@.+\.edu').count()
 
     @staticmethod
     def update_user_name(email, password, username):
@@ -135,12 +119,16 @@ class User(models.Model):
     @staticmethod
     def change_user_password(email, password):
         query = Q(Email__exact=email)
+        result = User.manager.filter(query)
+        if result.count() == 0:
+            return False, 'Email not exists'
+        query = Q(Email__exact=email)
         d = {"Password": password, "Vericode": ""}
         result = User.manager.filter(query).update(**d)
         return result
 
     @staticmethod
-    def get_two_users_by_id(id1, id2    ):
+    def get_two_users_by_id(id1, id2):
         query = Q(U_Id=id1) | Q(U_Id=id2)
         users = User.manager.filter(query)
     

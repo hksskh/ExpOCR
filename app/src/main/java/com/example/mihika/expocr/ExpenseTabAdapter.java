@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -157,17 +158,19 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
 
             double amount = Double.parseDouble(rawList[2]);
 
+            DecimalFormat df= new DecimalFormat("#.00");
+
 
             if(category.equals("Payment")){
-                builder.append(rawList[0]).append(" paid ").append(rawList[1]).append(" $").append(Math.abs(amount));
+                builder.append(rawList[0]).append(" paid ").append(rawList[1]).append(" $").append(df.format(Math.abs(amount)));
             }
             else if(rawList[0].equals("You")){
 
-                builder.append(rawList[0]).append(" lent $").append(Math.abs(amount)).append(" to ").append(rawList[1]);
+                builder.append(rawList[0]).append(" lent $").append(df.format(Math.abs(amount))).append(" to ").append(rawList[1]);
 
             }
             else {
-                builder.append(rawList[1]).append(" borrowed $").append(Math.abs(amount)).append(" from ").append(rawList[0]);
+                builder.append(rawList[1]).append(" borrowed $").append(df.format(Math.abs(amount))).append(" from ").append(rawList[0]);
 
             }
             item_alert.setText(builder.toString());

@@ -68,6 +68,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
         g_name = inIntent.getStringExtra("g_name");
 
         userSpinner = (MultiSelectionSpinner) findViewById(R.id.group_transaction_user_spinner);
+        userSpinner.setPrompt("Select group members to include in the transaction:");
         categorySpinner = (Spinner) findViewById(R.id.group_transaction_category_spinner);
 
         addEntriesForSpinner();
