@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -251,7 +250,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, PhotoCaptureActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_summary) {
-            Intent intent = new Intent(MainActivity.this, Summary.class);
+            Intent intent = new Intent(MainActivity.this, SummaryActivity.class);
             startActivity(intent);
         }  else if (id == R.id.nav_change_password) {
             Intent intent = new Intent(MainActivity.this, ChangePasswordActivity.class);

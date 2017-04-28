@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config
-    fillPaint.color="#0000FF"
-    labelPaint.textSize="50"/>
+    fillPaint.color="#FF6347"
+    labelPaint.textSize="35"/>

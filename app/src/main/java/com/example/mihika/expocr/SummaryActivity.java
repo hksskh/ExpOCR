@@ -30,13 +30,13 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.logging.LogRecord;
 
-public class Summary extends AppCompatActivity {
+public class SummaryActivity extends AppCompatActivity {
 
     public static final int SELECTED_SEGMENT_OFFSET = 50;
     private static final int PLOT_FINISH = 1;
 
-    private TextView donutSizeTextView;
-    private SeekBar donutSizeSeekBar;
+    //private TextView donutSizeTextView;
+    //private SeekBar donutSizeSeekBar;
 
     public PieChart pie;
     private Handler handler;
@@ -46,7 +46,7 @@ public class Summary extends AppCompatActivity {
     private Segment s3;
     private Segment s4;
 
-    private final String TAG = "Summary";
+    private final String TAG = "SummaryActivity";
     public ArrayList<SegmentFormatter> segmentFormatters = new ArrayList<>();
     public Map<String, Double> percents;
     @Override
@@ -66,8 +66,10 @@ public class Summary extends AppCompatActivity {
                             pie.addSegment(segment, segmentFormatters.get(count % segmentFormatters.size()));
                             count++;
                         }
-                        pie.getBorderPaint().setColor(Color.GRAY);
-                        pie.getBackgroundPaint().setColor(Color.GRAY);
+                        pie.getBorderPaint().setColor(Color.argb(255, 255,192,203));
+                        pie.getBackgroundPaint().setColor(Color.argb(255, 255,192,203));//Color Of Background
+                        pie.getTitle().getLabelPaint().setColor(Color.WHITE);//Color of title
+                        pie.getTitle().getLabelPaint().setShadowLayer(2.5f, 2.5f, 2.5f, Color.RED);//Shade of title
                         setupIntroAnimation();
                         break;
                 }
@@ -120,8 +122,8 @@ public class Summary extends AppCompatActivity {
             }
         });
 
-        donutSizeSeekBar = (SeekBar) findViewById(R.id.donutSizeSeekBar);
-        donutSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        //donutSizeSeekBar = (SeekBar) findViewById(R.id.donutSizeSeekBar);
+        /*donutSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {}
 
@@ -136,8 +138,8 @@ public class Summary extends AppCompatActivity {
                 updateDonutText();
             }
         });
-
-        donutSizeTextView = (TextView) findViewById(R.id.donutSizeTextView);
+        */
+        //donutSizeTextView = (TextView) findViewById(R.id.donutSizeTextView);
         updateDonutText();
         //ArrayList<SegmentFormatter> segmentFormatters = new ArrayList<>();
         segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_blue));
@@ -167,7 +169,7 @@ public class Summary extends AppCompatActivity {
     }
 
     protected void updateDonutText() {
-        donutSizeTextView.setText(donutSizeSeekBar.getProgress() + "%");
+        //donutSizeTextView.setText(donutSizeSeekBar.getProgress() + "%");
     }
 
     protected void setupIntroAnimation() {
