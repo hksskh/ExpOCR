@@ -53,7 +53,6 @@ public class Summary extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
-        System.out.println("Reach 48");
 
         handler = new Handler() {
             @Override
@@ -199,8 +198,8 @@ public class Summary extends AppCompatActivity {
     }
 
     protected String expense_retrieve_all(){
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_by_receiver";
-        String requestBody = "receiver_id=" + MainActivity.getU_id() + "&category=no_payment";
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_by_sender";
+        String requestBody = "sender_id=" + MainActivity.getU_id() + "&category=no_payment";
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         Log.d(TAG, text);
@@ -208,6 +207,7 @@ public class Summary extends AppCompatActivity {
     }
 
     protected Map<String, Double> parse(String s) {
+        Log.d(TAG, s);
         JSONArray jsonArray = null;
         try {
             jsonArray = new JSONArray(s);
