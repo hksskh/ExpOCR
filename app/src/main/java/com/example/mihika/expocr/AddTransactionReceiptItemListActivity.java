@@ -22,6 +22,8 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,6 +54,9 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addtransactionreceiptitem_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
 
         Intent inIntent = getIntent();
         try {
@@ -65,10 +70,6 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
         for (int index = 0; index < friend_list.size(); index++) {
             balance_list.add(0.0);
         }
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +128,9 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.nameView.setText(friend_list.get(position));
-            holder.balanceView.setText(String.valueOf(balance_list.get(position)));
+            BigDecimal bd = BigDecimal.valueOf(balance_list.get(position));
+            bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+            holder.balanceView.setText(bd.toString());
             holder.balanceView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
