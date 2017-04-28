@@ -199,8 +199,8 @@ public class Summary extends AppCompatActivity {
     }
 
     protected String expense_retrieve_all(){
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_by_sender";
-        String requestBody = "sender_id=" + MainActivity.getU_id();
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_by_receiver";
+        String requestBody = "receiver_id=" + MainActivity.getU_id() + "&category=no_payment";
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         Log.d(TAG, text);
@@ -215,7 +215,7 @@ public class Summary extends AppCompatActivity {
             e.printStackTrace();
         }
         Map<String, Double> amounts = new HashMap<>();
-        int totalAmount = 0;
+        double totalAmount = 0;
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = null;
             try {

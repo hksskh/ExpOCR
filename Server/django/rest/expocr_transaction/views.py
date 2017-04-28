@@ -22,10 +22,14 @@ def expocr_transaction_get_by_sender_id(request):
     elif request.method == 'POST':
         params = request.POST
     sender_id = params.get('sender_id')
+    category = params.get('category', None)
+    no_payment = (category == 'no_payment')
     data_list = []
     id_list = []
     result = Transaction.get_transaction_by_sender_id(sender_id)
     for entry in result:
+        if no_payment and str(entry['Category']) == 'Payment':
+            continue
         data = {}
         data['receiver_id'] = int(entry['Receiver_Id'])
         id_list.append(data['receiver_id'])
@@ -42,6 +46,36 @@ def expocr_transaction_get_by_sender_id(request):
     response = HttpResponse(json.dumps(data_list), content_type="application/json")
     return response
 
+@csrf_exempt
+def expocr_transaction_get_by_receiver_id(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    receiver_id = params.get('receiver_id')
+    category = params.get('category', None)
+    no_payment = (category == 'no_payment')
+    data_list = []
+    id_list = []
+    result = Transaction.get_transaction_by_receiver_id(receiver_id)
+    for entry in result:
+        if no_payment and str(entry['Category']) == 'Payment':
+            continue
+        data = {}
+        data['sender_id'] = int(entry['Sender_Id'])
+        id_list.append(data['sender_id'])
+        data['amount'] = float(entry['Amount'])
+        data['date'] = str(entry['Date'])
+        data['Category'] = str(entry['Category'])
+        data_list.append(data)
+    sender_bulk = User.manager.in_bulk(id_list)
+    index = 0
+    while index < len(id_list):
+        pk = id_list[index]
+        data_list[index]['sender_name'] = sender_bulk[pk].U_Name
+        index += 1
+    response = HttpResponse(json.dumps(data_list), content_type="application/json")
+    return response
 
 @csrf_exempt
 def expocr_transaction_get_by_uid(request):

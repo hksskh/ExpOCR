@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     url(r'^get_by_sender', views.expocr_transaction_get_by_sender_id),
+    url(r'^get_by_receiver', views.expocr_transaction_get_by_receiver_id),
     url(r'^create_by_id', views.expocr_transaction_create),
     url(r'^create_by_email', views.expocr_transaction_create_by_email),
     url(r'^get_all_friends', views.expocr_transaction_get_all_friends),
