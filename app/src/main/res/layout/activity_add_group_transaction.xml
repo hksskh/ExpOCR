@@ -30,12 +30,30 @@
             android:orientation="vertical"
             android:weightSum="1">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="Payer:"/>
+
+            <Spinner
+                android:id="@+id/group_transaction_payer_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="40sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Split between: "/>
+
             <com.example.mihika.expocr.MultiSelectionSpinner
                 android:id="@+id/group_transaction_user_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="5dp"
-                android:layout_marginTop="20dp"
                 android:textSize="40sp"
                 />
 

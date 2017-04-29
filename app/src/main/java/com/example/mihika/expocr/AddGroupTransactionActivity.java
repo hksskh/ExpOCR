@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.mihika.expocr.util.ServerUtil;
 
@@ -33,6 +34,7 @@ import java.util.Vector;
  */
 
 public class AddGroupTransactionActivity extends AppCompatActivity {
+    private Spinner payerSpinner;
     private MultiSelectionSpinner userSpinner;
     private Spinner categorySpinner;
     private AutoCompleteTextView amount_text;
@@ -67,6 +69,8 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
         g_id = inIntent.getIntExtra("g_id", 1);
         g_name = inIntent.getStringExtra("g_name");
 
+        payerSpinner = (Spinner) findViewById(R.id.group_transaction_payer_spinner);
+        payerSpinner.setPrompt("Select payer of expense:");
         userSpinner = (MultiSelectionSpinner) findViewById(R.id.group_transaction_user_spinner);
         userSpinner.setPrompt("Select group members to include in the transaction:");
         categorySpinner = (Spinner) findViewById(R.id.group_transaction_category_spinner);
@@ -90,6 +94,9 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                 switch(msg.what){
                     case SET_USER_SPINNER_ENTRIES:
                         userSpinner.setItems(userSpinnerNames);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddGroupTransactionActivity.this,
+                                android.R.layout.simple_spinner_item, userSpinnerNames);
+                        payerSpinner.setAdapter(adapter);
                         break;
                 }
             }
@@ -189,7 +196,12 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
         View focusView = null;
         String amount = amount_text.getText().toString();
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(amount)|| !isAmountValid(amount) || (userSpinner.getSelectedIndicies().size() == 0)) {
+        if(userSpinner.getSelectedIndicies().size() == 0) {
+            Toast.makeText(getApplicationContext(), "Please select at least one person to split between.", Toast.LENGTH_SHORT).show();
+            cancel = true;
+        }
+
+        if (TextUtils.isEmpty(amount)|| !isAmountValid(amount)) {
             amount_text.setError(getString(R.string.error_invalid_amount));
             focusView = amount_text;
             cancel = true;
@@ -209,19 +221,28 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                 Date date = new Date();
                 String datetime = dateFormat.format(date);
 
-                List<String> selectedNames = userSpinner.getSelectedStrings();
 
-                //boolean i_am_included = selectedNames.get(i).toString().equals(my_name);
+                List<String> selectedNames = userSpinner.getSelectedStrings();
+                String payer = payerSpinner.getSelectedItem().toString();
+
+                boolean payerIncluded = selectedNames.contains(payer);
                 double amount = Double.parseDouble(amount_text.getText().toString());
-                double individualAmount = ((amount/selectedNames.size())*(-100));
+                double individualAmount  = ((amount/selectedNames.size())*(-100));
                 individualAmount = Math.round(individualAmount);
                 individualAmount /= 100;
+                double payerAmount;
 
-                for(int i = 0; i < selectedNames.size(); i++) {
-                    if (true) {
+                if (!payerIncluded) {
+                    payerAmount = individualAmount * selectedNames.size() * (-1);
+                } else {
+                    payerAmount = individualAmount * (selectedNames.size()-1) * (-1);
+                }
 
-                        int userId = nameIdMap.get(selectedNames.get(i));
+                for (int i = 0; i < selectedNames.size(); i++) {
 
+                    int userId = nameIdMap.get(selectedNames.get(i));
+
+                    if (!(payerIncluded && (userId == nameIdMap.get(payer)))) {
                         String url = "http://" + ServerUtil.getServerAddress() + "group/add_transaction";
                         StringBuilder requestString = new StringBuilder();
                         requestString.append("receiver_id=").append(userId)
@@ -238,22 +259,23 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.has("warning")) {
-                               // handle it
+                                // handle it
                             }
-                        } catch (JSONException jsex){
+                        } catch (JSONException jsex) {
                             jsex.printStackTrace();
                         }
                     }
                 }
 
+
                 String url = "http://" + ServerUtil.getServerAddress() + "group/add_transaction";
                 StringBuilder requestString = new StringBuilder();
-                requestString.append("receiver_id=").append(MainActivity.getU_id())
+                requestString.append("receiver_id=").append(nameIdMap.get(payer))
                         .append("&group_id=").append(g_id)
                         .append("&category=").append(categorySpinner.getSelectedItem().toString())
                         .append("&memo=").append(memo_text.getText())
                         .append("&amount=")
-                        .append(individualAmount*selectedNames.size()*(-1))
+                        .append(payerAmount)
                         .append("&date=").append(datetime);
                 System.out.println(requestString.toString());
                 String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
@@ -269,9 +291,10 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                         gotoIndividualActivity.putExtra("group_name", g_name);
                         startActivity(gotoIndividualActivity);
                     }
-                } catch (JSONException jsex){
+                } catch (JSONException jsex) {
                     jsex.printStackTrace();
                 }
+
 
             }
         }).start();
