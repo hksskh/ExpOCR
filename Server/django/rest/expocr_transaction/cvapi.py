@@ -139,6 +139,7 @@ class CVAPI:
             rawLine = ''.join(rawLine).replace(',', '.')
             for price in re.findall(r'\d*\.\d+', rawLine):
                 jsonArray[line_num]['possible_price'].append(float(price))
+            jsonArray[line_num]['possible_price'].reverse()
             line_num += 1  # do not forget
 
         return jsonArray

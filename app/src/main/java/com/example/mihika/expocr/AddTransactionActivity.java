@@ -58,6 +58,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     private AutoCompleteTextView email_text;
     private AutoCompleteTextView amount_text;
     private AutoCompleteTextView memo_text;
+    Button add_transaction_from_receipt_btn;
     private Handler handler;
     private final String TAG = "AddTransactionActivity";
 
@@ -103,7 +104,10 @@ public class AddTransactionActivity extends AppCompatActivity {
             }
         });
 
-        Button add_transaction_from_receipt_btn = (Button) findViewById(R.id.add_transaction_from_receipt);
+        add_transaction_from_receipt_btn = (Button) findViewById(R.id.add_transaction_from_receipt);
+        if (receipt_list != null && receipt_list.length() > 0) {
+            add_transaction_from_receipt_btn.setText("Split Receipt");
+        }
         add_transaction_from_receipt_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,7 +126,7 @@ public class AddTransactionActivity extends AppCompatActivity {
 //                    } else {
 //                        intent.putExtra("friend_list", group_autos.toArray(new String[group_autos.size()]));
 //                    }
-                    intent.putExtra("friend_list", new String[]{email_text.getText().toString()});
+                    intent.putExtra("friend_list", new String[]{MainActivity.getU_email(), email_text.getText().toString()});
 //
                     startActivity(intent);
                 }
@@ -154,6 +158,9 @@ public class AddTransactionActivity extends AppCompatActivity {
             String receipt_list_string = intent.getStringExtra("receipt_list");
             try {
                 receipt_list = new JSONArray(receipt_list_string);
+                if (receipt_list.length() > 0) {
+                    add_transaction_from_receipt_btn.setText("Split Receipt");
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

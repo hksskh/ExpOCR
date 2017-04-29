@@ -94,12 +94,16 @@
         <activity
             android:name=".AddTransactionReceiptItemListActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="Split Receipt" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mihika.expocr.AddTransactionActivity" />
+        </activity>
         <activity
             android:name=".AddTransactionReceiptItemDetailActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".AddTransactionReceiptItemListActivity">
+            android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mihika.expocr.AddTransactionReceiptItemListActivity" />
@@ -125,7 +129,6 @@
         <activity
             android:name=".GroupSettingsActivity"
             android:label="Group Settings"
-            android:parentActivityName=".IndividualGroupActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

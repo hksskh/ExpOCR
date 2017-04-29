@@ -13,6 +13,9 @@ import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -45,7 +48,7 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     private JSONArray receipt_list;
     private List<String> friend_list;
-    private List<Double> balance_list;
+    private List<String> balance_list;
     private int selectedFriend = 0;
 
     private RecyclerView recyclerView;
@@ -56,7 +59,8 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_addtransactionreceiptitem_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent inIntent = getIntent();
         try {
@@ -68,18 +72,8 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
         Collections.addAll(friend_list, inIntent.getStringArrayExtra("friend_list"));
         balance_list = new ArrayList<>();
         for (int index = 0; index < friend_list.size(); index++) {
-            balance_list.add(0.0);
+            balance_list.add("0.00");
         }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AddTransactionReceiptItemListActivity.this, AddTransactionActivity.class);
-                intent.putExtra("amount", balance_list.get(0));
-                NavUtils.navigateUpTo(AddTransactionReceiptItemListActivity.this, intent);
-            }
-        });
 
         recyclerView = (RecyclerView) findViewById(R.id.addtransactionreceiptitem_list);
         assert recyclerView != null;
@@ -95,12 +89,41 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_single_save, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_single_save:
+                Intent intent = new Intent(AddTransactionReceiptItemListActivity.this, AddTransactionActivity.class);
+                double amount = -1;
+                try {
+                    amount = Double.parseDouble(balance_list.get(0));
+                    amount -= Double.parseDouble(balance_list.get(1));
+                    amount = Math.abs(amount);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                amount = amount < 0 ? 0.00 : amount;
+                intent.putExtra("amount", BigDecimal.valueOf(amount).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+                NavUtils.navigateUpTo(AddTransactionReceiptItemListActivity.this, intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
 
         if (intent.hasExtra("balance")) {
-            balance_list.set(selectedFriend, intent.getDoubleExtra("balance", 0.0));
+            balance_list.set(selectedFriend, String.valueOf(intent.getDoubleExtra("balance", 0.0)));
             recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
@@ -128,7 +151,7 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.nameView.setText(friend_list.get(position));
-            BigDecimal bd = BigDecimal.valueOf(balance_list.get(position));
+            BigDecimal bd = new BigDecimal(balance_list.get(position));
             bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
             holder.balanceView.setText(bd.toString());
             holder.balanceView.addTextChangedListener(new TextWatcher() {
@@ -142,20 +165,14 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (s.length() > 0) {
-                        try {
-                            balance_list.set(position, Double.parseDouble(s.toString()));//do not forget
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
+                    balance_list.set(position, s.toString());//do not forget
                 }
             });
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    selectedFriend = position;
+                    selectedFriend = position;//crucial
                     /*if (mTwoPane) {
                         Bundle arguments = new Bundle();
                         arguments.putString(AddTransactionReceiptItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
@@ -182,7 +199,6 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final View mView;
-            final ImageView avatarView;
             final EditText balanceView;
             final TextView nameView;
 
@@ -190,7 +206,6 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
                 super(view);
                 mView = view;
 
-                avatarView = (ImageView) mView.findViewById(R.id.add_transaction_receipt_friend_list_item_avatar);
                 balanceView = (EditText) mView.findViewById(R.id.add_transaction_receipt_friend_list_item_balance);
                 nameView = (TextView) mView.findViewById(R.id.add_transaction_receipt_friend_list_item_name);
             }

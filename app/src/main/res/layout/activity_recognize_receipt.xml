@@ -21,15 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/receipt_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_add"
-        app:backgroundTint="@color/colorPrimary" />
-
     <include layout="@layout/recognize_receipt_list" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -4,10 +4,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.mihika.expocr.util.ServerUtil;
@@ -16,23 +21,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptViewHolder> {
 
-    //number of views it will hold
-    private int mNumberItems;
-    private int maxItemNumber;
-
+    private RecyclerView recyclerView;
     private final ReceiptListItemClickListener mOnClickListener;
     private List<JSONObject> mData;
 
     //constructor
-    public ReceiptAdapter(int numberOfItems, RecognizeReceiptActivity listener) {
-        maxItemNumber = numberOfItems;
+    public ReceiptAdapter(RecognizeReceiptActivity listener, RecyclerView recyclerView) {
         mOnClickListener = listener;
+        this.recyclerView = recyclerView;
         mData = new ArrayList<>();
         syncReceiptList();
     }
@@ -86,8 +89,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
 
     @Override
     public int getItemCount() {
-        mNumberItems = mData.size();
-        return mNumberItems;
+        return mData.size();
     }
 
     public List<JSONObject> getmData(){
@@ -99,10 +101,16 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
 
         try {
             for (JSONObject dataObj: mData) {
-                if (dataObj.has("price") && dataObj.getDouble("price") > 0) {
+                double price = -1;
+                try {
+                    price = Double.parseDouble(dataObj.getString("price"));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                if (price > 0) {
                     JSONObject actualDataObj = new JSONObject();
                     actualDataObj.put("text", dataObj.getString("text"));
-                    actualDataObj.put("price", dataObj.getDouble("price"));
+                    actualDataObj.put("price", price);
                     actualData.put(actualDataObj);
                 }
             }
@@ -121,6 +129,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
     class ReceiptViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView item_text;
+        EditText item_price;
 
         //constructor
         ReceiptViewHolder(View itemView){
@@ -128,10 +137,11 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
             itemView.setOnClickListener(this);
 
             item_text = (TextView) itemView.findViewById(R.id.receipt_list_item_text);
+            item_price = (EditText) itemView.findViewById(R.id.receipt_list_item_edittext);
 
         }
 
-        void bind(int listIndex){
+        void bind(final int listIndex){
 
             String text = null;
             try {
@@ -140,6 +150,30 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
                 e.printStackTrace();
             }
             item_text.setText(text);
+
+            try {
+                item_price.setText(new BigDecimal(mData.get(listIndex).getString("price")).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            item_price.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    try {
+                        mData.get(listIndex).put("price", s.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
         @Override
@@ -159,7 +193,6 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
         @Override
         protected void onPostExecute(String s){
             fill_receipt_list(s);
-            mNumberItems = maxItemNumber > 0 ? (mData.size() > maxItemNumber ? maxItemNumber : mData.size()) : mData.size();
         }
     }
 
@@ -182,7 +215,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
             mData.add(mDataJson);
             try {
                 mDataJson.put("text", jsonObj.getString("text"));
-                mDataJson.put("possible_price", jsonObj.getJSONArray("possible_price"));
+                mDataJson.put("price", jsonObj.getJSONArray("possible_price").getString(0));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
