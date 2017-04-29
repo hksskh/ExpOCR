@@ -6,6 +6,6 @@
         android:id="@+id/menu_group_settings_save"
         android:orderInCategory="100"
         android:title="Save"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 
 </menu>

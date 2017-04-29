@@ -41,14 +41,17 @@ import android.os.Handler;
 
 public class GroupSettingsActivity extends AppCompatActivity implements GroupSettingsMembersAdapter.MemberListItemClickListener {
 
+    private static final int DELETED = 1;
+    private static final int FINISH_ADD_AVATAR = 2;
+
     private int g_id;
 
     private EditText name_text;
 
     private RecyclerView membersList;
     private GroupSettingsMembersAdapter membersAdapter;
-    private Handler delete_handler;
-    public static final int DELETED = 1;
+    private Handler handler;
+
     private Dialog loading_dialog;
 
     @Override
@@ -84,13 +87,17 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
             }
         });
 
-        delete_handler = new Handler() {
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case DELETED:
                         Intent gotoMain = new Intent(GroupSettingsActivity.this, MainActivity.class);
                         startActivity(gotoMain);
+                        break;
+                    case FINISH_ADD_AVATAR:
+                        membersAdapter.notifyDataSetChanged();
+                        LoadingDialog.closeDialog(loading_dialog);
                         break;
                 }
             }
@@ -135,12 +142,14 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            loading_dialog = LoadingDialog.showDialog(GroupSettingsActivity.this, "Retrieving friend information...");
                             String selectedText = (String)spinner_view.getSelectedItem();
                             int leftBracket = selectedText.indexOf("(");
                             int rightBracket = selectedText.lastIndexOf(")");
                             String u_name = selectedText.substring(0, leftBracket);
                             String u_email = selectedText.substring(leftBracket + 1, rightBracket);
-                            StringBuilder stringbuilder = new StringBuilder().append(MainActivity.getU_id()).append(",")
+                            final int u_id = FriendAdapter.get_friend_id_list().get(FriendAdapter.get_friend_email_list().indexOf(u_email));
+                            StringBuilder stringbuilder = new StringBuilder().append(u_id).append(",")
                                     .append(u_name).append(",")
                                     .append(u_email).append(":")
                                     .append("pending");
@@ -153,7 +162,17 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
                             }
                             if (!isInGroup) {//do not forget
                                 membersAdapter.getmData().add(clickedItemIndex + 1, stringbuilder.toString());
-                                membersAdapter.notifyDataSetChanged();
+                                membersAdapter.getMembers_id_list().add(clickedItemIndex, u_id);//take care
+                                membersAdapter.getMembers_avatar_uri_list().put(String.valueOf(u_id), null);
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        membersAdapter.getMembers_avatar_uri_list().put(String.valueOf(u_id), FriendAdapter.download_friend_avatar(u_id));
+                                        Message msg = new Message();
+                                        msg.what = FINISH_ADD_AVATAR;
+                                        handler.sendMessage(msg);
+                                    }
+                                }).start();
                             }
                             dialog.dismiss();
                         }
@@ -249,7 +268,7 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
                 String response = ServerUtil.sendData(serverUrl, requestString, "UTF-8");
                 Message msg = new Message();
                 msg.what = DELETED;
-                delete_handler.sendMessage(msg);
+                handler.sendMessage(msg);
             }
         }).start();
     }

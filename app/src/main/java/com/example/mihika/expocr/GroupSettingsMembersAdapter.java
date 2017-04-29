@@ -93,6 +93,14 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
         return mData;
     }
 
+    public List<Integer> getMembers_id_list() {
+        return members_id_list;
+    }
+
+    public HashMap<String, Uri> getMembers_avatar_uri_list() {
+        return members_avatar_uri_list;
+    }
+
     public void syncMemberList(){
         new MembersQueryTask().execute();
     }
@@ -162,6 +170,8 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             mData.remove(listIndex);
+                                            int delete_id = members_id_list.remove(listIndex - 1);
+                                            members_avatar_uri_list.remove(String.valueOf(delete_id));
                                             notifyDataSetChanged();
                                             dialog.dismiss();
                                         }

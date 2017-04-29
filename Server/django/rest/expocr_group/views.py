@@ -25,15 +25,12 @@ def expocr_group_create(request):
     data['g_name'] = str(result.G_Name)
     uid = params.get('u_id')
     emails = params.get('group_members_emails').split(',')
-    uid_res = Member.add_member(gid, uid)
+    uid_res = Member.add_member_by_id(gid, uid)
     # emails = data['emails'].split(',')
     for email in emails:
+        email = email.strip()
         if email is not "":
-            user = User.get_user_by_email(email)
-            for result in user:
-                uid = int(result.U_Id)
-                Member.add_member(gid, uid)
-            # Member.add_member(gid,email)
+            Member.add_member_by_email(gid,email)
     response = HttpResponse(json.dumps(data), content_type='application/json')
     return response
 

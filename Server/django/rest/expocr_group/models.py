@@ -59,9 +59,7 @@ class Member(models.Model):
         ordering = ['GU_Id']
 
     @staticmethod
-    def add_member_by_email(g_id, u_email):
-        result = User.get_user_by_email(u_email)
-        u_id = result[0].U_Id
+    def add_member_by_id(g_id, u_id):
         query = Q(G_Id=g_id) & Q(U_Id=u_id)
         result = Member.manager.filter(query)
         created = result.count()
@@ -73,6 +71,14 @@ class Member(models.Model):
             result = result.values('G_Id', 'U_Id')
 
         return result, created
+
+    @staticmethod
+    def add_member_by_email(g_id, u_email):
+        result = User.get_user_by_email(u_email)
+        if result.count() <= 0:
+            return result, 0
+        u_id = result[0].U_Id
+        return Member.add_member_by_id(g_id, u_id)
 
     @staticmethod
     def get_members(g_id):
