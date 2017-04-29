@@ -127,7 +127,18 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
             } else {
                 item_avatar.setImageURI(null);
                 item_avatar.setImageResource(R.drawable.ic_uiuc_seal);
-                Uri avatarUri = members_avatar_uri_list.get(String.valueOf(members_id_list.get(listIndex - 1)));
+                Uri avatarUri;
+                try {
+                    if (!members_avatar_uri_list.isEmpty() && !members_id_list.isEmpty()) {
+                        avatarUri = members_avatar_uri_list.get(String.valueOf(members_id_list.get(listIndex - 1)));
+                    } else {
+                        avatarUri = null;
+                    }
+                }
+                catch(IndexOutOfBoundsException e)
+                {
+                    avatarUri=null;
+                }
                 if (avatarUri != null) {
                     item_avatar.setImageURI(null);
                     item_avatar.setImageURI(avatarUri);
