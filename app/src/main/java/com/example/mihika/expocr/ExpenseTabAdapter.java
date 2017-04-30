@@ -48,7 +48,7 @@ public class ExpenseTabAdapter extends RecyclerView.Adapter<ExpenseTabAdapter.Ex
         maxItemNumber = numberOfItems;
         mOnClickListener = listener;
         mData = new ArrayList<>();
-        isRefreshing = false;
+        isRefreshing = true;
         syncExpenseList();
     }
 

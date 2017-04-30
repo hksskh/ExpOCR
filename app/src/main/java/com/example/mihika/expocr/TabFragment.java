@@ -115,6 +115,22 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         if(baseView == null){//if baseView has been created, then we enter into this onCreateView function because of the limited cached pages size in ViewPager, so we can simply restore view from baseView
             asssignView(inflater, container);
             setupRefreshLayout();
+            handler = new Handler(){
+                public void handleMessage(Message msg){
+                    super.handleMessage(msg);
+                    switch(msg.what){
+                        case FRIEND_FRAGMENT_REFRESH:
+                            swipeRefreshLayout.setRefreshing(false);
+                            break;
+                        case GROUP_FRAGMENT_REFRESH:
+                            swipeRefreshLayout.setRefreshing(false);
+                            break;
+                        case EXPENSE_FRAGMENT_REFRESH:
+                            swipeRefreshLayout.setRefreshing(false);
+                            break;
+                    }
+                }
+            };
         }
         return baseView;
     }
@@ -122,23 +138,7 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
     private void setupRefreshLayout(){
         swipeRefreshLayout = (SwipeRefreshLayout) baseView.findViewById(R.id.tabSwipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.red, R.color.green, R.color.blue);
-        handler = new Handler(){
-            public void handleMessage(Message msg){
-                super.handleMessage(msg);
-                switch(msg.what){
-                    case FRIEND_FRAGMENT_REFRESH:
-                        swipeRefreshLayout.setRefreshing(false);
-
-                        break;
-                    case GROUP_FRAGMENT_REFRESH:
-                        swipeRefreshLayout.setRefreshing(false);
-                        break;
-                    case EXPENSE_FRAGMENT_REFRESH:
-                        swipeRefreshLayout.setRefreshing(false);
-                        break;
-                }
-            }
-        };
+        swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -266,12 +266,18 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
     public void refreshTabFragment(){
         switch(page_title){
             case "FRIENDS":
+                swipeRefreshLayout.setRefreshing(true);
+                mFriendAdapter.setIsRefreshing(true);
                 mFriendAdapter.syncFriendList();
                 break;
             case "GROUPS":
+                swipeRefreshLayout.setRefreshing(true);
+                mGroupAdapter.setIsRefreshing(true);
                 mGroupAdapter.syncGroupList();
                 break;
             case "EXPENSES":
+                swipeRefreshLayout.setRefreshing(true);
+                mExpenseAdapter.setIsRefreshing(true);
                 mExpenseAdapter.syncExpenseList();
                 break;
         }

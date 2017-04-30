@@ -4,23 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.example.mihika.expocr.IndividualFriendActivity" >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/individual_friend_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/individual_friend_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/individual_friend_toolbar">
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/individual_friend_toolbar"
                 android:layout_width="match_parent"
@@ -49,22 +49,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/Base.TextAppearance.AppCompat.Body1"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="5dp"
                         android:gravity="center"
-
-                        android:textColor="@color/ap_white"
-                        android:layout_below="@id/friend_receiver_name" />
+                        android:textColor="@color/ap_white" />
 
                     <TextView
                         android:id="@+id/friend_receiver_net_balance"
-                        android:text="Net Balance: $"
+                        android:text="Net Balance: "
                         android:layout_width="match_parent"
                         style="@style/Base.TextAppearance.AppCompat.Title"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/friend_receiver_email"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
                         android:textColor="@color/ap_white"
-                        android:gravity="center"/>
+                        android:gravity="center" />
 
                     <!--
                     <LinearLayout
@@ -92,27 +90,18 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/individual_friend_list_layout"
+    <FrameLayout
+        android:id="@+id/individual_friend_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <ListView
-            android:id="@+id/expenses_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-        </ListView>
-    </LinearLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/individual_friend_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/individual_friend_list_layout"
+        app:layout_anchor="@id/individual_friend_container"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@android:drawable/ic_menu_add"
         app:backgroundTint="@color/colorPrimary"

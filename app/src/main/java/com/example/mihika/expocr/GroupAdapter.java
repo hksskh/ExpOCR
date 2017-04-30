@@ -53,7 +53,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             this.u_id = u_id;
             mOnClickListener = listener;
             mData = new ArrayList<>();
-            isRefreshing = false;
+            isRefreshing = true;
             syncGroupList();
     }
 

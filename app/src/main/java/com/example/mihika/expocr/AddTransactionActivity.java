@@ -61,6 +61,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     Button add_transaction_from_receipt_btn;
     private Handler handler;
     private final String TAG = "AddTransactionActivity";
+    private String fromActivity;
 
     private JSONArray receipt_list = null;
     private final List<String> friend_autos = new ArrayList<>();
@@ -87,6 +88,11 @@ public class AddTransactionActivity extends AppCompatActivity {
             }
         }
         friend_autos.addAll(FriendAdapter.get_friend_email_list());
+        if (inIntent.hasExtra("from")) {
+            fromActivity = inIntent.getStringExtra("from");
+        } else {
+            fromActivity = "Main";
+        }
 
         //transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
         //userSpinner = (MultiSelectionSpinner) findViewById(R.id.user_spinner);
@@ -241,9 +247,14 @@ public class AddTransactionActivity extends AppCompatActivity {
                         msg.setData(bundle);
                         handler.sendMessage(msg);
                     } else {
-                        Intent gotoMain = new Intent(AddTransactionActivity.this, MainActivity.class);
-                        gotoMain.putExtra("addTransaction", true);
-                        startActivity(gotoMain);
+                        Intent intent = new Intent();
+                        if (fromActivity.equals("IndividualFriend")) {
+                            intent.setClass(AddTransactionActivity.this, IndividualFriendActivity.class);
+                        } else if (fromActivity.equals("Main")) {
+                            intent.setClass(AddTransactionActivity.this, MainActivity.class);
+                        }
+                        intent.putExtra("addTransaction", true);
+                        startActivity(intent);
                     }
                 } catch (JSONException jsex){
                     jsex.printStackTrace();

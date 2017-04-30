@@ -163,9 +163,9 @@ public class RecordPaymentActivity extends AppCompatActivity {
                     if(jsonObject.has("warning")){
                         ;
                     }else{
-                        Intent gotoMain = new Intent(RecordPaymentActivity.this, MainActivity.class);
-                        gotoMain.putExtra("addTransaction", true);
-                        startActivity(gotoMain);
+                        Intent gotoIndividualFriend = new Intent(RecordPaymentActivity.this, IndividualFriendActivity.class);
+                        gotoIndividualFriend.putExtra("settle_up", true);
+                        startActivity(gotoIndividualFriend);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

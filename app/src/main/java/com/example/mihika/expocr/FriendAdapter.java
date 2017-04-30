@@ -59,7 +59,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         maxItemNumber = numberOfItems;
         mOnClickListener = listener;
         mData = new ArrayList<>();
-        isRefreshing = false;
+        isRefreshing = true;
         syncFriendList();
     }
 

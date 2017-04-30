@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 Log.d("MainActivity", "Add button clicked");
                 Intent transaction = new Intent(MainActivity.this, AddTransactionActivity.class);
+                transaction.putExtra("from", "Main");
                 startActivity(transaction);
             }
         });

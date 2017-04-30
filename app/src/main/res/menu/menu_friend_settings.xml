@@ -7,11 +7,6 @@
         android:title="Settle Up"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_individual_friend_save"
-        android:orderInCategory="100"
-        android:title="Save Transactions"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_individual_friend_delete"
         android:orderInCategory="100"
         android:title="Delete Friend"
