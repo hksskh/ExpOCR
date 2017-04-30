@@ -148,12 +148,6 @@ public class IndividualGroupActivity extends AppCompatActivity implements Indivi
         }
     }
 
-    /**
-     * Create the list of group transactions to display.
-     * @param menu
-     * @param v
-     * @param menuInfo
-     */
     /*@Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -163,11 +157,6 @@ public class IndividualGroupActivity extends AppCompatActivity implements Indivi
         }
     }*/
 
-    /**
-     * Allows a group transaction to be deleted if the user taps and hold onto the transaction item.
-     * @param item
-     * @return
-     */
     /*@Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
