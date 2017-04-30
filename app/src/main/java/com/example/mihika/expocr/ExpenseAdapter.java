@@ -17,11 +17,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by briannaifft on 3/1/17.
- */
 
 public class ExpenseAdapter extends BaseAdapter {
+
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Expense> mDataSource;

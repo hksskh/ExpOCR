@@ -39,6 +39,10 @@ import java.util.List;
 import java.util.logging.LogRecord;
 import android.os.Handler;
 
+/**
+ * An activity for the settings page of an individual group. Here, the group's name can be changed,
+ * members can be added, or the group can be deleted.
+ */
 public class GroupSettingsActivity extends AppCompatActivity implements GroupSettingsMembersAdapter.MemberListItemClickListener {
 
     private static final int DELETED = 1;
@@ -104,6 +108,11 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
         };
     }
 
+    /**
+     * Creates menu to show "Save" button
+     * @param menu
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -111,6 +120,11 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
         return true;
     }
 
+    /**
+     * Saves the group's settings if the "Save" button is clicked
+     * @param item
+     * @return boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -123,6 +137,11 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
         }
     }
 
+    /**
+     * Provides a dropdown menu of all friends that can be added to the group when "Add Friend to Group"
+     * button is clicked.
+     * @param clickedItemIndex
+     */
     @Override
     public void onMemberListItemClick(final int clickedItemIndex) {
         if (clickedItemIndex == 0) {
@@ -189,6 +208,10 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
         }
     }
 
+    /**
+     * Getter for group id
+     * @return int g_id
+     */
     public int getG_id() {
         return g_id;
     }
@@ -256,7 +279,6 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
 
             String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         }
-
     }
 
     private void delete_group() {
@@ -272,4 +294,5 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
             }
         }).start();
     }
+
 }

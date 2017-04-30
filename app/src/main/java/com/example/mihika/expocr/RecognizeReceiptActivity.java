@@ -28,6 +28,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity implements the OCR technology by scanning and parsing a receipt into individual
+ * items and prices.
+ */
 public class RecognizeReceiptActivity extends AppCompatActivity implements ReceiptAdapter.ReceiptListItemClickListener{
 
     private JSONArray receipt_sketch;
@@ -58,6 +62,11 @@ public class RecognizeReceiptActivity extends AppCompatActivity implements Recei
 
     }
 
+    /**
+     * Creates the menu option to recognize the receipt.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -65,6 +74,11 @@ public class RecognizeReceiptActivity extends AppCompatActivity implements Recei
         return true;
     }
 
+    /**
+     * If the button is clicked, the receipt starts being recognized and parsed.
+     * @param item
+     * @return boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

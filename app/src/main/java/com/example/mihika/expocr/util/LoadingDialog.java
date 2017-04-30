@@ -14,6 +14,12 @@ import com.example.mihika.expocr.R;
 
 public class LoadingDialog {
 
+    /**
+     * Shows the loading dialog with a given message.
+     * @param context
+     * @param msg dialog text
+     * @return Dialog
+     */
     public static Dialog showDialog(Context context, String msg){
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.dialog_loading, null);
@@ -37,6 +43,10 @@ public class LoadingDialog {
         return dialog;
     }
 
+    /**
+     * Closes the loading dialog.
+     * @param dialog
+     */
     public static void closeDialog(Dialog dialog){
         if(dialog != null & dialog.isShowing()){
             dialog.dismiss();

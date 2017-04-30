@@ -187,7 +187,7 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
                 mList.setLayoutManager(layoutManager);
                 mList.setHasFixedSize(true);
 
-                mGroupAdapter = new GroupAdapter(NUM_LIST_ITEMS, ((MainActivity)mListener).getU_id(), this);
+                mGroupAdapter = new GroupAdapter(NUM_LIST_ITEMS, MainActivity.getU_id(), this);
 
                 mList.setAdapter(mGroupAdapter);
                 break;

@@ -38,7 +38,9 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+/**
+ * This activity handles taking the picture for when a user wants to scan a bill.
+ */
 public class PhotoCaptureActivity extends AppCompatActivity {
 
     // code adapted from following tutorials:
@@ -82,6 +84,12 @@ public class PhotoCaptureActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Get permission from user to use their camera.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 0) {
@@ -92,6 +100,10 @@ public class PhotoCaptureActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Takes the picture and stores it.
+     * @param view
+     */
     public void takePicture(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         file = FileProvider.getUriForFile(PhotoCaptureActivity.this, BuildConfig.APPLICATION_ID + ".provider", getOutputMediaFile());

@@ -3,7 +3,6 @@ package com.example.mihika.expocr;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.nfc.tech.NfcA;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -45,7 +44,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by mihika on 4/8/17.
+ * This activity shows an individual group's name, the net balance between the user and the group,
+ * and a list of the group's transactions. Options to settle up, add a group transaction, or change
+ * the group settings are present as well.
  */
 public class IndividualGroupActivity extends AppCompatActivity implements IndividualGroupFragment.OnFragmentInteractionListener {
 
@@ -147,6 +148,12 @@ public class IndividualGroupActivity extends AppCompatActivity implements Indivi
         }
     }
 
+    /**
+     * Create the list of group transactions to display.
+     * @param menu
+     * @param v
+     * @param menuInfo
+     */
     /*@Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -154,9 +161,14 @@ public class IndividualGroupActivity extends AppCompatActivity implements Indivi
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_list, menu);
         }
-    }
+    }*/
 
-    @Override
+    /**
+     * Allows a group transaction to be deleted if the user taps and hold onto the transaction item.
+     * @param item
+     * @return
+     */
+    /*@Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {

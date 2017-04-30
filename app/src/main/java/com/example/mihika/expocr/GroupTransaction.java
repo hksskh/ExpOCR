@@ -12,9 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by awesomeness on 4/9/2017.
+ * This class allows the app to display and work with group transactions.
  */
-
 public class GroupTransaction {
 
     private double amount;
@@ -26,6 +25,11 @@ public class GroupTransaction {
     private int gid;
     private int uid;
 
+    /**
+     * Gets all group transactions for a certain group and returns a List to display them with.
+     * @param g_id group id
+     * @return List a list of all of the group's transactions
+     */
     public static List<GroupTransaction> getGroupTransactionsFromServer(int g_id){
         String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_group_transactions";
         String requestBody = "g_id="+g_id;
@@ -91,6 +95,12 @@ public class GroupTransaction {
         return text;
     }*/
 
+    /**
+     * Gets all pairs where one user owes another user in the group.
+     * @param g_id group id
+     * @param u_id user id
+     * @return List a list of pairs of people who owe each other in the group
+     */
     public static List<Pair> getOwedAmounts(int g_id, int u_id){
         List<Pair> amounts = getUserNetBalances(g_id);
         List<Pair> dues = new ArrayList<>();
@@ -155,6 +165,12 @@ public class GroupTransaction {
         return dues;
     }
 
+    /**
+     * Gets the user's net balance for the specific group
+     * @param g_id group id
+     * @param u_id user id
+     * @return double net balance of user for the group
+     */
     public static double getUserNetBalance(int g_id, int u_id){
         List<GroupTransaction> mDataSource = getGroupTransactionsFromServer(g_id);
         HashMap<Integer, Double> balances= new HashMap<>();
@@ -170,6 +186,11 @@ public class GroupTransaction {
 
     }
 
+    /**
+     * Gets a list of net balance for each member of the group.
+     * @param g_id group id
+     * @return List a list of pairs (members and their net balances)
+     */
     public static List<Pair> getUserNetBalances(int g_id){
         List<GroupTransaction> mDataSource = getGroupTransactionsFromServer(g_id);
         HashMap<Integer, GroupTransaction> balances= new HashMap<>();
@@ -203,6 +224,11 @@ public class GroupTransaction {
         return pairs;
     }
 
+    /**
+     *
+     * @param mids
+     * @return
+     */
     public static List<Pair> getMemberBriefs(List<Integer> mids) {
         String serverUrl = "http://" + ServerUtil.getServerAddress() + "user/get_briefs";
         StringBuilder stringBuilder = new StringBuilder();
@@ -272,6 +298,7 @@ public class GroupTransaction {
         }
 
     }
+
     public static void main(String[] args){
         System.out.println("running");
         System.out.println("part 1");

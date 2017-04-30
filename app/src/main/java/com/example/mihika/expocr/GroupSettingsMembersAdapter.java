@@ -64,7 +64,6 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
         MemberViewHolder viewHolder = new MemberViewHolder(view);
 
         return viewHolder;
-
     }
 
     /**
@@ -122,7 +121,6 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
             item_name = (TextView) itemView.findViewById(R.id.item_member_list_group_name);
             item_email = (TextView) itemView.findViewById(R.id.item_member_list_group_email);
             item_balance = (TextView) itemView.findViewById(R.id.item_member_list_group_balance);
-
         }
 
         void bind(final int listIndex){

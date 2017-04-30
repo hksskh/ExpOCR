@@ -65,7 +65,6 @@ public class AddTransactionReceiptItemDetailAdapter extends RecyclerView.Adapter
         ItemViewHolder viewHolder = new ItemViewHolder(view);
 
         return viewHolder;
-
     }
 
     /**
@@ -110,7 +109,6 @@ public class AddTransactionReceiptItemDetailAdapter extends RecyclerView.Adapter
         return mData;
     }
 
-
     //inner class
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -129,7 +127,6 @@ public class AddTransactionReceiptItemDetailAdapter extends RecyclerView.Adapter
         }
 
         void bind(final int listIndex){
-
             try {
                 JSONObject jsonObject = mData.getJSONObject(listIndex);
                 item_text.setText(jsonObject.getString("text"));
