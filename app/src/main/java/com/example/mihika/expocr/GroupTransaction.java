@@ -90,7 +90,7 @@ public class GroupTransaction {
         String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_transactions"; //check this with group
         String requestBody = "g_id=" + g_id;
 
-        String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
+        String text = ServerUtil.sendGroupMemberData(serverUrl, requestBody, "UTF-8");
 
         return text;
     }*/
@@ -275,6 +275,9 @@ public class GroupTransaction {
         return members;
     }
 
+    /**
+     * stucture class to hold a single group member information
+     */
     static class Pair {
         public Integer uid;
         public Double amount;

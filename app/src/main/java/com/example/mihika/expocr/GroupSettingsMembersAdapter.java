@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * adapter for recyclerview of Group members at Group settings page
+ */
 public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSettingsMembersAdapter.MemberViewHolder> {
 
     private final MemberListItemClickListener mOnClickListener;
@@ -100,6 +103,9 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
         return members_avatar_uri_list;
     }
 
+    /**
+     * synchronize member info in the group from server, fill in the group member list in group settings page
+     */
     public void syncMemberList(){
         new MembersQueryTask().execute();
     }
@@ -206,6 +212,9 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
         }
     }
 
+    /**
+     * AsyncTask to request member information from server, fill in the dataset and update recyclerview content
+     */
     private class MembersQueryTask extends AsyncTask<String, Void, String> {
 
         @Override

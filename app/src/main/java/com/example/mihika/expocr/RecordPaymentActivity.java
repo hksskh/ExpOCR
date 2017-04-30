@@ -100,17 +100,19 @@ public class RecordPaymentActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * check payment amount and proceed to send payment request to server
+     */
     private void attemptRecordPayment() {
         // Reset errors.
         paymentAmount.setError(null);
 
-        // Store values at the time of the login attempt.
         String amount = paymentAmount.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
+        // Check for a valid amount, if the user entered one.
         if (TextUtils.isEmpty(amount)|| !isAmountValid(amount)) {
             paymentAmount.setError(getString(R.string.error_invalid_amount));
             focusView = paymentAmount;
@@ -131,6 +133,9 @@ public class RecordPaymentActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * send payment request to server and jump back to refreshing individual friend page
+     */
     private void recordPayment() {
         final String receiver = dropdown1.getSelectedItem().toString();
         String sender = dropdown2.getSelectedItem().toString();

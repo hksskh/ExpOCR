@@ -35,6 +35,9 @@ import java.util.Vector;
  * Created by mihika on 4/8/17.
  */
 
+/**
+ * adapter for recyclerview in group tab page
+ */
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
 
     //number of views it will hold
@@ -125,7 +128,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             this.isRefreshing = isRefreshing;
         }
 
-        public void syncGroupList(){
+    /**
+     * synchronize with server the group list
+     */
+    public void syncGroupList(){
             new GroupAdapter.GroupsQueryTask().execute();
         }
 
@@ -174,6 +180,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
     }
 
+    /**
+     * AsyncTask to sync with server the group list, the fill in the dataset and update recyclerview content
+     */
     private class GroupsQueryTask extends AsyncTask<String, Void, JSONArray> {
 
         @Override
@@ -205,6 +214,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
     }
 
+    /**
+     * fill dataset with group list retrieved from server
+     * @param jsonArray
+     */
     private void fill_groups_list(JSONArray jsonArray) {
         int limit = maxItemNumber;
         mData.clear();

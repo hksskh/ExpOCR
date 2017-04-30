@@ -30,6 +30,9 @@ import java.util.Locale;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
 
+/**
+ * adapter for recyclerview at individual friend page
+ */
 public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFriendAdapter.ItemViewHolder> {
 
     private boolean isRefreshing;
@@ -105,6 +108,10 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         return mData;
     }
 
+    /**
+     * get net balances of friend transactions in this individual friend page
+     * @return
+     */
     public double getNetBalance() {
         double netBalance = 0.0;
         for(Expense x : mData) {
@@ -117,10 +124,16 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         this.isRefreshing = isRefreshing;
     }
 
+    /**
+     * synchronize friend transactions with server and fill in content of this page
+     */
     public void syncIndividualFriendList() {
         new TransactionBetweenQueryTask().execute();
     }
 
+    /**
+     * setup ItemTouchHelper.Callback to handle delete friend transaction by swiping
+     */
     private void setupItemTouchHelper(){
         ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
 
@@ -216,6 +229,9 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         }
     }
 
+    /**
+     * AsyncTask to request transactions between friends, fill in dataset and update recyclerview content
+     */
     class TransactionBetweenQueryTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -278,6 +294,9 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         return text;
     }
 
+    /**
+     * AsyncTask to send deletion of friend transaction to server and update UI
+     */
     class DeleteTransactionQueryTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -325,6 +344,10 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         return result;
     }
 
+    /**
+     * refresh friend information and net balance in this page when refreshing fragment list content
+     * @param s
+     */
     private void refreshActivityToolBar(String s) {
         ((IndividualFriendFragment)mOnClickListener).refreshActivityToolBar(s);
     }

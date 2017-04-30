@@ -32,8 +32,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -142,14 +140,18 @@ public class PhotoCaptureActivity extends AppCompatActivity {
                         Log.d(TAG, "image_byte length: " + String.valueOf(image_byte.length));
                         String image_string = byteToString(image_byte);
                         Log.d(TAG, "image_string length: " + String.valueOf(image_string.length()));
-                        sendData(image_string);
+                        sendImageToOCR(image_string);
                     }
                 });
             }
         }
     }
 
-    private void sendData(final String image_string){
+    /**
+     * send receipt photo (converted to bytes already) to server, and transfer returned recognized receipt to RecognizeReceiptActivity
+     * @param image_string
+     */
+    private void sendImageToOCR(final String image_string){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -196,6 +198,10 @@ public class PhotoCaptureActivity extends AppCompatActivity {
         return image_string;
     }
 
+    /**
+     * resize and return bytes of receipt photo
+     * @return
+     */
     private byte[] loadImage(){
         byte[] data = null;
         File image_file = null;

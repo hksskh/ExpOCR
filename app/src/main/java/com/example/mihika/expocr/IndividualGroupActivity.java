@@ -178,6 +178,10 @@ public class IndividualGroupActivity extends AppCompatActivity implements Indivi
         return fab;
     }
 
+    /**
+     * handle refreshing request of group name and net balance from invidual group fragment/adapter
+     * @param s
+     */
     public void refreshToolBar(String s) {
         String[] infos = s.split(",");
 

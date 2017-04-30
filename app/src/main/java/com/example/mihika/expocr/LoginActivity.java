@@ -225,6 +225,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+    /**
+     * handle user login through facebook
+     * @param email
+     * @param name
+     */
     private void doFaceBookLogin(final String email, final String name){
         new Thread(new Runnable(){
             @Override
@@ -252,13 +257,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Log.d(TAG, "From server:" + response);
                     jsonObject = new JSONObject(response);
                     String u_email = jsonObject.getString("email");
-                    if(!DUMMY_CREDENTIALS.contains(u_email)){
-                        DUMMY_CREDENTIALS.add(u_email);
-                        emailAdapter.add(u_email);
-                        FileWriter fw = new FileWriter(new File(getExternalCacheDir(), "user.list"), true);
-                        fw.write(u_email + System.getProperty("line.separator"));
-                        fw.close();
-                    }
+                    addEmailToDummyCredentials(u_email);
                     Intent gotoMain = new Intent(LoginActivity.this, MainActivity.class);
                     gotoMain.putExtra("u_id", jsonObject.getInt("id"));
                     gotoMain.putExtra("u_name", jsonObject.getString("name"));
@@ -304,6 +303,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    /**
+     * set up user email local cache
+     */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -328,6 +330,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
+    /**
+     * dynamic request for contact access permission
+     * @return
+     */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -374,6 +380,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return sb.toString();
     }
 
+    /**
+     * send login request to server. if succeed, jump to MainActivity
+     */
     private void login() {
         new Thread(new Runnable(){
             @Override
@@ -398,17 +407,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         String warning = jsonObject.getString("warning");
                         Bundle bundle = new Bundle();
                         bundle.putString("warning", warning);
-                        if(warning.startsWith("Email")){
-                            Message msg = new Message();
-                            msg.what = EMAIL_NOT_EXIST;
-                            msg.setData(bundle);
-                            handler.sendMessage(msg);
-                        }else{
-                            Message msg = new Message();
-                            msg.what = PASSWORD_INCORRECT;
-                            msg.setData(bundle);
-                            handler.sendMessage(msg);
-                        }
+                        isEmailorPasswordValid(warning, bundle);
                     }
                     else {
                         Message msg = new Message();
@@ -416,13 +415,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         handler.sendMessage(msg);
 
                         String u_email = jsonObject.getString("email");
-                        if(!DUMMY_CREDENTIALS.contains(u_email)){
-                            DUMMY_CREDENTIALS.add(u_email);
-                            emailAdapter.add(u_email);
-                            FileWriter fw = new FileWriter(new File(getExternalCacheDir(), "user.list"), true);
-                            fw.write(u_email + System.getProperty("line.separator"));
-                            fw.close();
-                        }
+                        addEmailToDummyCredentials(u_email);
 
                         Intent gotoMain = new Intent(LoginActivity.this, MainActivity.class);
                         gotoMain.putExtra("u_id", jsonObject.getInt("id"));
@@ -435,6 +428,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
         }).start();
+    }
+
+    private void addEmailToDummyCredentials(String u_email) throws IOException {
+        if(!DUMMY_CREDENTIALS.contains(u_email)){
+            DUMMY_CREDENTIALS.add(u_email);
+            emailAdapter.add(u_email);
+            FileWriter fw = new FileWriter(new File(getExternalCacheDir(), "user.list"), true);
+            fw.write(u_email + System.getProperty("line.separator"));
+            fw.close();
+        }
+    }
+
+    private void isEmailorPasswordValid(String warning, Bundle bundle) {
+        if(warning.startsWith("Email")){
+            Message msg = new Message();
+            msg.what = EMAIL_NOT_EXIST;
+            msg.setData(bundle);
+            handler.sendMessage(msg);
+        }else{
+            Message msg = new Message();
+            msg.what = PASSWORD_INCORRECT;
+            msg.setData(bundle);
+            handler.sendMessage(msg);
+        }
     }
 
 
@@ -479,17 +496,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView.requestFocus();
         } else {
             login();
-            /*
-            if (!success) {
-                Toast.makeText(getApplicationContext(), "Username or password is not correct", Toast.LENGTH_SHORT).show();
-            } else {
-                success = false;
-                Intent gotoMain = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(gotoMain);
-            }
-            */
         }
     }
+
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic

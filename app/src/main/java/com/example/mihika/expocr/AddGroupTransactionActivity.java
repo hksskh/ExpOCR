@@ -6,9 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -27,7 +25,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 /**
  * Class for adding a group transaction. Selects user that paid and users to split bill between and
@@ -122,7 +119,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity{
                         groupMemberArray.add(u_id);
                     }
 
-                    getNamesFromIds();
+                    getNamesFromUids();
                     Message msg = new Message();
                     msg.what = SET_USER_SPINNER_ENTRIES;
                     handler.sendMessage(msg);
@@ -134,7 +131,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity{
         }).start();
     }
 
-    private void getNamesFromIds(){
+    private void getNamesFromUids(){
         nameIdMap.put(my_name + " (" + my_email + ")", MainActivity.getU_id());
         userSpinnerNames.add(my_name + " (" + my_email + ")");
 
@@ -195,7 +192,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity{
         }
 
         if (!cancel) {
-            sendData();
+            sendGroupTransactionData();
         }
     }
 
@@ -203,7 +200,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity{
      * Splits amount between all users selected equally. Sends group id, user id, amount, memo,
      * date, and category for each user splitting the bill to the server.
      */
-    public void sendData(){
+    public void sendGroupTransactionData(){
         new Thread(new Runnable(){
             @Override
             public void run() {

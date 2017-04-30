@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+/**
+ * internal fragment for individual friend page, used to display recyclerview of friend transactions list
+ */
 public class IndividualFriendFragment extends Fragment implements IndividualFriendAdapter.IndividualFriendItemClickListener {
     /**
      * The fragment argument representing the item ID that this fragment
@@ -148,12 +151,19 @@ public class IndividualFriendFragment extends Fragment implements IndividualFrie
         return mList;
     }
 
+    /**
+     * set swipe layout, synchronize friend transactions with server and refresh fragment content
+     */
     public void refreshFragment(){
         swipeRefreshLayout.setRefreshing(true);
         mAdapter.setIsRefreshing(true);
         mAdapter.syncIndividualFriendList();
     }
 
+    /**
+     * forward refreshing request of friend information and netbalance to IndividualFriendActivity
+     * @param s
+     */
     public void refreshActivityToolBar(String s) {
         ((IndividualFriendActivity)mListener).refreshToolBar(s);
     }

@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatAutoCompleteTextView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 
 import android.widget.Button;
 import android.widget.MultiAutoCompleteTextView;
@@ -18,10 +15,6 @@ import com.example.mihika.expocr.util.ServerUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Vector;
 
 /**
@@ -57,7 +50,7 @@ public class AddGroupMembersActivity extends AppCompatActivity{
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendData();
+                sendGroupMemberData();
             }
         });
     }
@@ -75,7 +68,7 @@ public class AddGroupMembersActivity extends AppCompatActivity{
      * the group, and the emails of the members that are to be added. If the friend to add does not
      * exist, that email will return a warning and not be added to the group.
      */
-    public void sendData(){
+    public void sendGroupMemberData(){
         new Thread(new Runnable(){
             @Override
             public void run() {

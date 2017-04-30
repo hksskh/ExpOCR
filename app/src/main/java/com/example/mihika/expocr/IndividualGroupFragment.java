@@ -13,6 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Internal Fragment in individual group activity, used to display recyclerview containing group transactions list
+ */
 public class IndividualGroupFragment extends Fragment implements IndividualGroupAdapter.IndividualGroupItemClickListener {
     /**
      * The fragment argument representing the item ID that this fragment
@@ -143,12 +146,19 @@ public class IndividualGroupFragment extends Fragment implements IndividualGroup
         return mList;
     }
 
+    /**
+     * set swipe layout, sync group transactions with server and refresh fragment content
+     */
     public void refreshFragment(){
         swipeRefreshLayout.setRefreshing(true);
         mAdapter.setIsRefreshing(true);
         mAdapter.syncIndividualGroupList();
     }
 
+    /**
+     * forward request of refreshing group name and net balance from adapter to individual group activity
+     * @param s
+     */
     public void refreshActivityToolBar(String s) {
         ((IndividualGroupActivity)mListener).refreshToolBar(s);
     }

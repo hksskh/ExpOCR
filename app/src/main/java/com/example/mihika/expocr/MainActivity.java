@@ -43,6 +43,9 @@ import java.util.Date;
 
 import static android.os.Environment.getExternalStorageDirectory;
 
+/**
+ * Main activity page for this app. containing left drawer, three tab pages (friend, group and expense).
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TabFragment.OnFragmentInteractionListener {
 
@@ -232,6 +235,11 @@ public class MainActivity extends AppCompatActivity
 //        return super.onOptionsItemSelected(item);
 //    }
 
+    /**
+     * handle item click in left drawer, jump to specific activities
+     * @param item
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -322,6 +330,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * download avatar for current user without local avatar cache
+     */
     private void downSyncAvatar(){
         new Thread(new Runnable() {
             @Override
@@ -345,6 +356,11 @@ public class MainActivity extends AppCompatActivity
         }).start();
     }
 
+    /**
+     * download byte array of user avatar from server
+     * @param u_id
+     * @return
+     */
     public static byte[] download_avatar_bytes(int u_id) {
         byte[] image_byte = null;
         try {
@@ -362,6 +378,10 @@ public class MainActivity extends AppCompatActivity
         return image_byte;
     }
 
+    /**
+     * upload avatar file (content converted to bytes) to server with local avatar cache
+     * i.e. local avatar cache is preferred than avatar file on server
+     */
     private void upSyncAvatar(){
         new Thread(new Runnable() {
             @Override
@@ -386,6 +406,9 @@ public class MainActivity extends AppCompatActivity
         }).start();
     }
 
+    /**
+     * show dialog to choose to get avatar from gallery or from camera
+     */
     private void showAvatarDialog(){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final AlertDialog dialog = dialogBuilder.create();
@@ -415,6 +438,10 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
+    /**
+     * forward cropping of chosen photo to system CROP API
+     * @param uri
+     */
     private void cropPhoto(Uri uri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
@@ -432,6 +459,9 @@ public class MainActivity extends AppCompatActivity
 
 }
 
+/**
+ * view page adapter holding tab fragments (friend, group and expense) in MainActivity
+ */
 class TabFragmentAdapter extends FragmentPagerAdapter {
     private FragmentManager fm;
     private String[] tab_titles;

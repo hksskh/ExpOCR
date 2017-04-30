@@ -89,6 +89,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
         return sb.toString();
     }
 
+    /**
+     * check if the entered email and password are valid. if valid, proceed to send change password request to server
+     */
     private void attemptChangePassword() {
         Log.d(TAG, "Called attempt_change_password");
 
@@ -137,13 +140,22 @@ public class ChangePasswordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * send change password request to server
+     * if succeed, jump back to LoginActivity
+     */
     private void changePassword() {
         new Thread(new Runnable(){
             @Override
             public void run() {
                 String email = mEmailView.getText().toString();
                 String password = mPasswordView.getText().toString();
-
+                String encrypted = null;
+                try {
+                    encrypted = encrypt(password);
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
                 String url = "http://" + ServerUtil.getServerAddress() + "user/change_password";
                 String requestString = "email=" + email + "&password=" + password;
                 Log.d(TAG, requestString);

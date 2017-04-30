@@ -33,6 +33,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
+/**
+ * adapter for recyclerview in group balance page
+ */
 public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapter.BalanceViewHolder> {
 
     private final BalanceListItemClickListener mOnClickListener;
@@ -103,6 +106,9 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         return mData;
     }
 
+    /**
+     * synchronize with server about group transactions, calculate balance to each other groupmates
+     */
     private void syncBalanceList(){
         new BalancesQueryTask().execute();
     }
@@ -154,6 +160,11 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         }
     }
 
+    /**
+     * handle settle up operation for a specific group balance
+     * @param brief
+     * @param balance
+     */
     private void show_settle_up_dialog(final String brief, double balance) {
         AlertDialog.Builder builder = new AlertDialog.Builder((GroupBalanceActivity)mOnClickListener);
         LayoutInflater inflater = ((GroupBalanceActivity)mOnClickListener).getLayoutInflater();
@@ -199,6 +210,11 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         dialog.show();
     }
 
+    /**
+     * send settle up request to server
+     * @param u_email
+     * @param balance
+     */
     private void doSettleUp(String u_email, double balance) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();
@@ -240,6 +256,9 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
     }
 
+    /**
+     * AsyncTask to get group balances from server, fill in the dataset and update recyclerview content
+     */
     private class BalancesQueryTask extends AsyncTask<String, Void, List<GroupTransaction.Pair>> {
 
         @Override
@@ -254,6 +273,10 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         }
     }
 
+    /**
+     * fill in dataset with balances with other group mates
+     * @param list
+     */
     private void fill_balances_list(List<GroupTransaction.Pair> list){
         System.out.println("GroupBalanceAdapter: fill_balances_list: size: " + list.size());
         mData.clear();//do not forget
@@ -278,6 +301,10 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         notifyDataSetChanged();
     }
 
+    /**
+     * get balances with other groupmates in the group
+     * @return
+     */
     private List<GroupTransaction.Pair> get_user_balances(){
         List<GroupTransaction.Pair> result = GroupTransaction.getOwedAmounts(((GroupBalanceActivity)mOnClickListener).getG_id(), MainActivity.getU_id());
         return result;

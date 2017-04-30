@@ -220,6 +220,9 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
         new SaveQueryTask().execute();
     }
 
+    /**
+     * AsyncTask to save group name and newly added group members to server
+     */
     private class SaveQueryTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -259,6 +262,9 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
         return null;
     }
 
+    /**
+     * send newly added group members to server
+     */
     private void add_member_by_emails() {
         List<String> u_emails = new ArrayList<>();
 
