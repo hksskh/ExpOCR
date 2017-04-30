@@ -45,6 +45,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/** 
+ * This activity displays information about an individual friend, the net balance between you and 
+ * that friend, and a list of all the transaction between you and your friends. 
+ */
 public class IndividualFriendActivity extends AppCompatActivity implements IndividualFriendFragment.OnFragmentInteractionListener {
 
     private IndividualFriendFragment fragment;
@@ -132,6 +136,11 @@ public class IndividualFriendActivity extends AppCompatActivity implements Indiv
         }
     }
 
+    /**
+     * Create the popup menu of settings.
+     * @param menu
+     * @return boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -139,6 +148,12 @@ public class IndividualFriendActivity extends AppCompatActivity implements Indiv
         return true;
     }
 
+    /**
+     * Perform activity based on menu item selected. If settle up is clicked, a transaction will be
+     * added. If delete friend is selected, the friend will be deleted.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

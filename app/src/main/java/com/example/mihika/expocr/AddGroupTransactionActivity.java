@@ -30,10 +30,12 @@ import java.util.Locale;
 import java.util.Vector;
 
 /**
- * Created by briannaifft on 4/13/17.
+ * Class for adding a group transaction. Selects user that paid and users to split bill between and
+ * gets the memo, amount, and category for the transaction. It also checks if at least one person is
+ * chosen to split with and if the amount is valid.
  */
+public class AddGroupTransactionActivity extends AppCompatActivity{
 
-public class AddGroupTransactionActivity extends AppCompatActivity {
     private Spinner payerSpinner;
     private MultiSelectionSpinner userSpinner;
     private Spinner categorySpinner;
@@ -52,16 +54,13 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
     private int g_id;
     private String g_name;
 
-    private static final String[] amount_autos = new String[]{
-
-    };
+    private static final String[] amount_autos = new String[]{ };
     private static final String[] memo_autos = new String[]{
             "Movie", "Snack", "Popcorn", "Pizza", "Grocery", "Lunch", "Dinner", "Electricity", "Utility Bills"
-
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_group_transaction);
 
@@ -103,18 +102,14 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
         };
     }
 
-    protected void addEntriesForSpinner() {
-//        List<String> list = new ArrayList<String>();
-
+    protected void addEntriesForSpinner(){
         new Thread(new Runnable(){
             @Override
             public void run() {
-
                 String url = "http://" + ServerUtil.getServerAddress() + "group/get_members";
                 StringBuilder requestString = new StringBuilder();
                 requestString.append("g_id=").append(g_id);
 
-//                Log.d(TAG, requestString.toString());
                 String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
 
                 System.out.println("From server:" + response);
@@ -135,23 +130,13 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                 } catch (JSONException jsex){
                     jsex.printStackTrace();
                 }
-
             }
         }).start();
-
-//        userSpinner.setItems(list);
-
     }
 
-    private void getNamesFromIds() {
-        //new Thread(new Runnable(){
-            //@Override
-            //public void run() {
-
+    private void getNamesFromIds(){
         nameIdMap.put(my_name + " (" + my_email + ")", MainActivity.getU_id());
-
         userSpinnerNames.add(my_name + " (" + my_email + ")");
-
 
                 for(int i =0; i< groupMemberArray.size(); i++) {
                     if(!(groupMemberArray.get(i) == MainActivity.getU_id())) {
@@ -173,12 +158,10 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                         }
                     }
                 }
-            //}
-        //}).start();
     }
 
+    // Adapters for AutoCompleteTextViews for memo and amount.
     private void set_autotext_adapters(){
-        //adapters for AutoCompleteTextViews
         ArrayAdapter<String> amount_adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, amount_autos);
         amount_text = (AutoCompleteTextView)
@@ -191,7 +174,10 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
         memo_text.setAdapter(memo_adapter);
     }
 
-    public void attemptSendData() {
+    /**
+     * Checks if at least one user is selected to split bill and if amount is valid.
+     */
+    public void attemptSendData(){
         boolean cancel = false;
         View focusView = null;
         String amount = amount_text.getText().toString();
@@ -213,14 +199,17 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
         }
     }
 
-    public void sendData() {
+    /**
+     * Splits amount between all users selected equally. Sends group id, user id, amount, memo,
+     * date, and category for each user splitting the bill to the server.
+     */
+    public void sendData(){
         new Thread(new Runnable(){
             @Override
             public void run() {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 Date date = new Date();
                 String datetime = dateFormat.format(date);
-
 
                 List<String> selectedNames = userSpinner.getSelectedStrings();
                 String payer = payerSpinner.getSelectedItem().toString();
@@ -267,7 +256,6 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                     }
                 }
 
-
                 String url = "http://" + ServerUtil.getServerAddress() + "group/add_transaction";
                 StringBuilder requestString = new StringBuilder();
                 requestString.append("receiver_id=").append(nameIdMap.get(payer))
@@ -295,14 +283,12 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                     jsex.printStackTrace();
                 }
 
-
             }
         }).start();
     }
 
-    private boolean isAmountValid(String amount) {
+    private boolean isAmountValid(String amount){
         return amount.matches("^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\\.[0-9]{2}");
-
     }
 
 }

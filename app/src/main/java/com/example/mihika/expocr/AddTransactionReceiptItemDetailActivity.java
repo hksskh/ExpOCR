@@ -59,6 +59,11 @@ public class AddTransactionReceiptItemDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Create menu option to save.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -66,6 +71,11 @@ public class AddTransactionReceiptItemDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * If the save button is clicked, the item is saved and the balance is updated.
+     * @param item
+     * @return boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

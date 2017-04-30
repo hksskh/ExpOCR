@@ -47,12 +47,13 @@ import org.json.JSONObject;
 
 import static android.view.View.VISIBLE;
 
-public class AddTransactionActivity extends AppCompatActivity {
+/**
+ * This activity adds a transaction between two users.
+ */
+public class AddTransactionActivity extends AppCompatActivity{
 
     private final int FRIEND_EMAIL_NOT_EXIST = 1;
 
-    //private Spinner transactionKindSpinner;
-   // private MultiSelectionSpinner userSpinner;
     private Spinner categorySpinner;
     private Spinner split_owe_owed;
     private AutoCompleteTextView email_text;
@@ -79,7 +80,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_transaction);
 
         Intent inIntent = getIntent();
-        if (inIntent.hasExtra("receipt_list")) {
+        if (inIntent.hasExtra("receipt_list")){
             String receipt_list_string = inIntent.getStringExtra("receipt_list");
             try {
                 receipt_list = new JSONArray(receipt_list_string);
@@ -94,27 +95,24 @@ public class AddTransactionActivity extends AppCompatActivity {
             fromActivity = "Main";
         }
 
-        //transactionKindSpinner = (Spinner)findViewById(R.id.transaction_kind_spinner);
-        //userSpinner = (MultiSelectionSpinner) findViewById(R.id.user_spinner);
         categorySpinner = (Spinner) findViewById(R.id.transaction_category_spinner);
         split_owe_owed = (Spinner) findViewById(R.id.split_spinner);
-        //addEntriesForSpinner();
         addListenerOnSpinnerItemSelection();
         set_autotext_adapters();
 
         Button add_transaction_button = (Button) findViewById(R.id.add_transaction_button);
         add_transaction_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view){
                 sendData();
             }
         });
 
         add_transaction_from_receipt_btn = (Button) findViewById(R.id.add_transaction_from_receipt);
-        if (receipt_list != null && receipt_list.length() > 0) {
+        if (receipt_list != null && receipt_list.length() > 0){
             add_transaction_from_receipt_btn.setText("Split Receipt");
         }
-        add_transaction_from_receipt_btn.setOnClickListener(new View.OnClickListener() {
+        add_transaction_from_receipt_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if (receipt_list == null || receipt_list.length() == 0) {
@@ -127,13 +125,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                     }
                     Intent intent = new Intent(AddTransactionActivity.this, AddTransactionReceiptItemListActivity.class);
                     intent.putExtra("receipt_list", receipt_list.toString());
-//                    if (transactionKindSpinner.getSelectedItem().equals("For Individual")) {
-//                        intent.putExtra("friend_list", new String[]{email_text.getText().toString()});
-//                    } else {
-//                        intent.putExtra("friend_list", group_autos.toArray(new String[group_autos.size()]));
-//                    }
                     intent.putExtra("friend_list", new String[]{MainActivity.getU_email(), email_text.getText().toString()});
-//
                     startActivity(intent);
                 }
             }
@@ -173,6 +165,10 @@ public class AddTransactionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Splits amount of transaction based on user preference and then sends all necessary data to
+     * the server to add the transaction.
+     */
     public void sendData() {
         new Thread(new Runnable(){
             @Override
@@ -228,8 +224,6 @@ public class AddTransactionActivity extends AppCompatActivity {
 
                 }
 
-
-
                 requestString.append("&date=").append(datetime);
                         //.append(Math.abs(Double.parseDouble(amount_text.getText().toString())))
 
@@ -263,8 +257,6 @@ public class AddTransactionActivity extends AppCompatActivity {
             }
         }).start();
     }
-
-
 
     private void set_autotext_adapters(){
         //adapters for AutoCompleteTextViews

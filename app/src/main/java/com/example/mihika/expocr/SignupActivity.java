@@ -31,7 +31,11 @@ import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-
+/**
+ * This activity is used to create accounts. It requires users to enter their first and last names,
+ * email, and a password. The password when sent to the server is encrypted, and the account is only
+ * created when all criteria for an account has successfully been met.
+ */
 public class SignupActivity extends AppCompatActivity {
 
     private final int EMAIL_EXIST = 1;

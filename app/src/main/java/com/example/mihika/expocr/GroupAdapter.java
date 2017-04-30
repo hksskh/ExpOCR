@@ -84,7 +84,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             GroupAdapter.GroupViewHolder viewHolder = new GroupAdapter.GroupViewHolder(view);
 
             return viewHolder;
-
         }
 
         /**
@@ -131,7 +130,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
 
     //inner class
-    class GroupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class GroupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView item_avatar;
         TextView item_name;
@@ -145,11 +144,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             item_avatar = (ImageView) itemView.findViewById(R.id.friend_list_item_avatar);
             item_name = (TextView) itemView.findViewById(R.id.friend_list_item_name);
             item_balance = (TextView) itemView.findViewById(R.id.friend_list_item_balance);
-
         }
 
-        void bind(int listIndex){
-
+        void bind(int listIndex) {
             String rawData = mData.get(listIndex);
             String[] rawList = rawData.split(",");
             item_avatar.setImageResource(R.drawable.ic_list_group);
@@ -208,7 +205,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
     }
 
-    private void fill_groups_list(JSONArray jsonArray){
+    private void fill_groups_list(JSONArray jsonArray) {
         int limit = maxItemNumber;
         mData.clear();
         group_name_list.clear();

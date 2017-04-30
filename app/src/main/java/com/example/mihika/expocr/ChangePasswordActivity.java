@@ -30,9 +30,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by briannaifft on 4/3/17.
+ * Activity used to change a user's password. The user enters in his/her email followed by the new
+ * password twice to verify the password was entered correctly.
  */
-
 public class ChangePasswordActivity extends AppCompatActivity {
 
     private AutoCompleteTextView mEmailView;
@@ -76,7 +76,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 }
             }
         };
-
     }
 
     private String encrypt(String password) throws NoSuchAlgorithmException {
@@ -138,7 +137,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         }
     }
 
-
     private void changePassword() {
         new Thread(new Runnable(){
             @Override
@@ -160,22 +158,19 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             Message msg = new Message();
                             msg.what = CHANGE_PWD_SUCCESS;
                             handler.sendMessage(msg);
-                            //Toast.makeText(getApplicationContext(), "Password changed successfully. Re-login!", Toast.LENGTH_LONG).show();
-
                             Intent gotoLogin = new Intent(ChangePasswordActivity.this, LoginActivity.class);
                             gotoLogin.putExtra("u_email", email);
                             gotoLogin.putExtra("u_password", password);
                             gotoLogin.putExtra("forgotPassword", "");
                             startActivity(gotoLogin);
                         }
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         }).start();
     }
-
 
 }

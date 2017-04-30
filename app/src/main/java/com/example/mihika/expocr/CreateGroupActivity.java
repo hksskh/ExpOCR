@@ -12,13 +12,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * Activity that starts the process of creating a new group. This activity will ask to give a name
+ * for the new group and then redirect you to the AddGroupMembersActivity to add members to the group.
+ */
 public class CreateGroupActivity extends AppCompatActivity {
-
 
     private EditText group_name;
     private Button create_group_button;
     private int u_id;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,21 +42,24 @@ public class CreateGroupActivity extends AppCompatActivity {
                     System.out.println("Create Group Activity GROUP NAME: " + gname + "\n....................");
                     startActivity(intent);
                 }
-
             }
         });
-
     }
-    public boolean attemptCreateGroup(){
+
+    /**
+     * Creates a group named by the group name inputted by the user.
+     * @return true if group was successfully created
+     */
+    public boolean attemptCreateGroup() {
         group_name.setError(null);
 
-        // Store values at the time of the login attempt.
+        // Store group name from user input
         String name = group_name.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
+        // Check if the user entered a group name.
         if (TextUtils.isEmpty(name)) {
             group_name.setError("Please enter a group name");
             focusView = group_name;
@@ -62,9 +67,9 @@ public class CreateGroupActivity extends AppCompatActivity {
             focusView.requestFocus();
             return false;
         }
-        else
+        else {
             return true;
-
+        }
     }
 
 }

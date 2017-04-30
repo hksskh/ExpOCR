@@ -38,9 +38,8 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Created by briannaifft on 4/6/17.
+ * This activity records a transaction between two users.
  */
-
 public class RecordPaymentActivity extends AppCompatActivity {
 
     private int u_id;
@@ -161,7 +160,6 @@ public class RecordPaymentActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.has("warning")){
-                        ;
                     }else{
                         Intent gotoIndividualFriend = new Intent(RecordPaymentActivity.this, IndividualFriendActivity.class);
                         gotoIndividualFriend.putExtra("settle_up", true);

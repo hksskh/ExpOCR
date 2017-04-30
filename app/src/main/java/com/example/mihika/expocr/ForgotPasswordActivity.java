@@ -30,9 +30,9 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by briannaifft on 3/30/17.
+ * Provides the ability for a user to change their password if forgotten. A verification code is emailed
+ * to the user who must then type in the code to the app to proceed to the ChangePasswordActivity.
  */
-
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private AutoCompleteTextView mEmailView;
@@ -161,7 +161,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         } else {
             enterVericode();
         }
-
     }
 
     private void enterVericode() {
@@ -233,7 +232,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     else {
                         Bundle bundle = new Bundle();
                         bundle.putString("success","Email with verication code has been sent.");
-
                         Message msg = new Message();
                         msg.what = EMAIL_EXISTS;
                         msg.setData(bundle);
@@ -250,4 +248,5 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         //TODO: Replace this with your own logic
         return email.contains("@");
     }
+
 }

@@ -39,7 +39,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by mihika on 4/8/17.
+ * This activity shows an individual group's name, the net balance between the user and the group,
+ * and a list of the group's transactions. Options to settle up, add a group transaction, or change
+ * the group settings are present as well.
  */
 public class IndividualGroupActivity extends AppCompatActivity {
 
@@ -122,6 +124,12 @@ public class IndividualGroupActivity extends AppCompatActivity {
         mListView.setAdapter(adapter);
     }
 
+    /**
+     * Create the list of group transactions to display.
+     * @param menu
+     * @param v
+     * @param menuInfo
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -131,6 +139,11 @@ public class IndividualGroupActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Allows a group transaction to be deleted if the user taps and hold onto the transaction item.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();

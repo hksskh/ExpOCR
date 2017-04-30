@@ -75,7 +75,6 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
         BalanceViewHolder viewHolder = new BalanceViewHolder(view);
 
         return viewHolder;
-
     }
 
     /**
@@ -109,22 +108,21 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
     }
 
     //inner class
-    class BalanceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class BalanceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView item_text;
         Button item_settle_up;
 
         //constructor
-        BalanceViewHolder(View itemView){
+        BalanceViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
 
             item_text = (TextView) itemView.findViewById(R.id.grp_balance_text);
             item_settle_up = (Button) itemView.findViewById(R.id.settle_up_grp_balance);
-
         }
 
-        void bind(int listIndex){
+        void bind(int listIndex) {
 
             final String rawData = mData.get(listIndex);
 
@@ -148,6 +146,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
             }
 
         }
+
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
@@ -165,7 +164,6 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
         brief_view.setText(brief);
         balance_view.setText(String.valueOf(balance));
-
 
         builder.setTitle("Group Settle Up")
                 .setView(settle_up_view)
@@ -283,9 +281,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
     private List<GroupTransaction.Pair> get_user_balances(){
         List<GroupTransaction.Pair> result = GroupTransaction.getOwedAmounts(((GroupBalanceActivity)mOnClickListener).getG_id(), MainActivity.getU_id());
-
         return result;
     }
-
-
+    
 }

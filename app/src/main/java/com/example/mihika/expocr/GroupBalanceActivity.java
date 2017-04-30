@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+/**
+ * This activity provides a RecyclerView of all a user's groups and their respective net balances.
+ */
 public class GroupBalanceActivity extends AppCompatActivity implements GroupBalanceAdapter.BalanceListItemClickListener {
 
     private RecyclerView mList;
@@ -27,10 +30,14 @@ public class GroupBalanceActivity extends AppCompatActivity implements GroupBala
     }
 
     @Override
-    public void onBalanceListItemClick(int clickedItemIndex) {
-    }
+    public void onBalanceListItemClick(int clickedItemIndex) { }
 
+    /**
+     * Getter for g_id of the group.
+     * @return int g_id
+     */
     public int getG_id() {
         return g_id;
     }
+
 }

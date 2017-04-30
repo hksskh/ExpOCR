@@ -21,6 +21,7 @@ import org.json.JSONException;
  * on handsets.
  */
 public class AddTransactionReceiptItemDetailFragment extends Fragment implements AddTransactionReceiptItemDetailAdapter.AddTransactionReceiptItemDetailItemClickListener {
+
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -37,8 +38,7 @@ public class AddTransactionReceiptItemDetailFragment extends Fragment implements
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AddTransactionReceiptItemDetailFragment() {
-    }
+    public AddTransactionReceiptItemDetailFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,10 +80,10 @@ public class AddTransactionReceiptItemDetailFragment extends Fragment implements
     }
 
     @Override
-    public void onAddTransactionReceiptItemDetailItemClick(int clickedItemIndex) {
-    }
+    public void onAddTransactionReceiptItemDetailItemClick(int clickedItemIndex) { }
 
     public double getBalance(){
         return mAdapter.getBalance();
     }
+
 }

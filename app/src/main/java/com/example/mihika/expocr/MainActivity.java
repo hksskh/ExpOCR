@@ -288,15 +288,12 @@ public class MainActivity extends AppCompatActivity
         return u_id;
     }
 
-
     public static String getU_name(){
         return u_name;
     }
     public static String getU_email(){
         return u_email;
     }
-
-
 
     public static Uri get_avatar_uri() {
         return avatarUri;
@@ -414,7 +411,7 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
-    private void cropPhoto(Uri uri){
+    private void cropPhoto(Uri uri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");
@@ -428,7 +425,6 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         startActivityForResult(intent, CROP_PHOTO);
     }
-
 
 }
 
@@ -469,4 +465,5 @@ class TabFragmentAdapter extends FragmentPagerAdapter {
             ((TabFragment)tab).refreshTabFragment();
         }
     }
+
 }

@@ -1,10 +1,5 @@
 package com.example.mihika.expocr;
 
-/**
- * Created by briannaifft on 2/28/17.
- */
-
-
 /*
  * Copyright (c) 2016 Razeware LLC
  *
@@ -41,6 +36,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+
+/**
+ * This is a class used to display all of a user's transactions in the Expense tab of the app.
+ */
 public class Expense {
 
     private Double balance;
@@ -48,10 +47,19 @@ public class Expense {
     private int id;
     private String expense;
 
-    public Expense(){
+    /**
+     * Empty class object constructor
+     */
+    public Expense() { }
 
-    }
-
+    /**
+     * Class object constructor with all global variables initialized.
+     * @param id u_id of receiver
+     * @param expense description of transaction ("You lent %50.00 to Anthony" or "You borrowed $20.00 from Anthony")
+     * @param balance amount lent or borrowed
+     * @param date the date (April 11, 2017)
+     * @throws ParseException
+     */
     public Expense(int id, String expense, double balance, String date) throws ParseException {
         this.id = id;
         this.expense = expense;
@@ -59,35 +67,62 @@ public class Expense {
         this.date = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         this.date.setTime(sdf.parse(date));
-
     }
 
+    /**
+     * Class object constructor with 3 of 4 global variables initialized.
+     * @param expense description of transaction ("You lent %50.00 to Anthony" or "You borrowed $20.00 from Anthony")
+     * @param balance amount lent or borrowed
+     * @param date the date (April 11, 2017)
+     * @throws ParseException
+     */
     public Expense(String expense, double balance, String date) throws ParseException {
         this.expense = expense;
         this.balance = balance;
         this.date = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         this.date.setTime(sdf.parse(date));
-
     }
 
+    /**
+     * Getter for expense (description of a transaction).
+     * @return String description of a transaction
+     */
     public String getExpense() {
         return expense;
     }
 
+    /**
+     * Getter for balance (amount of a transaction).
+     * @return Double amount of a transaction
+     */
     public Double getBalance() {
         return balance;
     }
 
+    /**
+     * Getter for the date.
+     * @return Calendar (April 11, 2017 is the format)
+     */
     public Calendar getDate() {
         return date;
     }
 
+    /**
+     * Getter for user id.
+     * @return int u_id
+     */
     public int getId() {
         return this.id;
     }
 
-    public static ArrayList<Expense> getRecipesFromFile(String filename, Context context){
+    /**
+     * Get all transactions from a JSON and display all the results in a arraylist.
+     * @param filename json file containing the expenses
+     * @param context
+     * @return ArrayList an ArrayList of all expenses in the file given
+     */
+    public static ArrayList<Expense> getRecipesFromFile(String filename, Context context) {
         final ArrayList<Expense> expenseList = new ArrayList<>();
 
         try {

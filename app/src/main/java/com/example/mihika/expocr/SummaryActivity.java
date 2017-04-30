@@ -30,13 +30,13 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.logging.LogRecord;
 
+/**
+ * This activity implements the pie chart for the Summary page.
+ */
 public class SummaryActivity extends AppCompatActivity {
 
     public static final int SELECTED_SEGMENT_OFFSET = 50;
     private static final int PLOT_FINISH = 1;
-
-    //private TextView donutSizeTextView;
-    //private SeekBar donutSizeSeekBar;
 
     public PieChart pie;
     private Handler handler;
@@ -122,33 +122,13 @@ public class SummaryActivity extends AppCompatActivity {
             }
         });
 
-        //donutSizeSeekBar = (SeekBar) findViewById(R.id.donutSizeSeekBar);
-        /*donutSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {}
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                pie.getRenderer(PieRenderer.class).setDonutSize(seekBar.getProgress()/100f,
-                        PieRenderer.DonutMode.PERCENT);
-                pie.redraw();
-                updateDonutText();
-            }
-        });
-        */
-        //donutSizeTextView = (TextView) findViewById(R.id.donutSizeTextView);
         updateDonutText();
-        //ArrayList<SegmentFormatter> segmentFormatters = new ArrayList<>();
         segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_blue));
         segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_green));
         segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_red));
         segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_yellow));
         segmentFormatters.add(new SegmentFormatter(this, R.xml.pie_segment_formatter_purple));
         plot();
-
     }
 
     private void plot() {
@@ -169,7 +149,6 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     protected void updateDonutText() {
-        //donutSizeTextView.setText(donutSizeSeekBar.getProgress() + "%");
     }
 
     protected void setupIntroAnimation() {
@@ -188,8 +167,6 @@ public class SummaryActivity extends AppCompatActivity {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float scale = valueAnimator.getAnimatedFraction();
-//                scalingSeries1.setScale(scale);
-//                scalingSeries2.setScale(scale);
                 renderer.setExtentDegs(360 * scale);
                 pie.redraw();
             }

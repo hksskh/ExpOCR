@@ -198,6 +198,7 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
+
             final View mView;
             final EditText balanceView;
             final TextView nameView;
@@ -216,4 +217,5 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
             }
         }
     }
+
 }
