@@ -63,12 +63,13 @@ public class SummaryActivity extends AppCompatActivity {
                         for (String category : percents.keySet()) {
                             Double percent = percents.get(category);
                             Segment segment = new Segment(category + " \n" + Double.toString(percent) + "%", percent);
+
                             pie.addSegment(segment, segmentFormatters.get(count % segmentFormatters.size()));
                             count++;
                         }
-                        pie.getBorderPaint().setColor(Color.argb(255, 255,192,203));
-                        pie.getBackgroundPaint().setColor(Color.argb(255, 255,192,203));//Color Of Background
-                        pie.getTitle().getLabelPaint().setColor(Color.WHITE);//Color of title
+                        pie.getBorderPaint().setColor(Color.WHITE);
+                        pie.getBackgroundPaint().setColor(Color.WHITE);//Color Of Background
+                        pie.getTitle().getLabelPaint().setColor(Color.RED);//Color of title
                         pie.getTitle().getLabelPaint().setShadowLayer(2.5f, 2.5f, 2.5f, Color.RED);//Shade of title
                         setupIntroAnimation();
                         break;
@@ -90,7 +91,6 @@ public class SummaryActivity extends AppCompatActivity {
                 PointF click = new PointF(motionEvent.getX(), motionEvent.getY());
                 if(pie.getPie().containsPoint(click)) {
                     Segment segment = pie.getRenderer(PieRenderer.class).getContainingSegment(click);
-
                     if(segment != null) {
                         final boolean isSelected = getFormatter(segment).getOffset() != 0;
                         deselectAll();

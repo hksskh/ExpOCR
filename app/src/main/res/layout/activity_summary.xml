@@ -11,8 +11,9 @@
 
     <com.androidplot.pie.PieChart
         android:id="@+id/mySimplePieChart"
-        androidPlot.title.labelPaint.textSize="70"
-        androidPlot.title.text="Expenses by Category"
+        androidPlot.title.labelPaint.textSize="20sp"
+
+        androidPlot.title.text="Expense distribution across categories"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginTop="0dp"
