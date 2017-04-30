@@ -159,16 +159,7 @@ public class MultiSelectionSpinner extends Spinner implements
         StringBuilder sb = new StringBuilder();
         boolean foundOne = false;
 
-        for (int i = 0; i < _items.length; ++i) {
-            if (mSelection[i]) {
-                if (foundOne) {
-                    sb.append(", ");
-                }
-                foundOne = true;
-
-                sb.append(_items[i]);
-            }
-        }
+        selectedItems(sb, foundOne);
         return sb.toString();
     }
 
@@ -176,6 +167,11 @@ public class MultiSelectionSpinner extends Spinner implements
         StringBuilder sb = new StringBuilder();
         boolean foundOne = false;
 
+        selectedItems(sb, foundOne);
+        return sb.toString();
+    }
+
+    private void selectedItems(StringBuilder sb, boolean foundOne) {
         for (int i = 0; i < _items.length; ++i) {
             if (mSelection[i]) {
                 if (foundOne) {
@@ -185,6 +181,6 @@ public class MultiSelectionSpinner extends Spinner implements
                 sb.append(_items[i]);
             }
         }
-        return sb.toString();
     }
+
 }

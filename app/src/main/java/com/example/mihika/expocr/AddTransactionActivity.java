@@ -1,51 +1,31 @@
 package com.example.mihika.expocr;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Vector;
 
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.mihika.expocr.util.ServerUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import static android.view.View.VISIBLE;
 
 /**
  * This activity adds a transaction between two users.
@@ -104,7 +84,7 @@ public class AddTransactionActivity extends AppCompatActivity{
         add_transaction_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                sendData();
+                sendTransactionData();
             }
         });
 
@@ -169,7 +149,7 @@ public class AddTransactionActivity extends AppCompatActivity{
      * Splits amount of transaction based on user preference and then sends all necessary data to
      * the server to add the transaction.
      */
-    public void sendData() {
+    public void sendTransactionData() {
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -190,42 +170,31 @@ public class AddTransactionActivity extends AppCompatActivity{
                 if(categorySpinner.getSelectedItem().toString().equals(getResources().getString(R.string.select_category)))
                     category = getResources().getString(R.string.category_general);
 
-                if(split_owe_owed.getSelectedItem().toString().equals(getResources().getString(R.string.owe_full))) {
+                String split = split_owe_owed.getSelectedItem().toString();
+                requestString.append("sender_id=").append(MainActivity.getU_id())
+                        .append("&receiver_email=").append(email_text.getText())
+                        .append("&category=").append(category)
+                        .append("&memo=").append(memo_text.getText())
+                        .append("&date=").append(datetime);
 
-                    requestString.append("sender_id=").append(MainActivity.getU_id())
-                            .append("&receiver_email=").append(email_text.getText())
-                            .append("&category=").append(category)
-                            .append("&memo=").append(memo_text.getText())
-                            .append("&am_I_sender=").append("yes")
-                            .append("&amount=").append(amt);
+                switch(split) {
+                    case "You owe full amount":
+                        requestString.append("&am_I_sender=").append("yes")
+                                     .append("&amount=").append(amt);
+                        break;
+                    case "You owe equal split":
+                        requestString.append("&am_I_sender=").append("yes")
+                                     .append("&amount=").append(amt_half);
+                        break;
+                    case "You are owed full amount":
+                        requestString.append("&am_I_sender=").append("no")
+                                     .append("&amount=").append(amt);
+                        break;
+                    default:
+                        requestString.append("&am_I_sender=").append("no")
+                                     .append("&amount=").append(amt_half);
+                        break;
                 }
-                else if (split_owe_owed.getSelectedItem().toString().equals(getResources().getString(R.string.owe_share))){
-                    requestString.append("sender_id=").append(MainActivity.getU_id())
-                            .append("&receiver_email=").append(email_text.getText())
-                            .append("&category=").append(category)
-                            .append("&memo=").append(memo_text.getText())
-                            .append("&am_I_sender=").append("yes")
-                            .append("&amount=").append(amt_half);
-                }
-                else if (split_owe_owed.getSelectedItem().toString().equals(getResources().getString(R.string.owed_full))) {
-                        requestString.append("sender_id=").append(MainActivity.getU_id())
-                                .append("&receiver_email=").append(email_text.getText())
-                                .append("&category=").append(category)
-                                .append("&memo=").append(memo_text.getText())
-                                .append("&am_I_sender=").append("no")
-                                .append("&amount=").append(amt);
-                    }
-                else {  requestString.append("sender_id=").append(MainActivity.getU_id())
-                                   .append("&receiver_email=").append(email_text.getText())
-                                   .append("&category=").append(category)
-                                   .append("&memo=").append(memo_text.getText())
-                                   .append("&am_I_sender=").append("no")
-                                   .append("&amount=").append(amt_half);
-
-                }
-
-                requestString.append("&date=").append(datetime);
-                        //.append(Math.abs(Double.parseDouble(amount_text.getText().toString())))
 
                 Log.d(TAG, requestString.toString());
                 String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
