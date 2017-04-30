@@ -11,14 +11,14 @@
 
     </style>
 
-    <style name="AppTheme.NoActionBar" >
+    <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.Rosenormal</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@color/textcolorprimary_title</item>
         <item name="android:textColorSecondary">@color/textcolorsecondary_subtitle</item>
     </style>
