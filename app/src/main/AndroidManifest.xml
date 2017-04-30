@@ -73,7 +73,11 @@
         <activity
             android:name=".IndividualGroupActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mihika.expocr.MainActivity" />
+        </activity>
         <activity
             android:name=".ForgotPasswordActivity"
             android:launchMode="singleTask" />
@@ -125,6 +129,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".GroupBalanceActivity"
+            android:label="Group Balances"
             android:launchMode="singleTask" />
         <activity
             android:name=".GroupSettingsActivity"

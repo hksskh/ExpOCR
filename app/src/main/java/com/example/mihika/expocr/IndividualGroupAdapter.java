@@ -7,11 +7,10 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.mihika.expocr.util.ServerUtil;
@@ -22,35 +21,35 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
 
-public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFriendAdapter.ItemViewHolder> {
+public class IndividualGroupAdapter extends RecyclerView.Adapter<IndividualGroupAdapter.ItemViewHolder> {
 
     private boolean isRefreshing;
 
-    private final IndividualFriendItemClickListener mOnClickListener;
-    private int receiver_id;
+    private final IndividualGroupItemClickListener mOnClickListener;
+    private int g_id;
     private List<Expense> mData;
 
     //constructor
-    public IndividualFriendAdapter(IndividualFriendFragment listener, int receiver_id) {
+    public IndividualGroupAdapter(IndividualGroupFragment listener, int g_id) {
         mOnClickListener = listener;
-        this.receiver_id = receiver_id;
+        this.g_id = g_id;
         mData = new ArrayList<>();
         isRefreshing = true;
 
         setupItemTouchHelper();
-        syncIndividualFriendList();
+        syncIndividualGroupList();
     }
 
-    interface IndividualFriendItemClickListener {
-        void onIndividualFriendItemClick(int clickedItemIndex);
+    interface IndividualGroupItemClickListener {
+        void onIndividualGroupItemClick(int clickedItemIndex);
     }
 
     /**
@@ -117,7 +116,7 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         this.isRefreshing = isRefreshing;
     }
 
-    public void syncIndividualFriendList() {
+    public void syncIndividualGroupList() {
         new TransactionBetweenQueryTask().execute();
     }
 
@@ -137,16 +136,19 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.START) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(((IndividualFriendFragment)mOnClickListener).getContext());
-                    builder.setTitle("Delete Friend Transaction")
+                    AlertDialog.Builder builder = new AlertDialog.Builder(((IndividualGroupFragment)mOnClickListener).getContext());
+                    builder.setTitle("Delete Group Transaction")
                             .setMessage("Do you really want to delete this transaction?")
                             .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     int position = viewHolder.getAdapterPosition();
-                                    int transactionId = mData.get(position).getId();
+                                    Calendar transactionDate = mData.get(position).getDate();
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                    String transactionDateString = dateFormat.format(transactionDate.getTime());
+
                                     mData.remove(position);
-                                    new DeleteTransactionQueryTask().execute(String.valueOf(transactionId));
+                                    new DeleteTransactionQueryTask().execute(transactionDateString);
 
                                     dialog.dismiss();
                                 }
@@ -164,7 +166,7 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(((IndividualFriendFragment)mOnClickListener).getmList());
+        itemTouchHelper.attachToRecyclerView(((IndividualGroupFragment)mOnClickListener).getmList());
     }
 
     //inner class
@@ -197,11 +199,11 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
             if(expense.getBalance() < 0) {
                 double balance = expense.getBalance() * (-1);
                 balanceTextView.setText("- $".concat(df.format(balance)));
-                balanceTextView.setTextColor(((IndividualFriendFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
+                balanceTextView.setTextColor(((IndividualGroupFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
             }
             else {
                 balanceTextView.setText("$".concat(df.format(expense.getBalance())));
-                balanceTextView.setTextColor(((IndividualFriendFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
+                balanceTextView.setTextColor(((IndividualGroupFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
             }
             dayTextView.setText(Integer.toString(expense.getDate().get(Calendar.DAY_OF_MONTH)));
             monthTextView.setText(expense.getDate().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
@@ -212,7 +214,7 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         @Override
         public void onClick(View v) {
             int clickedPostion = getAdapterPosition();
-            mOnClickListener.onIndividualFriendItemClick(clickedPostion);
+            mOnClickListener.onIndividualGroupItemClick(clickedPostion);
         }
     }
 
@@ -220,14 +222,14 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
 
         @Override
         protected String doInBackground(String... params) {
-            String s = friend_get_transaction_between();
-            fill_individual_friend_list(s);
+            String s = group_get_transaction_list_for(g_id, MainActivity.getU_id());
+            fill_individual_group_list(s);
 
-            return get_friend_info();
+            return get_group_info();
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(String s){
             notifyDataSetChanged();
             double netBalance = getNetBalance();
             s += ("," + netBalance);
@@ -235,13 +237,13 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
             if(isRefreshing){
                 isRefreshing = false;//do not forget
                 Message msg = new Message();
-                msg.what = IndividualFriendFragment.INDIVIDUAL_FRIEND_LIST_REFRESH;
-                ((IndividualFriendFragment)mOnClickListener).getHandler().sendMessage(msg);
+                msg.what = IndividualGroupFragment.INDIVIDUAL_GROUP_LIST_REFRESH;
+                ((IndividualGroupFragment)mOnClickListener).getHandler().sendMessage(msg);
             }
         }
     }
 
-    private void fill_individual_friend_list(String s) {
+    private void fill_individual_group_list(String s) {
         JSONArray jsonArray = null;
         try {
             jsonArray = new JSONArray(s);
@@ -250,19 +252,18 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         }
         //int limit = data.size();
         mData.clear();
-        for (int index = 0; index < jsonArray.length(); index++) { //&& index < limit; index++){
+        for(int index = 0; index < jsonArray.length(); index++){ //&& index < limit; index++){
             JSONObject jsonObj = null;
             try {
-                jsonObj = jsonArray.getJSONObject(index);
+                jsonObj=jsonArray.getJSONObject(index);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             Expense expense = null;
             try {
-                expense = new Expense(jsonObj.getInt("id"), jsonObj.getString("category") + ": " + jsonObj.getString("memo"),
+                expense = new Expense(jsonObj.getString("category") + ": " + jsonObj.getString("memo"),
                         Double.parseDouble(jsonObj.getString("amount")), jsonObj.getString("date"));
-
-
+                //TODO can also fetch people involved
             } catch (ParseException | JSONException e) {
                 e.printStackTrace();
             }
@@ -270,9 +271,9 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         }
     }
 
-    private String friend_get_transaction_between() {
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/get_between";
-        String requestBody = "sender_id=" + MainActivity.getU_id() + "&receiver_id=" + receiver_id;
+    private String group_get_transaction_list_for(int g_id, int u_id){
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_user_transactions";
+        String requestBody = "g_id="+g_id + "&u_id=" + u_id;
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         return text;
@@ -282,14 +283,14 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
 
         @Override
         protected String doInBackground(String... params) {
-            int transactionId = Integer.parseInt(params[0]);
-            delete_transaction(transactionId);
+            String transactionDate = params[0];
+            delete_transaction(transactionDate);
 
-            return get_friend_info();
+            return get_group_info();
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(String s){
             notifyDataSetChanged();
             double netBalance = getNetBalance();
             s += ("," + netBalance);
@@ -297,27 +298,26 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
         }
     }
 
-    private String delete_transaction(int transactionId) {
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "transaction/delete_by_id";
-        String requestBody = "tid=" + String.valueOf(transactionId);
+    private String delete_transaction(String transactionDate) {
+        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/delete_transaction_by_date";
+        String requestBody = "date=" + transactionDate;
+        Log.d("delete_transaction", requestBody);
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         return text;
     }
 
-    private String get_friend_info() {
-        String url = "http://" + ServerUtil.getServerAddress() + "user/get_user_by_id";
+    private String get_group_info() {
+        String url = "http://" + ServerUtil.getServerAddress() + "group/get_group_name";
         StringBuilder requestString = new StringBuilder();
-        requestString.append("id=").append(receiver_id);
+        requestString.append("g_id=").append(g_id);
         String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
         String result = "";
 
         try {
-            JSONArray jsonArray = new JSONArray(response);
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-            String name = jsonObject.getJSONObject("fields").getString("U_Name");
-            String email = jsonObject.getJSONObject("fields").getString("Email");
-            result = name + "," + email;
+            JSONObject jsonObject = new JSONObject(response);
+            String name = jsonObject.getString("g_name");
+            result = name;
 
         } catch (JSONException jsex) {
             jsex.printStackTrace();
@@ -326,7 +326,7 @@ public class IndividualFriendAdapter extends RecyclerView.Adapter<IndividualFrie
     }
 
     private void refreshActivityToolBar(String s) {
-        ((IndividualFriendFragment)mOnClickListener).refreshActivityToolBar(s);
+        ((IndividualGroupFragment)mOnClickListener).refreshActivityToolBar(s);
     }
 
 }

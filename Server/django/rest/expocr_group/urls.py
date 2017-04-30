@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     url(r'^create_group', views.expocr_group_create),
+    url(r'^get_group_name', views.expocr_group_get_group_name),
     url(r'^update_group_name', views.expocr_group_update_group_name),
     url(r'^delete_group', views.expocr_group_delete),
     url(r'^add_member_by_email', views.expocr_group_add_member_by_email),

@@ -4,103 +4,78 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:fitsSystemWindows="true"
+    tools:context="com.example.mihika.expocr.IndividualGroupActivity" >
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_height="192dp"
-        android:layout_width="match_parent">
+        android:id="@+id/individual_group_app_bar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:theme="@style/AppTheme.AppBarOverlay" >
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/individual_group_toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:toolbarId="@+id/toolbar"
+            android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="?attr/colorPrimary">
-            <LinearLayout
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/individual_group_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_gravity="center">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/Base.TextAppearance.AppCompat.Headline"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:id="@+id/group_name"
-                    android:textColor="@color/ap_white" />
-
-                <TextView
-                    android:text="Net Balance: $"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/group_name"
-                    android:layout_marginTop="60dp"
-                    android:gravity="center"
-                    android:id="@+id/net_balance"
-                    android:textColor="@color/ap_white"
-                    style="@style/Base.TextAppearance.AppCompat.Title"
-                    />
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:weightSum="1">
-                    <Button
-                        android:text="Balance"
-                        android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/individual_group_name"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:textSize="12sp"
-                        android:id="@+id/settle_up_individual_grp"
-                        android:backgroundTint="@color/colorPrimary_700"
-                        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
-                        android:layout_weight="0.56" />
+                        style="@style/Base.TextAppearance.AppCompat.Headline"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:textColor="@color/ap_white" />
 
-                    <Button
-                        android:text="Add Transaction"
-
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/individual_group_net_balance"
+                        android:text="Net Balance: "
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:textSize="12sp"
-                        android:id="@+id/add_group_transaction"
-                        android:backgroundTint="@color/colorPrimary_700"
-                        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"/>
-
-                    <Button
-                        android:id="@+id/individual_grp_settings"
-
-                        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
-                        android:layout_width="113dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:backgroundTint="@color/colorPrimary_700"
-                        android:text="Settings"
-                        android:textSize="12sp" />
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:textColor="@color/ap_white"
+                        style="@style/Base.TextAppearance.AppCompat.Title" />
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-
-    <ListView
-        android:id="@+id/expenses_list_view"
-        android:layout_marginTop="200dp"
+    <FrameLayout
+        android:id="@+id/individual_group_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></ListView>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <!--android:divider="@drawable/border"-->
-    <!--android:dividerHeight="1px"-->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/individual_group_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@id/individual_group_container"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@android:drawable/ic_menu_add"
+        app:backgroundTint="@color/colorPrimary"
+        style="@style/Widget.Design.FloatingActionButton" />
 
 </android.support.design.widget.CoordinatorLayout>

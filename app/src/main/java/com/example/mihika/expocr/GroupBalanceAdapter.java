@@ -130,7 +130,7 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
 
             item_text.setText(rawData);
 
-            if (!rawData.contains("owes")) {
+            if (!rawData.contains("owe")) {
                 item_settle_up.setVisibility(View.GONE);
             } else {
                 item_settle_up.setOnClickListener(new View.OnClickListener() {
@@ -237,10 +237,9 @@ public class GroupBalanceAdapter extends RecyclerView.Adapter<GroupBalanceAdapte
                 .append("&amount=")
                 .append(balance)
                 .append("&date=").append(datetime);
-        System.out.println(requestString.toString());
+
         response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
 
-        System.out.println(response);
     }
 
     private class BalancesQueryTask extends AsyncTask<String, Void, List<GroupTransaction.Pair>> {

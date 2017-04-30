@@ -34,6 +34,20 @@ def expocr_group_create(request):
     response = HttpResponse(json.dumps(data), content_type='application/json')
     return response
 
+@csrf_exempt
+def expocr_group_get_group_name(request):
+    if request.method == 'GET':
+        params = request.GET
+    elif request.method == 'POST':
+        params = request.POST
+    g_id = params.get('g_id')
+    result = Group.get_group_name(g_id)
+
+    result = result[0]
+    data = {'g_id': int(result.G_Id), 'g_name': str(result.G_Name)}
+
+    response = HttpResponse(json.dumps(data), content_type='application/json')
+    return response
 
 @csrf_exempt
 def expocr_group_update_group_name(request):

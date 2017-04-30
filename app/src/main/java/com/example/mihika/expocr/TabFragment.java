@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -203,6 +204,27 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
 
                 mList.setAdapter(mExpenseAdapter);
                 break;
+        }
+        if (mList != null) {
+            final FloatingActionButton fab = ((MainActivity)mListener).getMyFAB();
+            mList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0 || dy < 0 && fab.isShown()) {
+                        fab.hide();
+                    }
+                }
+
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        fab.show();
+                    }
+
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+            });
         }
     }
 

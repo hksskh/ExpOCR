@@ -289,6 +289,7 @@ public class AddGroupTransactionActivity extends AppCompatActivity {
                         Intent gotoIndividualActivity = new Intent(AddGroupTransactionActivity.this, IndividualGroupActivity.class);
                         gotoIndividualActivity.putExtra("group_id", g_id);
                         gotoIndividualActivity.putExtra("group_name", g_name);
+                        gotoIndividualActivity.putExtra("addTransaction", true);
                         startActivity(gotoIndividualActivity);
                     }
                 } catch (JSONException jsex) {
