@@ -131,6 +131,9 @@ public class SummaryActivity extends AppCompatActivity {
         plot();
     }
 
+    /**
+     * get user expenses from server and plot piechart with returned transactions
+     */
     private void plot() {
         new Thread(new Runnable() {
             @Override

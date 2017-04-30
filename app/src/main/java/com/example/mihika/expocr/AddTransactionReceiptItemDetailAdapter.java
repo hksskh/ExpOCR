@@ -22,10 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * adapter for recyclerview in AddTransactionReceiptItemDetailFragment
+ */
 public class AddTransactionReceiptItemDetailAdapter extends RecyclerView.Adapter<AddTransactionReceiptItemDetailAdapter.ItemViewHolder> {
 
     private final AddTransactionReceiptItemDetailItemClickListener mOnClickListener;
     private JSONArray mData;
+    //mark if the data at this position in mData has been checked by user with checkbox view
     private List<Boolean> dataChecked;
 
     //constructor
@@ -89,6 +93,10 @@ public class AddTransactionReceiptItemDetailAdapter extends RecyclerView.Adapter
         return mData.length();
     }
 
+    /**
+     * get balance of all the items checked by user
+     * @return
+     */
     public double getBalance() {
         double balance = 0.0;
 

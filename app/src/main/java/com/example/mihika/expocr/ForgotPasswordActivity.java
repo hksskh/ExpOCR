@@ -103,6 +103,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * check if email is valid, and proceed to request vericode from server
+     */
     private void attemptRequestVericode() {
         // Reset errors.
         mEmailView.setError(null);
@@ -135,6 +138,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * check if the vericode is empty, and proceed to send vericode for comparison at server
+     */
     private void attemptEnterVericode() {
         // Reset errors.
         mVericodeView.setError(null);
@@ -163,6 +169,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * send vericode for comparison at server
+     */
     private void enterVericode() {
         new Thread(new Runnable(){
             @Override
@@ -204,6 +213,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }).start();
     }
 
+    /**
+     * send request to server for vericode
+     */
     private void requestVericode() {
         new Thread(new Runnable(){
             @Override

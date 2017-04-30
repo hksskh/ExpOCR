@@ -275,6 +275,9 @@ public class GroupTransaction {
         return members;
     }
 
+    /**
+     * stucture class to hold a single group member information
+     */
     static class Pair {
         public Integer uid;
         public Double amount;

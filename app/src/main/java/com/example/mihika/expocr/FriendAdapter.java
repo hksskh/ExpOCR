@@ -39,6 +39,9 @@ import java.util.Vector;
  * Created by mihika on 3/13/17.
  */
 
+/**
+ * adapter for recyclerview in Friend tab page
+ */
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
 
     //number of views it will hold
@@ -144,6 +147,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         this.isRefreshing = isRefreshing;
     }
 
+    /**
+     * synchronize friend list of this recyclerview with server
+     */
     public void syncFriendList(){
         new FriendsQueryTask().execute();
     }
@@ -207,6 +213,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         }
     }
 
+    /**
+     * AsyncTask to request friend list and friend avatar from server, then fill in the dataset and update content of recyclerview
+     */
     private class FriendsQueryTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -236,6 +245,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         }
     }
 
+    /**
+     * download avatar for u_id, and store it locally, return the uri to the avatar file
+     * @param friend_id
+     * @return
+     */
     public static Uri download_friend_avatar(int friend_id) {
         byte[] bytes = MainActivity.download_avatar_bytes(friend_id);
         Uri avatarUri = null;
@@ -267,6 +281,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         return avatarUri;
     }
 
+    /**
+     * fill in dataset the friend list retrieved from server
+     * @param s
+     */
     private void fill_receivers_list(String s){
         JSONArray jsonArray = null;
         try {

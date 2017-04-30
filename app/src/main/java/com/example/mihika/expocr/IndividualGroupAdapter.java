@@ -29,6 +29,9 @@ import java.util.Locale;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
 
+/**
+ * adapter for recyclerview at individual group page
+ */
 public class IndividualGroupAdapter extends RecyclerView.Adapter<IndividualGroupAdapter.ItemViewHolder> {
 
     private boolean isRefreshing;
@@ -104,6 +107,10 @@ public class IndividualGroupAdapter extends RecyclerView.Adapter<IndividualGroup
         return mData;
     }
 
+    /**
+     * get balance of group transactions in this individual group page (fragment)
+     * @return
+     */
     public double getNetBalance() {
         double netBalance = 0.0;
         for(Expense x : mData) {
@@ -116,10 +123,16 @@ public class IndividualGroupAdapter extends RecyclerView.Adapter<IndividualGroup
         this.isRefreshing = isRefreshing;
     }
 
+    /**
+     * synchronize group transactions with server, fill in recyclerview content
+     */
     public void syncIndividualGroupList() {
         new TransactionBetweenQueryTask().execute();
     }
 
+    /**
+     * set up ItemTouchHelper.Callback to handle deletion of group transaction by swiping in recyclerview
+     */
     private void setupItemTouchHelper(){
         ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
 
@@ -218,6 +231,9 @@ public class IndividualGroupAdapter extends RecyclerView.Adapter<IndividualGroup
         }
     }
 
+    /**
+     * AsyncTask to request group transactions for current user, fill in dataset and update recyclerview content
+     */
     class TransactionBetweenQueryTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -279,6 +295,9 @@ public class IndividualGroupAdapter extends RecyclerView.Adapter<IndividualGroup
         return text;
     }
 
+    /**
+     * AsyncTask to send group transaction deletion to server and update UI
+     */
     class DeleteTransactionQueryTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -325,6 +344,10 @@ public class IndividualGroupAdapter extends RecyclerView.Adapter<IndividualGroup
         return result;
     }
 
+    /**
+     * refresh group name and net balance when refreshing recyclerview list content
+     * @param s
+     */
     private void refreshActivityToolBar(String s) {
         ((IndividualGroupFragment)mOnClickListener).refreshActivityToolBar(s);
     }

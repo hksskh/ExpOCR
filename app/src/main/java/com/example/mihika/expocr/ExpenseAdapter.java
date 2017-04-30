@@ -17,7 +17,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * used to be adapter for listview in individual friend and group page
+ */
 public class ExpenseAdapter extends BaseAdapter {
 
     private Context mContext;

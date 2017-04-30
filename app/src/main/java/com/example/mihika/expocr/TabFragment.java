@@ -53,6 +53,8 @@ import java.util.concurrent.RunnableFuture;
  * to handle interaction events.
  * Use the {@link TabFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * Fragment class for tab fragments (friend, group and expense) displayed in MainActivity
  */
 public class TabFragment extends Fragment implements FriendAdapter.FriendListItemClickListener, GroupAdapter.GroupListItemClickListener, ExpenseTabAdapter.ExpenseListItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
@@ -136,6 +138,9 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         return baseView;
     }
 
+    /**
+     * associate swiping operation with sync operation with server
+     */
     private void setupRefreshLayout(){
         swipeRefreshLayout = (SwipeRefreshLayout) baseView.findViewById(R.id.tabSwipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.red, R.color.green, R.color.blue);
@@ -165,6 +170,11 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         return this.handler;
     }
 
+    /**
+     * initialize recyclerview and adapter for different tab fragments
+     * @param inflater
+     * @param container
+     */
     private void asssignView(LayoutInflater inflater, ViewGroup container){
         switch(page_title){
             case "FRIENDS":
@@ -253,6 +263,11 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         mListener = null;
     }
 
+    /**
+     * handle onclick event on items in friend tab fragment list
+     * jump to individual friend page
+     * @param clickedItemIndex
+     */
     @Override
     public void onFriendListItemClick(int clickedItemIndex) {
         String rawData = mFriendAdapter.getmData().get(clickedItemIndex);
@@ -266,6 +281,11 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         startActivity(intent);
     }
 
+    /**
+     * handle click event on items in group tab fragment list
+     * jump to individual group page
+     * @param clickedItemIndex
+     */
     @Override
     public void onGroupListItemClick(int clickedItemIndex) {
         String rawData = mGroupAdapter.getmData().get(clickedItemIndex);
@@ -285,6 +305,9 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
 
     }
 
+    /**
+     * handle refreshing of tab fragments when jumping from specific activities to MainActivity
+     */
     public void refreshTabFragment(){
         switch(page_title){
             case "FRIENDS":
@@ -305,11 +328,11 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         }
     }
 
+    /**
+     * template function for interaction between tab fragment and MainActivity
+     * @return
+     */
     private String fragmentRefresh(){
-        for(long index = 0; index < 10000000; index++){
-            index <<= 1;
-            index >>= 1;
-        }
         if (mListener != null) {
             return mListener.onFragmentRefresh(page_title);
         }

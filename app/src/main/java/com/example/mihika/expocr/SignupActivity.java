@@ -120,6 +120,12 @@ public class SignupActivity extends AppCompatActivity {
         return sb.toString();
     }
 
+    /**
+     * send signup request to server and jump to login page
+     * @param username
+     * @param email
+     * @param encryptedPasswd
+     */
     private final void sendData(String username, String email, String encryptedPasswd) {
         new Thread(new Runnable(){
             @Override
@@ -199,6 +205,9 @@ public class SignupActivity extends AppCompatActivity {
         sendData(name, email, password);//encrypted);
     }
 
+    /**
+     * check name, email and password view in signup page. if valid, proceed to send signup request to server
+     */
     private void attempt_signup() {
         Log.d(TAG, "Called attempt_signup");
 

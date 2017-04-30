@@ -132,6 +132,9 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(friend_list));
     }
 
+    /**
+     * adapter for recyclerview of friend list in this activity
+     */
     class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -148,6 +151,11 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
             return new ViewHolder(view);
         }
 
+        /**
+         * fill content for each component in this holder, and set up onclick listener
+         * @param holder
+         * @param position
+         */
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.nameView.setText(friend_list.get(position));

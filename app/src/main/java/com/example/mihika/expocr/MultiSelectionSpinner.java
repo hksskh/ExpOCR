@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Customized spinner with multi selection box, currently used in add group transaction activity
+ */
 public class MultiSelectionSpinner extends Spinner implements
         DialogInterface.OnMultiChoiceClickListener {
     String[] _items = null;

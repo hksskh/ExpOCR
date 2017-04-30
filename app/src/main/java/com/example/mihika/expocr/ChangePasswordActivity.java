@@ -89,6 +89,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
         return sb.toString();
     }
 
+    /**
+     * check if the entered email and password are valid. if valid, proceed to send change password request to server
+     */
     private void attemptChangePassword() {
         Log.d(TAG, "Called attempt_change_password");
 
@@ -137,6 +140,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * send change password request to server
+     * if succeed, jump back to LoginActivity
+     */
     private void changePassword() {
         new Thread(new Runnable(){
             @Override

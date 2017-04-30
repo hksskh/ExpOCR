@@ -149,6 +149,10 @@ public class PhotoCaptureActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * send receipt photo (converted to bytes already) to server, and transfer returned recognized receipt to RecognizeReceiptActivity
+     * @param image_string
+     */
     private void sendData(final String image_string){
         new Thread(new Runnable() {
             @Override
@@ -196,6 +200,10 @@ public class PhotoCaptureActivity extends AppCompatActivity {
         return image_string;
     }
 
+    /**
+     * resize and return bytes of receipt photo
+     * @return
+     */
     private byte[] loadImage(){
         byte[] data = null;
         File image_file = null;

@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * adapter for recyclerview displaying recognized receipt item list
+ */
 public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptViewHolder> {
 
     private RecyclerView recyclerView;
@@ -96,6 +99,10 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
         return mData;
     }
 
+    /**
+     * return JSONArray containing mapping of each receipt item with its price
+     * @return
+     */
     public JSONArray getActualData(){
         JSONArray actualData = new JSONArray();
 
@@ -183,6 +190,9 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
         }
     }
 
+    /**
+     * fill in content of recyclerview the recognized receipt
+     */
     private class ReceiptQueryTask extends AsyncTask<String, Void, String> {
 
         @Override

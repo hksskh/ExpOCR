@@ -225,6 +225,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+    /**
+     * handle user login through facebook
+     * @param email
+     * @param name
+     */
     private void doFaceBookLogin(final String email, final String name){
         new Thread(new Runnable(){
             @Override
@@ -304,6 +309,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    /**
+     * set up user email local cache
+     */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -328,6 +336,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
+    /**
+     * dynamic request for contact access permission
+     * @return
+     */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -374,6 +386,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return sb.toString();
     }
 
+    /**
+     * send login request to server. if succeed, jump to MainActivity
+     */
     private void login() {
         new Thread(new Runnable(){
             @Override

@@ -152,6 +152,12 @@ public class Expense {
         return expenseList;
     }
 
+    /**
+     * test method to load from sample resource file
+     * @param filename
+     * @param context
+     * @return
+     */
     private static String loadJsonFromAsset(String filename, Context context) {
         String json = null;
 

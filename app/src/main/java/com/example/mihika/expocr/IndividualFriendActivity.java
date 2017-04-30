@@ -229,6 +229,10 @@ public class IndividualFriendActivity extends AppCompatActivity implements Indiv
         }).start();
     }
 
+    /**
+     * called by internal fragments to refresh friend information and balance when refreshing fragment content list
+     * @param s
+     */
     public void refreshToolBar(String s) {
         String[] infos = s.split(",");
 
