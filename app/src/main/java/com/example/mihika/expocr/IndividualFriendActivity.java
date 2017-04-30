@@ -75,7 +75,7 @@ public class IndividualFriendActivity extends AppCompatActivity implements Indiv
         emailView = ((TextView) findViewById(R.id.friend_receiver_email));
         emailView.setText(inIntent.getStringExtra("receiver_email"));
         BigDecimal bd = new BigDecimal(inIntent.getStringExtra("balance"));
-        bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
         double bd_double = bd.doubleValue();
         if (bd_double < 0) {
             balanceView = ((TextView) findViewById(R.id.friend_receiver_net_balance));
@@ -221,7 +221,7 @@ public class IndividualFriendActivity extends AppCompatActivity implements Indiv
             nameView.setText(infos[0]);
             emailView.setText(infos[1]);
             BigDecimal bd = new BigDecimal(infos[2]);
-            bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
+            bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
             double bd_double = bd.doubleValue();
             if (bd_double < 0) {
                 balanceView.setText("Net Balance: - $" + Math.abs(bd_double));
@@ -230,7 +230,7 @@ public class IndividualFriendActivity extends AppCompatActivity implements Indiv
             }
         } else if (infos.length == 2) {
             BigDecimal bd = new BigDecimal(infos[1]);
-            bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
+            bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
             double bd_double = bd.doubleValue();
             if (bd_double < 0) {
                 balanceView.setText("Net Balance: - $" + Math.abs(bd_double));

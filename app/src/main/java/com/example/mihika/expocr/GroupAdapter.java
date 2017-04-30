@@ -159,7 +159,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             //String test=new String("10");
             double balance = Double.parseDouble(rawList[2]);
             BigDecimal bd = new BigDecimal(balance);
-            bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
+            bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
             balance = bd.doubleValue();
             if(balance < 0){
                 item_balance.setText("you owe" + System.getProperty("line.separator") + "$" + String.format("%.2f", Math.abs(balance)));

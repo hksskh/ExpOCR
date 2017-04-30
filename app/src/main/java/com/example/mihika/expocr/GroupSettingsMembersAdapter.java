@@ -187,7 +187,7 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
                     });
                 } else {
                     BigDecimal bd = new BigDecimal(rawList[1]);
-                    bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
+                    bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
                     double bal = bd.doubleValue();
 
                     if(bal < 0){

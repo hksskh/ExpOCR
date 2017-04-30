@@ -185,16 +185,16 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             item_email.setText(rawList[0]);
             double bal = Double.parseDouble(rawList[1]);
             BigDecimal bd = new BigDecimal(bal);
-            bd = bd.setScale(2, BigDecimal.ROUND_CEILING);
+            bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
             bal = bd.doubleValue();
 
             if(bal < 0){
-                String dollar_bal =  "- $" + String.format("%.2f", Math.abs(bal));
+                String dollar_bal =  "- $" + Math.abs(bal);
                 item_balance.setText(dollar_bal);
 //                    item_balance.getText().toString()) < 0){
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
             }else{
-                String dollar_bal =  "$" + String.format("%.2f", Math.abs(bal));
+                String dollar_bal =  "$" + bal;
                 item_balance.setText(dollar_bal);
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
             }
