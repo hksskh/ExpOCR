@@ -116,24 +116,25 @@
             android:name=".CreateGroupActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".AddGroupMembersActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".AddGroupTransactionActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".GroupBalanceActivity"
-            android:label="Group Balances"
             android:launchMode="singleTask" />
         <activity
             android:name=".GroupSettingsActivity"
-            android:label="Group Settings">
+            android:label="Group Settings"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mihika.expocr.IndividualGroupActivity" />

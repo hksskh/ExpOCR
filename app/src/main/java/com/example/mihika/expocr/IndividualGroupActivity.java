@@ -59,6 +59,9 @@ public class IndividualGroupActivity extends AppCompatActivity implements Indivi
     private TextView balanceView;
     private FloatingActionButton fab;
 
+    private Button mBalanceButton;
+    private Button mSettingsButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +99,28 @@ public class IndividualGroupActivity extends AppCompatActivity implements Indivi
                     .commit();
         }
 
+        mBalanceButton = (Button) findViewById(R.id.balance_individual_grp);
+        mBalanceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(IndividualGroupActivity.this, GroupBalanceActivity.class);
+                intent.putExtra("g_id", g_id);
+                startActivity(intent);
+
+            }
+        });
+
+        mSettingsButton = (Button) findViewById(R.id.individual_grp_settings);
+        mSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(IndividualGroupActivity.this, GroupSettingsActivity.class);
+                intent.putExtra("g_id", g_id);
+                intent.putExtra("g_name", g_name);
+                startActivity(intent);
+
+            }
+        });
         fab = (FloatingActionButton) findViewById(R.id.individual_group_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
