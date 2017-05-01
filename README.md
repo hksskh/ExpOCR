@@ -28,11 +28,19 @@ We have deployed the backend on an azure server. The application will automatica
 For more information on the project, please contact us.
 
 Contributors:
+
 Mihika Dave
+
 Conner Croft
+
 Brianna Ifft
+
 Lanxiao Bai
+
 Daniel Cummins
+
 Eric Barron
+
 Anthony Huang
+
 Vimal Patel
