@@ -119,27 +119,6 @@
                 android:text="Add"
                 />
 
-            <!--<Spinner-->
-            <!--android:id="@+id/transaction_kind_spinner"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:entries="@array/transaction_options"-->
-            <!--android:prompt="@string/prompt_fab"-->
-            <!--android:paddingBottom="5dp"-->
-            <!--android:paddingTop="5dp"-->
-            <!--android:textSize="40sp"-->
-            <!--android:theme="@style/AlertDialog.AppCompat.Light"-->
-            <!--android:translationX="-5dp" />-->
-
-            <!--<com.example.mihika.expocr.MultiSelectionSpinner-->
-                <!--android:id="@+id/user_spinner"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:paddingBottom="5dp"-->
-                <!--android:paddingTop="5dp"-->
-                <!--android:textSize="40sp"-->
-                <!--android:visibility="invisible" />-->
-
 
         </LinearLayout>
 

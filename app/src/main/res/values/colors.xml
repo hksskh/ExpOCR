@@ -20,7 +20,7 @@
 
     <color name="colorbutton">@color/colorPrimary</color>
 
-    <!--<color name="colorPrimaryDark">#1976D2</color>-->MENU_POPUP_BACK_COLOR
+
     <color name="pale_red">#EF5350</color>
     <color name="orange">#FF9800</color>
     <color name="black">#FF000000</color>
