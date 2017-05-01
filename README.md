@@ -21,6 +21,9 @@ To build and run the application on a hardware device follow the following instr
 To generate the APK for distribution follow the following instructions:
  https://developer.android.com/studio/run/index.html#generating-apks
  
+Link download the APK:
+https://gitlab-beta.engr.illinois.edu/kesongh2/ExpOCR/blob/master/app/app-release.apk
+ 
 # Server:
 
 We have deployed the backend on an azure server. The application will automatically talk to our backend. All server code is located under the ExpOCR/Server folder and utilizes Django.
