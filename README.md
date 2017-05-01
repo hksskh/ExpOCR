@@ -22,6 +22,7 @@ To generate the APK for distribution follow the following instructions:
  https://developer.android.com/studio/run/index.html#generating-apks
  
 Server:
+
 We have deployed the backend on an azure server. The application will automatically talk to our backend. All server code is located under the ExpOCR/Server folder and utilizes Django.
  
 For more information on the project, please contact us.
