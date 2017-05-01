@@ -181,21 +181,13 @@ public class AddTransactionReceiptItemListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     selectedFriend = position;//crucial
-                    /*if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(AddTransactionReceiptItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        AddTransactionReceiptItemDetailFragment fragment = new AddTransactionReceiptItemDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.addtransactionreceiptitem_detail_container, fragment)
-                                .commit();
-                    } else {*/
+
                         Context context = v.getContext();
                         Intent intent = new Intent(context, AddTransactionReceiptItemDetailActivity.class);
                         intent.putExtra(AddTransactionReceiptItemDetailFragment.ARG_RECEIPT_LIST, receipt_list.toString());
 
                         context.startActivity(intent);
-                    //}
+
                 }
             });
         }

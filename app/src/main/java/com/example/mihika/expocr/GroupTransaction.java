@@ -57,43 +57,6 @@ public class GroupTransaction {
 
         return retval;
     }
-    /*
-    public static ArrayList<Expense> getGroupExpensesFromServer(int g_id){
-        ArrayList<Expense> expenseList = new ArrayList<Expense>();
-        JSONArray expenses = null;
-        try {
-            expenses = new JSONArray(expense_retrieve_group_transaction(g_id));
-            // Get Recipe objects from data
-            for(int i = 0; i < expenses.length(); i++){
-                Expense expense = new Expense();
-
-                expense.expense = expenses.getJSONObject(i).getString("Expense");
-                expense.balance = expenses.getJSONObject(i).getDouble("Balance");
-                int date = expenses.getJSONObject(i).getInt("Day");
-                int month = expenses.getJSONObject(i).getInt("Month");
-                int year = expenses.getJSONObject(i).getInt("Year");
-                expense.date = Calendar.getInstance();
-                expense.date.set(year, month-1, date);
-                expense.sender_id = expenses.getJSONObject(i).getInt("Sender_Id");
-                expense.receiver_id = expenses.getJSONObject(i).getInt("Receiver_Id");
-
-                expenseList.add(expense);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return expenseList;
-    }
-    */
-
-    /*private static String expense_retrieve_group_transaction(int g_id){
-        String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/get_transactions"; //check this with group
-        String requestBody = "g_id=" + g_id;
-
-        String text = ServerUtil.sendGroupMemberData(serverUrl, requestBody, "UTF-8");
-
-        return text;
-    }*/
 
     /**
      * Gets all pairs where one user owes another user in the group.

@@ -207,11 +207,6 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-//        MenuItem searchItem = menu.findItem(R.id.action_search);
-//        final SearchView searchView = (SearchView) searchItem.getActionView();
-//        searchView.setQueryHint(getResources().getString(R.string.action_search));
-//        //Todo: add different listeners for searchView to offer suggestions based on query text
-
         return true;
     }
 
@@ -424,10 +419,6 @@ public class MainActivity extends AppCompatActivity
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        //intent.putExtra("outputX", 200);
-        //intent.putExtra("outputY", 200);
-        //intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, avatarUri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());

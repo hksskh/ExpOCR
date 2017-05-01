@@ -228,14 +228,7 @@ public class SignupActivity extends AppCompatActivity {
 
         if (isEmailValid && isPasswordValid && canReEnterPasswordMatch) {
             signup();
-            /*
-            if (!success) {
-                Toast.makeText(getApplicationContext(), "Email or user name already used", Toast.LENGTH_SHORT).show();
-            } else {
-                Intent gotoMain = new Intent(SignupActivity.this, MainActivity.class);
-                startActivity(gotoMain);
-            }
-            */
+
         } else {
 
             LoadingDialog.closeDialog(loading_dialog);//do not forget

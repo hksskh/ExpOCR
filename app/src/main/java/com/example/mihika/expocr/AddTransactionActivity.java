@@ -249,59 +249,11 @@ public class AddTransactionActivity extends AppCompatActivity{
         memo_text.setAdapter(memo_adapter);
     }
 
-    protected void addEntriesForSpinner() {
-//        List<String> list = new ArrayList<String>();
-//        //We use fake list here for demo
-//        list.add("Me");
-//        list.add("User 1");
-//        list.add("User 2");
-//        list.add("User 3");
-//        List<String> list = getUsersFromServer();
-//        userSpinner.setItems(list);
-//
-//        List<String> list2 = new ArrayList<String>();
-//        //We use fake list here for demo
-//        list2.add("Clothing");
-//
-//        list2.add("General");
-//        list2.addGeneralusing");
-//        list2.add("Salary");
-//        List<String> list = getCatergoriesFromServer();
-//
-//        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list2);
-//        categorySpinner.setAdapter(dataAdapter2);
-//
-//        List<String> list3 = new ArrayList<>();
-//        list3.add("For Individual");
-//        list3.add("For Group");
-//        ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list3);
-//        transactionKindSpinner.setAdapter(dataAdapter3);
-    }
 
-    protected String getUsersFromServer() {
-        //TODO Implement download data from server
-        return null;
-    }
+
 
     public void addListenerOnSpinnerItemSelection() {
-//        transactionKindSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                if (parent.getItemAtPosition(position).toString().equals("For group")) {
-//                   // userSpinner.setVisibility(View.VISIBLE);
-//                    email_text.setVisibility(View.GONE);
-//                }
-//                else {
-//                    //userSpinner.setVisibility(View.INVISIBLE);
-//                    email_text.setVisibility(View.VISIBLE);
-//                }
-//            }
 
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
     }
 }
 

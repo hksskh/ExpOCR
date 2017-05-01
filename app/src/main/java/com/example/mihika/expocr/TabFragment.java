@@ -293,8 +293,6 @@ public class TabFragment extends Fragment implements FriendAdapter.FriendListIte
         Intent intent = new Intent(this.getActivity(), IndividualGroupActivity.class);
         intent.putExtra("group_id", rawList[0]);
         intent.putExtra("group_name", rawList[1]);
-//        rawList = rawList[2].split(":");
-        //intent.putExtra("receiver_email", rawList[0]);
         intent.putExtra("balance", rawList[2]);
         intent.putExtra("u_id", mGroupAdapter.getU_id());
         startActivity(intent);

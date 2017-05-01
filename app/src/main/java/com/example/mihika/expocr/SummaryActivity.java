@@ -78,7 +78,7 @@ public class SummaryActivity extends AppCompatActivity {
 //        pie.getRenderer(PieRenderer.class).setDonutSize(20/100f,
 //                PieRenderer.DonutMode.PERCENT);
 
-        
+
         final float padding = PixelUtils.dpToPix(30);
         pie.getPie().setPadding(padding, padding, padding, padding);
         //setupIntroAnimation();
