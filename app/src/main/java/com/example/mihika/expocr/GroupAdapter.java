@@ -165,11 +165,15 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
             balance = bd.doubleValue();
             if(balance < 0){
-                item_balance.setText("you owe" + System.getProperty("line.separator") + "$" + String.format("%.2f", Math.abs(balance)));
+                item_balance.setText("You owe" + System.getProperty("line.separator") + "$" + String.format("%.2f", Math.abs(balance)));
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
-            }else{
-                item_balance.setText("you are owed" + System.getProperty("line.separator") + "$" + String.format("%.2f", Math.abs(balance)));
+            }else if (balance > 0){
+                item_balance.setText("You are owed" + System.getProperty("line.separator") + "$" + String.format("%.2f", Math.abs(balance)));
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
+            }else {
+                item_balance.setText("Settled up!" );
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
+
             }
         }
 

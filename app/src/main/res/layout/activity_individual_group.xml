@@ -28,73 +28,74 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
+            </android.support.v7.widget.Toolbar>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/individual_group_name"
+                    style="@style/Base.TextAppearance.AppCompat.Headline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textColor="@color/ap_white" />
+
+                <TextView
+                    android:id="@+id/individual_group_net_balance"
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="Net Balance: "
+                    android:textColor="@color/ap_white" />
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_gravity="center">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
-                    <TextView
-                        android:id="@+id/individual_group_name"
-                        android:layout_width="match_parent"
+                    <Button
+                        android:id="@+id/balance_individual_grp"
+                        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/Base.TextAppearance.AppCompat.Headline"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:textColor="@color/ap_white" />
-
-                    <TextView
-                        android:id="@+id/individual_group_net_balance"
-                        android:text="Net Balance: "
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="0.5"
+                        android:backgroundTint="@color/colorPrimary_700"
+                        android:text="Balance"
                         android:textColor="@color/ap_white"
-                        style="@style/Base.TextAppearance.AppCompat.Title" />
+                        android:textSize="12sp" />
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <Button
+                        android:id="@+id/individual_grp_settings"
+
+                        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
+                        android:layout_width="113dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:weightSum="1">
-                        <Button
-                            android:text="Balance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:textSize="12sp"
-                            android:id="@+id/balance_individual_grp"
-                            android:backgroundTint="@color/colorPrimary_700"
-                            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
-                            android:layout_weight="0.5"
-                            android:textColor="@color/ap_white"/>
-
-
-                        <Button
-                            android:id="@+id/individual_grp_settings"
-
-                            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
-                            android:layout_width="113dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:backgroundTint="@color/colorPrimary_700"
-                            android:text="Settings"
-                            android:textSize="12sp"
-                            android:layout_weight="0.5"
-                            android:textColor="@color/ap_white"/>
-
-                    </LinearLayout>
-
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="0.5"
+                        android:backgroundTint="@color/colorPrimary_700"
+                        android:text="Settings"
+                        android:textColor="@color/ap_white"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
-            </android.support.v7.widget.Toolbar>
+
+            </LinearLayout>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

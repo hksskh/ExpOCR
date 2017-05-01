@@ -147,58 +147,6 @@ public class IndividualGroupActivity extends AppCompatActivity implements Indivi
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_individual_group, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_individual_group_balance:
-                Intent intent = new Intent(IndividualGroupActivity.this, GroupBalanceActivity.class);
-                intent.putExtra("g_id", g_id);
-                startActivity(intent);
-                return true;
-            case R.id.action_individual_group_settings:
-                intent = new Intent(IndividualGroupActivity.this, GroupSettingsActivity.class);
-                intent.putExtra("g_id", g_id);
-                intent.putExtra("g_name", g_name);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /*@Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId()==R.id.expenses_list_view) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu_list, menu);
-        }
-    }*/
-
-    /*@Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch(item.getItemId()) {
-            case R.id.delete:
-                Expense clickedExpense = data.get(info.position);
-                currentPosition = info.position;
-                Calendar transactionDate = clickedExpense.getDate();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-                String transactionDateString = dateFormat.format(transactionDate.getTime());
-                new IndividualGroupActivity.DeleteTransactionQueryTask().execute(transactionDateString);
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }*/
-
     public FloatingActionButton getFab() {
         return fab;
     }

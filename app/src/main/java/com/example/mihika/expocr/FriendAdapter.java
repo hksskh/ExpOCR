@@ -195,14 +195,24 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             bal = bd.doubleValue();
 
             if(bal < 0){
-                String dollar_bal =  "- $" + Math.abs(bal);
-                item_balance.setText(dollar_bal);
-//                    item_balance.getText().toString()) < 0){
+
+                item_balance.setText("You owe" + System.getProperty("line.separator") + "$" + String.format("%.2f", Math.abs(bal)));
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
-            }else{
-                String dollar_bal =  "$" + bal;
-                item_balance.setText(dollar_bal);
+//                String dollar_bal =  "- $" + Math.abs(bal);
+//                item_balance.setText(dollar_bal);
+//                    item_balance.getText().toString()) < 0){
+//                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.negativeRed));
+            }else if (bal > 0){
+                item_balance.setText("You are owed" + System.getProperty("line.separator") + "$" + String.format("%.2f", Math.abs(bal)));
                 item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
+
+//                String dollar_bal =  "$" + bal;
+               //               item_balance.setText(dollar_bal);
+//                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
+            } else{
+                item_balance.setText("Settled up!" );
+                item_balance.setTextColor(((TabFragment)mOnClickListener).getResources().getColor(R.color.moneyGreen));
+
             }
         }
 

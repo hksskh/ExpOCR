@@ -215,25 +215,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_add_friend) {
-//            Toast.makeText(getApplicationContext(), "Add a transaction with your friend to add him to your Friends tab!", Toast.LENGTH_LONG).show();
-//            return true;
-//        }else if(id == R.id.action_create_group){
-//            Intent intent = new Intent(this, CreateGroupActivity.class);
-//            startActivity(intent);
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     /**
      * handle item click in left drawer, jump to specific activities
@@ -266,11 +247,7 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("u_email",u_email);
             startActivity(intent);
         }
-// else if (id == R.id.nav_settings) {
-//            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
-//        } else if (id == R.id.nav_contact) {
-//            Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
-//        }
+
         else if (id == R.id.nav_logout){
             FacebookSdk.sdkInitialize(getApplicationContext());
             LoginManager.getInstance().logOut();
