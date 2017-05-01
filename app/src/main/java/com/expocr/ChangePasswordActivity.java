@@ -148,7 +148,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 String url = "http://" + ServerUtil.getServerAddress() + "user/change_password";
-                String requestString = "email=" + email + "&password=" + password;
+                String requestString = "email=" + email + "&password=" + encrypted;
                 //Log.d(TAG, requestString);
 
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");

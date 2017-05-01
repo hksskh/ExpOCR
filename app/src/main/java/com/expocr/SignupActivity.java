@@ -115,21 +115,12 @@ public class SignupActivity extends AppCompatActivity {
      * @param email
      * @param encryptedPasswd
      */
-    private final void sendData(String username, String email, String encryptedPasswd) {
+    private final void sendData(final String username, final String email, final String password, final String encryptedPasswd) {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String name = mFirstNameView.getText().toString() + " " + mLastNameView.getText().toString();
-                String email = mEmailView.getText().toString();
-                String password = mPasswordView.getText().toString();
-                String encrypted = null;
-                try {
-                    encrypted = encrypt(password);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
                 String url = "http://" + ServerUtil.getServerAddress() + "user/try_create";
-                String requestString = "username=" + name + "&email=" + email + "&password=" + password;//encrypted;
+                String requestString = "username=" + username + "&email=" + email + "&password=" + encryptedPasswd;
                 //Log.d(TAG, requestString);
 
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
@@ -191,7 +182,7 @@ public class SignupActivity extends AppCompatActivity {
         //Log.d(TAG, name);
         //Log.d(TAG, password);
         //Log.d(TAG, encrypted);
-        sendData(name, email, password);//encrypted);
+        sendData(name, email, password, encrypted);
     }
 
     /**

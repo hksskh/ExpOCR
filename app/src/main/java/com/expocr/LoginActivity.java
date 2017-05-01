@@ -384,7 +384,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     e.printStackTrace();
                 }
                 String url = "http://" + ServerUtil.getServerAddress() + "user/login_by_email";
-                String requestString = "email=" + email + "&password=" + password;//encrypted;
+                String requestString = "email=" + email + "&password=" + encrypted;
                 //Log.d(TAG, requestString);
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
                 //Log.d(TAG, "From server:" + response);
