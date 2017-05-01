@@ -26,3 +26,13 @@ Server:
 We have deployed the backend on an azure server. The application will automatically talk to our backend. All server code is located under the ExpOCR/Server folder and utilizes Django.
  
 For more information on the project, please contact us.
+
+Contributors:
+Mihika Dave
+Conner Croft
+Brianna Ifft
+Lanxiao Bai
+Daniel Cummins
+Eric Barron
+Anthony Huang
+Vimal Patel
