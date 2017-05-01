@@ -6,6 +6,22 @@ As students, we usually go for outings/restaurants/grocery shopping with friends
 
 App:
 
-It is an Android App. You can clone the project and run it in an IDE that supports android development. You can also generate APK to run it in an android phone.
+The application is an Android Application. You can clone the repository and import it into an IDE that supports android development, we used Android Studio. You can run the application using Android Studio with an emulator or an Android phone. An apk can also be generated using Android Studio for distribution.
+To import the project into Android Studio please follow the following instructions:
+ 1. Open Android Studio
+ 2. On the splash screen select the "Open an existing Android Studio project"
+ 3. Navigate to where you cloned the git repository and select the ExpOCR folder
 
+To build and run the application on an emulator follow the following instructions:
+ https://developer.android.com/studio/run/emulator.html
+
+To build and run the application on a hardware device follow the following instructions:
+ https://developer.android.com/studio/run/device.html
+ 
+To generate the APK for distribution follow the following instructions:
+ https://developer.android.com/studio/run/index.html#generating-apks
+ 
+Server:
+We have deployed the backend on an azure server. The application will automatically talk to our backend. All server code is located under the ExpOCR/Server folder and utilizes Django.
+ 
 For more information on the project, please contact us.
