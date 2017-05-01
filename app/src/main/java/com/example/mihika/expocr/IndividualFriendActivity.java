@@ -147,6 +147,7 @@ public class IndividualFriendActivity extends AppCompatActivity implements Indiv
             public void onClick(View view) {
                 Intent transaction = new Intent(IndividualFriendActivity.this, AddTransactionActivity.class);
                 transaction.putExtra("from", "IndividualFriend");
+                transaction.putExtra("email", emailView.getText());
                 startActivity(transaction);
             }
         });

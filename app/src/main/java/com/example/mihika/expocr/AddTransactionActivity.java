@@ -79,6 +79,9 @@ public class AddTransactionActivity extends AppCompatActivity{
         split_owe_owed = (Spinner) findViewById(R.id.split_spinner);
         addListenerOnSpinnerItemSelection();
         set_autotext_adapters();
+        if (inIntent.hasExtra("email")) {
+            email_text.setText(inIntent.getStringExtra("email"));
+        }
 
         Button add_transaction_button = (Button) findViewById(R.id.add_transaction_button);
         add_transaction_button.setOnClickListener(new View.OnClickListener() {
