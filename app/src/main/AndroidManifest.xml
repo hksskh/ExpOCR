@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mihika.expocr">
+    package="com.expocr">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -68,7 +68,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mihika.expocr.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".IndividualGroupActivity"
@@ -76,7 +76,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mihika.expocr.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".ForgotPasswordActivity"
@@ -102,7 +102,7 @@
             android:label="Split Receipt" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mihika.expocr.AddTransactionActivity" />
+                android:value=".AddTransactionActivity" />
         </activity>
         <activity
             android:name=".AddTransactionReceiptItemDetailActivity"
@@ -110,7 +110,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mihika.expocr.AddTransactionReceiptItemListActivity" />
+                android:value=".AddTransactionReceiptItemListActivity" />
         </activity>
         <activity
             android:name=".CreateGroupActivity"
@@ -137,7 +137,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mihika.expocr.IndividualGroupActivity" />
+                android:value=".IndividualGroupActivity" />
         </activity>
     </application>
 

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/ap_white"
     android:orientation="vertical"
-    tools:context="com.example.mihika.expocr.SummaryActivity">
+    tools:context=".SummaryActivity">
 
     <com.androidplot.pie.PieChart
         android:id="@+id/mySimplePieChart"

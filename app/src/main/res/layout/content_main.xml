@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.mihika.expocr.MainActivity"
+    tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <android.support.design.widget.TabLayout
@@ -20,10 +20,11 @@
         app:tabIndicatorColor="@color/white"
         app:tabSelectedTextColor="@color/tabselectedcolor"
         app:tabBackground="@color/colorPrimary"
-        app:tabTextColor="@color/tabcolor"></android.support.design.widget.TabLayout>
+        app:tabTextColor="@color/tabcolor" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/tabPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"></android.support.v4.view.ViewPager>
+        android:layout_weight="1" />
 </LinearLayout>
