@@ -35,16 +35,12 @@ import java.util.logging.LogRecord;
  */
 public class SummaryActivity extends AppCompatActivity {
 
-    public static final int SELECTED_SEGMENT_OFFSET = 50;
+    public static final int SELECTED_SEGMENT_OFFSET = 0;
     private static final int PLOT_FINISH = 1;
 
     public PieChart pie;
     private Handler handler;
 
-    private Segment s1;
-    private Segment s2;
-    private Segment s3;
-    private Segment s4;
 
     private final String TAG = "SummaryActivity";
     public ArrayList<SegmentFormatter> segmentFormatters = new ArrayList<>();
@@ -62,7 +58,7 @@ public class SummaryActivity extends AppCompatActivity {
                         int count = 0;
                         for (String category : percents.keySet()) {
                             Double percent = percents.get(category);
-                            Segment segment = new Segment(category + " \n" + Double.toString(percent) + "%", percent);
+                            Segment segment = new Segment(category , percent);
 
                             pie.addSegment(segment, segmentFormatters.get(count % segmentFormatters.size()));
                             count++;
@@ -79,7 +75,10 @@ public class SummaryActivity extends AppCompatActivity {
 
         // initialize our XYPlot reference:
         pie = (PieChart) findViewById(R.id.mySimplePieChart);
+//        pie.getRenderer(PieRenderer.class).setDonutSize(20/100f,
+//                PieRenderer.DonutMode.PERCENT);
 
+        
         final float padding = PixelUtils.dpToPix(30);
         pie.getPie().setPadding(padding, padding, padding, padding);
         //setupIntroAnimation();
