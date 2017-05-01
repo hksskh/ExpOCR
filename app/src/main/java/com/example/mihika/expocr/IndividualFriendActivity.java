@@ -57,6 +57,8 @@ public class IndividualFriendActivity extends AppCompatActivity implements Indiv
     private TextView balanceView;
     private FloatingActionButton fab;
     private Handler delete_handler;
+    private Button mSettleUpButton;
+    private Button mDeleteFriendButton;
 
     List<Expense> data;
     private int receiver_id;
@@ -88,6 +90,44 @@ public class IndividualFriendActivity extends AppCompatActivity implements Indiv
             balanceView = ((TextView) findViewById(R.id.friend_receiver_net_balance));
             balanceView.setText("Net Balance: $" + bd_double);
         }
+
+        mSettleUpButton = (Button) findViewById(R.id.settle_up);
+        mSettleUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToRecordPayment = new Intent(IndividualFriendActivity.this, RecordPaymentActivity.class);
+                goToRecordPayment.putExtra("u_id", MainActivity.getU_id());
+                goToRecordPayment.putExtra("receiver_id", receiver_id);
+                startActivity(goToRecordPayment);
+            }
+        });
+
+
+        mDeleteFriendButton = (Button) findViewById(R.id.delete_friend);
+        mDeleteFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(IndividualFriendActivity.this);
+                builder.setTitle("Delete Friend")
+                        .setMessage("Do you really want to delete this friend?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                delete_friend();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.create().show();
+
+            }
+        });
+
 
         if (savedInstanceState == null) {
             // Create the friend transaction fragment and add it to the activity

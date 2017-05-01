@@ -92,6 +92,7 @@ public class IndividualFriendFragment extends Fragment implements IndividualFrie
 
         mList.setAdapter(mAdapter);
 
+
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.fragment_individual_friend_refresh_layout);
         swipeRefreshLayout.setColorSchemeResources(R.color.red, R.color.green, R.color.blue);
         swipeRefreshLayout.setRefreshing(true);

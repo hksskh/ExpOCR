@@ -133,8 +133,7 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".GroupSettingsActivity"
-            android:label="Group Settings"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="Group Settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mihika.expocr.IndividualGroupActivity" />
