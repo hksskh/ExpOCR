@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -234,6 +235,9 @@ public class GroupSettingsMembersAdapter extends RecyclerView.Adapter<GroupSetti
         @Override
         protected void onPostExecute(String s) {
             notifyDataSetChanged();
+            Message msg = new Message();
+            msg.what = GroupSettingsActivity.FINISH_MEMBERS_SYNC;
+            ((GroupSettingsActivity)mOnClickListener).getHandler().sendMessage(msg);
         }
     }
 

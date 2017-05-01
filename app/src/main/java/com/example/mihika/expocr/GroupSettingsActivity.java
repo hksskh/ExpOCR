@@ -45,8 +45,9 @@ import android.os.Handler;
  */
 public class GroupSettingsActivity extends AppCompatActivity implements GroupSettingsMembersAdapter.MemberListItemClickListener {
 
-    private static final int DELETED = 1;
-    private static final int FINISH_ADD_AVATAR = 2;
+    public static final int DELETED = 1;
+    public static final int FINISH_ADD_AVATAR = 2;
+    public static final int FINISH_MEMBERS_SYNC = 3;
 
     private int g_id;
 
@@ -80,6 +81,7 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
         };
         membersList.setLayoutManager(layoutManager);
 
+        loading_dialog = LoadingDialog.showDialog(this, "Retrieving group members information...");
         membersAdapter = new GroupSettingsMembersAdapter(this);
         membersList.setAdapter(membersAdapter);
 
@@ -101,6 +103,9 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
                         break;
                     case FINISH_ADD_AVATAR:
                         membersAdapter.notifyDataSetChanged();
+                        LoadingDialog.closeDialog(loading_dialog);
+                        break;
+                    case FINISH_MEMBERS_SYNC:
                         LoadingDialog.closeDialog(loading_dialog);
                         break;
                 }
@@ -161,7 +166,6 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            loading_dialog = LoadingDialog.showDialog(GroupSettingsActivity.this, "Retrieving friend information...");
                             String selectedText = (String)spinner_view.getSelectedItem();
                             int leftBracket = selectedText.indexOf("(");
                             int rightBracket = selectedText.lastIndexOf(")");
@@ -180,6 +184,7 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
                                 }
                             }
                             if (!isInGroup) {//do not forget
+                                loading_dialog = LoadingDialog.showDialog(GroupSettingsActivity.this, "Retrieving friend information...");
                                 membersAdapter.getmData().add(clickedItemIndex + 1, stringbuilder.toString());
                                 membersAdapter.getMembers_id_list().add(clickedItemIndex, u_id);//take care
                                 membersAdapter.getMembers_avatar_uri_list().put(String.valueOf(u_id), null);
@@ -214,6 +219,10 @@ public class GroupSettingsActivity extends AppCompatActivity implements GroupSet
      */
     public int getG_id() {
         return g_id;
+    }
+
+    public Handler getHandler() {
+        return handler;
     }
 
     private void saveSettings(){

@@ -141,7 +141,7 @@ public class IndividualGroupActivity extends AppCompatActivity implements Indivi
 
         if (intent.hasExtra("new_group_name")) {
             g_name = intent.getStringExtra("new_group_name");
-            ((TextView)findViewById(R.id.group_name)).setText(g_name);
+            ((TextView)findViewById(R.id.individual_group_name)).setText(g_name);
         } else if (intent.hasExtra("addTransaction")) {
             fragment.refreshFragment();
         }
