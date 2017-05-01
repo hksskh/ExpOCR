@@ -141,10 +141,10 @@ public class SignupActivity extends AppCompatActivity {
                 }
                 String url = "http://" + ServerUtil.getServerAddress() + "user/try_create";
                 String requestString = "username=" + name + "&email=" + email + "&password=" + password;//encrypted;
-                Log.d(TAG, requestString);
+                //Log.d(TAG, requestString);
 
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.has("warning")){
@@ -199,9 +199,9 @@ public class SignupActivity extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, name);
-        Log.d(TAG, password);
-        Log.d(TAG, encrypted);
+        //Log.d(TAG, name);
+        //Log.d(TAG, password);
+        //Log.d(TAG, encrypted);
         sendData(name, email, password);//encrypted);
     }
 
@@ -209,7 +209,7 @@ public class SignupActivity extends AppCompatActivity {
      * check name, email and password view in signup page. if valid, proceed to send signup request to server
      */
     private void attempt_signup() {
-        Log.d(TAG, "Called attempt_signup");
+        //Log.d(TAG, "Called attempt_signup");
 
         boolean isEmailValid = isValidEmail(mEmailView.getText());
 

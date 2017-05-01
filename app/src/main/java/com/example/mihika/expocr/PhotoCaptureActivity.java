@@ -116,7 +116,7 @@ public class PhotoCaptureActivity extends AppCompatActivity {
 
         if (!mediaStorageDir.exists()){
             if (!mediaStorageDir.mkdirs()){
-                Log.d("PhotoCapture", "failed to create directory");
+                //Log.d("PhotoCapture", "failed to create directory");
                 return null;
             }
         }
@@ -137,9 +137,9 @@ public class PhotoCaptureActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         loading_dialog = LoadingDialog.showDialog(PhotoCaptureActivity.this, "Receipt Recognizing...");
                         byte[] image_byte = loadImage();
-                        Log.d(TAG, "image_byte length: " + String.valueOf(image_byte.length));
+                        //Log.d(TAG, "image_byte length: " + String.valueOf(image_byte.length));
                         String image_string = byteToString(image_byte);
-                        Log.d(TAG, "image_string length: " + String.valueOf(image_string.length()));
+                        //Log.d(TAG, "image_string length: " + String.valueOf(image_string.length()));
                         sendImageToOCR(image_string);
                     }
                 });

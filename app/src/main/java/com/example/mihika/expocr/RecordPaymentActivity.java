@@ -158,9 +158,9 @@ public class RecordPaymentActivity extends AppCompatActivity {
                         .append("&memo=").append(paymentDropdown.getSelectedItem().toString())
                         .append("&amount=").append(paymentAmount.getText().toString())
                         .append("&date=").append(datetime);
-                Log.d(TAG, requestString.toString());
+                //Log.d(TAG, requestString.toString());
                 String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -189,10 +189,10 @@ public class RecordPaymentActivity extends AppCompatActivity {
 
                 String url = "http://" + ServerUtil.getServerAddress() + "user/get_two_users";
                 String requestString = "id1=" + u_id + "&id2=" + receiver_id;
-                Log.d(TAG, requestString);
+                //Log.d(TAG, requestString);
 
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
 
                 try {
                     JSONArray jsonArray = new JSONArray(response);

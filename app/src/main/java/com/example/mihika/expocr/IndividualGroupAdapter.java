@@ -320,7 +320,7 @@ public class IndividualGroupAdapter extends RecyclerView.Adapter<IndividualGroup
     private String delete_transaction(String transactionDate) {
         String serverUrl = "http://" + ServerUtil.getServerAddress() + "group/delete_transaction_by_date";
         String requestBody = "date=" + transactionDate;
-        Log.d("delete_transaction", requestBody);
+        //Log.d("delete_transaction", requestBody);
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
         return text;

@@ -199,10 +199,10 @@ public class AddTransactionActivity extends AppCompatActivity{
                         break;
                 }
 
-                Log.d(TAG, requestString.toString());
+                //Log.d(TAG, requestString.toString());
                 String response = ServerUtil.sendData(url, requestString.toString(), "UTF-8");
 
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.has("warning")) {

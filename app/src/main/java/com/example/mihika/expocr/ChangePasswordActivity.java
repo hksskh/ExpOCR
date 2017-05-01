@@ -93,7 +93,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
      * check if the entered email and password are valid. if valid, proceed to send change password request to server
      */
     private void attemptChangePassword() {
-        Log.d(TAG, "Called attempt_change_password");
+        //Log.d(TAG, "Called attempt_change_password");
 
         boolean isEmailValid = mEmailView.getText().toString().equals(userEmail.toString());
 
@@ -158,10 +158,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 }
                 String url = "http://" + ServerUtil.getServerAddress() + "user/change_password";
                 String requestString = "email=" + email + "&password=" + password;
-                Log.d(TAG, requestString);
+                //Log.d(TAG, requestString);
 
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.has("updated rows")){

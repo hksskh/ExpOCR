@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         myFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("MainActivity", "Add button clicked");
+                //Log.d("MainActivity", "Add button clicked");
                 Intent transaction = new Intent(MainActivity.this, AddTransactionActivity.class);
                 transaction.putExtra("from", "Main");
                 startActivity(transaction);

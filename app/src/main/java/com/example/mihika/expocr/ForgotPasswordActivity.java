@@ -130,7 +130,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            Log.d(TAG, "cancel");
+            //Log.d(TAG, "cancel");
             focusView.requestFocus();
             LoadingDialog.closeDialog(loading_dialog);//do not forget
         } else {
@@ -161,7 +161,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            Log.d(TAG, "cancel");
+            //Log.d(TAG, "cancel");
             focusView.requestFocus();
             LoadingDialog.closeDialog(loading_dialog);//do not forget
         } else {
@@ -181,10 +181,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                 String url = "http://" + ServerUtil.getServerAddress() + "user/check_vericode";
                 String requestString = "email=" + email + "&vericode=" + vericode;
-                Log.d(TAG, requestString);
+                //Log.d(TAG, requestString);
 
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.has("warning")){
@@ -224,10 +224,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                 String url = "http://" + ServerUtil.getServerAddress() + "user/request_vericode";
                 String requestString = "email=" + email;
-                Log.d(TAG, requestString);
+                //Log.d(TAG, requestString);
 
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.has("warning")){

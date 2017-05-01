@@ -236,9 +236,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void run() {
                 String url = "http://" + ServerUtil.getServerAddress() + "user/create_facebook_user";
                 String requestString = "email=" + email + "&username=" + name;
-                Log.d(TAG, requestString);
+                //Log.d(TAG, requestString);
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -252,9 +252,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                     url = "http://" + ServerUtil.getServerAddress() + "user/login_with_facebook";
                     requestString = "email=" + email;
-                    Log.d(TAG, requestString);
+                    //Log.d(TAG, requestString);
                     response = ServerUtil.sendData(url, requestString, "UTF-8");
-                    Log.d(TAG, "From server:" + response);
+                    //Log.d(TAG, "From server:" + response);
                     jsonObject = new JSONObject(response);
                     String u_email = jsonObject.getString("email");
                     addEmailToDummyCredentials(u_email);
@@ -397,9 +397,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
                 String url = "http://" + ServerUtil.getServerAddress() + "user/login_by_email";
                 String requestString = "email=" + email + "&password=" + password;//encrypted;
-                Log.d(TAG, requestString);
+                //Log.d(TAG, requestString);
                 String response = ServerUtil.sendData(url, requestString, "UTF-8");
-                Log.d(TAG, "From server:" + response);
+                //Log.d(TAG, "From server:" + response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);

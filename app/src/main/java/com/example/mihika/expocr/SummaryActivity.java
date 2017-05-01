@@ -183,12 +183,12 @@ public class SummaryActivity extends AppCompatActivity {
         String requestBody = "receiver_id=" + MainActivity.getU_id() + "&category=no_payment";
 
         String text = ServerUtil.sendData(serverUrl, requestBody, "UTF-8");
-        Log.d(TAG, text);
+        //Log.d(TAG, text);
         return text;
     }
 
     protected Map<String, Double> parse(String s) {
-        Log.d(TAG, s);
+        //Log.d(TAG, s);
         JSONArray jsonArray = null;
         try {
             jsonArray = new JSONArray(s);
