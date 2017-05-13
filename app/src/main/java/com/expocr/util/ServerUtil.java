@@ -15,7 +15,7 @@ public class ServerUtil {
 
     private static final String ADDR_LOCALHOST = "127.0.0.1:8000/";
     private static final String ADDR_EMULATOR = "10.0.2.2:8000/";
-    private static final String ADDR_AZURE = "cs428-expocr2200.cloudapp.net:8000/";
+    private static final String ADDR_AZURE = "cs428-expocr.cloudapp.net:8000/";
 
     /**
      * Getter for the server address being used (either the local server or the Azure server)
